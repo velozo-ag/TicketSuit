@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox fx:id="controlBar" alignment="CENTER_RIGHT" onMouseDragged="#dragBar" onMousePressed="#pressBar" onMouseReleased="#releaseBar" prefHeight="34.0" prefWidth="1061.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControlBarController">
+   <children>
+      <Button mnemonicParsing="false" text="Min" />
+      <Button mnemonicParsing="false" text="Max" />
+      <Button mnemonicParsing="false" text="Close" />
+   </children>
+</HBox>
