@@ -20,11 +20,11 @@
                   <Button layoutX="72.5" layoutY="15.0" mnemonicParsing="false" onAction="#authAccount" prefHeight="40.0" prefWidth="150.0" styleClass="mainButton" text="L O G I N" />
                </children>
             </Pane>
-            <TextField fx:id="tUsername" layoutX="100.0" layoutY="169.0" prefHeight="35.0" prefWidth="400.0" styleClass="inputText" >
+            <TextField fx:id="tUsername" layoutX="100.0" layoutY="169.0" prefHeight="35.0" prefWidth="400.0" styleClass="inputText">
                <font>
                   <Font size="14.0" />
                </font></TextField>
-      <PasswordField fx:id="tPassword" layoutX="100.0" layoutY="238.0" prefHeight="35.0" prefWidth="400.0" styleClass="inputText" >
+      <PasswordField fx:id="tPassword" layoutX="100.0" layoutY="238.0" prefHeight="35.0" prefWidth="400.0" styleClass="inputText">
                <font>
                   <Font size="14.0" />
                </font></PasswordField>

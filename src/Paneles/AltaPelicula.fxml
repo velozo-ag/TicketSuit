@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="pFormulario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../Styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.FormController">
+   <children>
+      <Pane fx:id="formPanel" layoutX="340.0" layoutY="50.0" prefHeight="620.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="88.0" layoutY="27.0" text="N O M B R E">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tNombre" layoutX="90.0" layoutY="52.0" prefHeight="35.0" prefWidth="192.0" styleClass="inputText" />
+
+            <Label layoutX="90.0" layoutY="97.0" text="G E N E R O">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="cGenero" layoutX="90.0" layoutY="122.0" prefHeight="35.0" prefWidth="192.0" styleClass="inputText" />
+
+            <Label layoutX="90.0" layoutY="167.0" text="D I R E C T O R">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label> 
+            <TextField fx:id="tDirector" layoutX="90.0" layoutY="192.0" prefHeight="35.0" prefWidth="192.0" styleClass="inputText" />
+
+            <Label layoutX="321.0" layoutY="27.0" text="N A C I O N A L I D A D">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tNacionalidad" layoutX="321.0" layoutY="52.0" prefHeight="35.0" prefWidth="192.0" styleClass="inputText" />
+
+            <Label layoutX="321.0" layoutY="97.0" text="C A L I F I C A C I O N">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label>
+
+            <Label layoutX="321.0" layoutY="167.0" text="D U R A C I O N">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tDuracion" layoutX="321.0" layoutY="192.0" prefHeight="35.0" prefWidth="192.0" styleClass="inputText" />
+
+            <!-- poster -->
+            <Label layoutX="263.0" layoutY="423.0" text="P O S T E R">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="posterImageView" fitHeight="180.0" fitWidth="150.0" layoutX="20.0" layoutY="465.0" pickOnBounds="true" preserveRatio="true" />
+            
+            <Button layoutX="20.0" layoutY="515.0" mnemonicParsing="false" onAction="#uploadPoster" prefHeight="40.0" prefWidth="169.0" styleClass="mainButton" text="S U B I R  P O S T E R" />
+            
+            <Button layoutX="417.0" layoutY="566.0" mnemonicParsing="false" onAction="#submitForm" prefHeight="40.0" prefWidth="169.0" styleClass="mainButton" text="S U B I R  P E L I C U L A" />
+            <Button layoutX="20.0" layoutY="566.0" mnemonicParsing="false" onAction="#uploadPoster" prefHeight="40.0" prefWidth="169.0" styleClass="mainButton" text="E D I T A R  P O S T E R" />
+            <ComboBox fx:id="cGenero1" layoutX="321.0" layoutY="122.0" prefHeight="35.0" prefWidth="192.0" styleClass="inputText" />
+            <Label layoutX="90.0" layoutY="238.0" text="S I N O P S I S">
+               <font>
+                  <Font name="Montserrat Regular" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tDirector1" layoutX="89.0" layoutY="266.0" prefHeight="141.0" prefWidth="424.0" styleClass="inputText" />
+            <Pane layoutX="241.0" layoutY="445.0" prefHeight="180.0" prefWidth="120.0" styleClass="cartelera" />
+         </children>
+      </Pane>
+      <Button layoutX="45.0" layoutY="30.0" mnemonicParsing="false" onAction="#submitForm" prefHeight="40.0" prefWidth="120.0" styleClass="mainButton" text="V O L V E R" />
+   </children>
+</AnchorPane>

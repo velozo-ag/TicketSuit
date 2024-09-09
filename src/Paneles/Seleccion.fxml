@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../Styles/Main.css" fx:controller="Controllers.SeleccionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../Styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.SeleccionController">
    <children>
-      <Label layoutX="231.0" layoutY="84.0" text="PELICULA SELECCIONADA" />
-      <Button layoutX="179.0" layoutY="134.0" mnemonicParsing="false" onAction="#toCartelera" text="Volver a Cartelera" />
-      <Button layoutX="179.0" layoutY="166.0" mnemonicParsing="false" onAction="#toSeleccionAsiento" text="Seguir compra/ Seleccionar Asiento" />
+      <Label layoutX="286.0" layoutY="35.0" styleClass="titleText" text="P E L I C U L A   S E L E C C I O N A D A" />
+      <Button layoutX="40.0" layoutY="631.0" mnemonicParsing="false" onAction="#toCartelera" prefHeight="50.0" prefWidth="163.0" styleClass="mainButton" text="&lt;&lt;  V O L V E R" />
+      <Button layoutX="1064.0" layoutY="631.0" mnemonicParsing="false" onAction="#toSeleccionAsiento" prefHeight="50.0" prefWidth="163.0" styleClass="mainButton" text="C O N T I N U A R  &gt;&gt;" />
+      <Pane layoutX="286.0" layoutY="144.0" prefHeight="432.0" prefWidth="302.0" styleClass="cartelera" />
+      <Label layoutX="693.0" layoutY="144.0" prefHeight="21.0" prefWidth="214.0" text="T I P O  D E  P E L I C U L A">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="693.0" layoutY="171.0" prefHeight="37.0" prefWidth="302.0" styleClass="inputText" />
+      <Label layoutX="693.0" layoutY="232.0" prefHeight="21.0" prefWidth="214.0" text="D E S C U E N T O">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="693.0" layoutY="260.0" prefHeight="37.0" prefWidth="302.0" styleClass="inputText" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="744.0" layoutY="408.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Resources/Logo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

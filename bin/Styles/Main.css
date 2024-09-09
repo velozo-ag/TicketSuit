@@ -26,6 +26,12 @@ AnchorPane {
     -fx-text-fill: #ee6e83ad;
 }
 
+.inputText .arrow {
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+    -fx-background-color: #fcc798;
+}
+
 Button{
     -fx-cursor: hand;
 }
@@ -79,7 +85,37 @@ TableColumnHeader{
 .cartelera{
     -fx-border-color: linear-gradient(
         from 0% 0% to 100% 100%,
-        #ee6e84,
+        #ff60c2,
         #fcc798
     );
+}
+
+.titleText {
+    -fx-font-size: 36px;
+    -fx-font-family: 'Montserrat Bold';
+    -fx-text-fill: #ee6e84;  /* Color sólido del texto */
+    -fx-effect: dropshadow(gaussian, rgba(238, 110, 132, 0.8), 10, 0.5, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(238, 110, 132, 0.6), 20, 0.5, 0, 0), 
+                 dropshadow(gaussian, rgba(238, 110, 132, 0.4), 30, 0.5, 0, 0),
+                 innershadow(gaussian, rgba(238, 110, 132, 0.8), 10, 0.5, 0, 0);
+    -fx-text-alignment: center;
+    -fx-padding: 20px;
+}
+
+.optionButton {
+    -fx-background-color: transparent; 
+    -fx-border-width: 1px;
+    -fx-border-color: #ee6e84;
+    -fx-text-fill: #ee6e84;
+    -fx-font-size: 14px;
+    -fx-font-family: 'Montserrat Regular';
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 10px 20px;
+}
+
+.optionButton:hover {
+    -fx-background-color: #ee6e84;
+    -fx-text-fill: #050627;
+    -fx-border-color: #050627;
 }
