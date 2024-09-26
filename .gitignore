@@ -1,0 +1,44 @@
+# Bytecode compilado de Java
+*.class
+
+# Carpetas de compilación
+/bin/
+/build/
+
+# Directorios generados por IDEs
+/.idea/
+/*.iml
+/.vscode/
+/target/
+*.log
+
+# Archivos de configuración del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuración de dependencias locales (como Maven o Gradle)
+.mvn/
+.gradle/
+/out/
+/lib/
+/logs/
+/dist/
+node_modules/
+
+# Archivos temporales
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Archivos de JavaFX
+/.javafx/
+/out/
+
+# Archivos de configuración de conexiones (no expongas credenciales)
+database.properties
+/src/database/DatabaseConnection.java
+*.db
+
+# Archivos de entorno (variables de entorno locales)
+.env

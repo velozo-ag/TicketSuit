@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 * {
     -fx-font-family: "Montserrat", sans-serif;
@@ -15,7 +15,12 @@ AnchorPane {
     -fx-background-size: cover;
 }
 
+.textoTitulo{
+    
+}
+
 .inputText {
+    -fx-background: none;
     -fx-background-color: #050627;
     -fx-border-width: 2px;
     -fx-border-color: linear-gradient(
@@ -32,7 +37,7 @@ AnchorPane {
     -fx-background-color: #fcc798;
 }
 
-Button{
+Button {
     -fx-cursor: hand;
 }
 
@@ -50,19 +55,31 @@ Button{
     );
 }
 
-.navButton{
+.simpleButton {
+    -fx-background-color: none;
+    -fx-text-fill: #ee6e84;
+}
+
+.navButton {
     -fx-background-color: none;
     -fx-padding: 10px;
     -fx-text-fill: #ee6e84;
 }
 
-.logoutButton{
-    -fx-background-color: #0506278b;
+.navButtonSelected {
+    -fx-background-color: none;
     -fx-padding: 10px;
     -fx-text-fill: #ee6e84;
+    -fx-font-weight: 700;
 }
 
-.titleLabel{
+.logoutButton {
+    -fx-background-color: #ee6e84;
+    -fx-padding: 10px;
+    -fx-text-fill: #050627;
+}
+
+.titleLabel {
     -fx-font-weight: 700;
 }
 
@@ -76,13 +93,29 @@ TableView {
     );
 }
 
-TableColumnHeader{
+TableColumnHeader {
     -fx-border-width: 0;
     -fx-border-color: none;
     -fx-background-color: #050627;
 }
 
-.cartelera{
+.table-row-cell {
+    fx-padding: 20px;
+    -fx-alignment: center ;
+}
+/* 
+    
+.table-row-cell:selected{
+    -fx-background-color: #12133f;
+    -fx-text-fill: #ffffff
+}
+
+.table-row-cell:filled:hover{
+    -fx-background-color: #12133f;
+    -fx-text-fill: #ffffff
+} */
+
+.cartelera {
     -fx-border-color: linear-gradient(
         from 0% 0% to 100% 100%,
         #ff60c2,
@@ -91,24 +124,27 @@ TableColumnHeader{
 }
 
 .titleText {
+    -fx-font-weight: 700;
     -fx-font-size: 36px;
-    -fx-font-family: 'Montserrat Bold';
-    -fx-text-fill: #ee6e84;  /* Color sólido del texto */
-    -fx-effect: dropshadow(gaussian, rgba(238, 110, 132, 0.8), 10, 0.5, 0, 0);
-    -fx-effect: dropshadow(gaussian, rgba(238, 110, 132, 0.6), 20, 0.5, 0, 0), 
-                 dropshadow(gaussian, rgba(238, 110, 132, 0.4), 30, 0.5, 0, 0),
-                 innershadow(gaussian, rgba(238, 110, 132, 0.8), 10, 0.5, 0, 0);
+    -fx-font-family: "Montserrat Bold";
+    -fx-text-fill: #ee6e84; /* Color sólido del texto */
+    -fx-effect: dropshadow(gaussian, rgba(238, 110, 132, 0.6), 20, 0.5, 0, 0),
+        dropshadow(gaussian, rgba(238, 110, 132, 0.4), 30, 0.5, 0, 0);
     -fx-text-alignment: center;
     -fx-padding: 20px;
 }
 
 .optionButton {
-    -fx-background-color: transparent; 
+    -fx-background-color: transparent;
     -fx-border-width: 1px;
-    -fx-border-color: #ee6e84;
+    -fx-border-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #ee6e84,
+        #fcc798
+    );
     -fx-text-fill: #ee6e84;
     -fx-font-size: 14px;
-    -fx-font-family: 'Montserrat Regular';
+    -fx-font-family: "Montserrat Regular";
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-padding: 10px 20px;
