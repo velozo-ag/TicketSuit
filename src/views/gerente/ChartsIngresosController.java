@@ -8,7 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import views.MainController;
-
+/**1 */
 public class ChartsIngresosController {
 
     private MainController mainController = new MainController();
