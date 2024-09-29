@@ -1,26 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
 <!-- 1 -->
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.gerente.ChartsLogisticaController">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
          <children>
-            <Button layoutX="163.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="\$ - INGRESOS" />
-            <Button layoutX="288.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="ASISTENCIAS" />
-            <Button layoutX="415.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="LOGISTICA &amp; OPERATIVA" />
+            <Button layoutX="309.0" layoutY="51.0" mnemonicParsing="false" onAction="#ChartsAsistencias" styleClass="navButton" text="ASISTENCIAS" />
+            <Button layoutX="449.0" layoutY="51.0" mnemonicParsing="false" onAction="#ChartsIngresos" styleClass="navButton" text="\$ INGRESOS" />
             <Button layoutX="604.0" layoutY="51.0" mnemonicParsing="false" onAction="#toLogin" styleClass="logoutButton" text="LOGOUT" />
             <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/Logo.png" />
                </image>
             </ImageView>
-            <Label layoutX="576.0" layoutY="343.0" text="Logistica" />
+            <Button layoutX="151.0" layoutY="51.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
+            <BarChart layoutX="210.0" layoutY="177.0" prefHeight="500.0" prefWidth="547.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+            <BarChart layoutX="790.0" layoutY="178.0" prefHeight="250.0" prefWidth="250.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+            <Label layoutX="254.0" layoutY="154.0" text="Capacidad de Salas Utilizadas &amp; Capacidad Total">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+            <Label layoutX="814.0" layoutY="159.0" text="Cantidad de Peliculas por Genero" />
+            <BarChart layoutX="790.0" layoutY="427.0" prefHeight="250.0" prefWidth="250.0">
+               <xAxis>
+                  <CategoryAxis side="BOTTOM" />
+               </xAxis>
+               <yAxis>
+                  <NumberAxis side="LEFT" />
+               </yAxis>
+            </BarChart>
+            <Label layoutX="814.0" layoutY="412.0" text="Cantidad de Peliculas por Genero" />
          </children>
       </Pane>
    </children>

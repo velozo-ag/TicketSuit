@@ -1,26 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+
 <!-- 2 -->
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.gerente.ChartsAsistenciaController">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
          <children>
-            <Button layoutX="163.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="\$ - INGRESOS" />
-            <Button layoutX="288.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="ASISTENCIAS" />
-            <Button layoutX="415.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="LOGISTICA &amp; OPERATIVA" />
+            <Button layoutX="294.0" layoutY="50.0" mnemonicParsing="false" onAction="#ChartsIngresos" styleClass="navButton" text="\$ INGRESOS" />
+            <Button layoutX="415.0" layoutY="50.0" mnemonicParsing="false" onAction="#ChartsLogistica" styleClass="navButton" text="LOGISTICA &amp; OPERATIVA" />
             <Button layoutX="604.0" layoutY="51.0" mnemonicParsing="false" onAction="#toLogin" styleClass="logoutButton" text="LOGOUT" />
             <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/Logo.png" />
                </image>
             </ImageView>
-            <Label layoutX="604.0" layoutY="317.0" text="Asistencias" />
+            <Button layoutX="151.0" layoutY="50.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
+            <BarChart layoutX="51.0" layoutY="146.0" prefHeight="250.0" prefWidth="530.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+            <LineChart layoutX="655.0" layoutY="436.0" prefHeight="240.0" prefWidth="530.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </LineChart>
+            <BarChart layoutX="51.0" layoutY="431.0" prefHeight="250.0" prefWidth="530.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+            <PieChart layoutX="775.0" layoutY="85.0" prefHeight="290.0" prefWidth="290.0" />
+            <Label layoutX="248.0" layoutY="131.0" text="Asistencia Por Pelicula" />
+            <Label layoutX="244.0" layoutY="410.0" text="Asistencia Por X Genero" />
+            <Label layoutX="823.0" layoutY="411.0" text="Asistencia General Por X Tiempo" />
+            <Label layoutX="818.0" layoutY="44.0" text="Asistencia Por Clasificacion (Total)" />
+            <ComboBox layoutX="448.0" layoutY="404.0" prefHeight="27.0" prefWidth="119.0" styleClass="inputText" />
+            <ComboBox layoutX="1052.0" layoutY="405.0" prefHeight="27.0" prefWidth="119.0" styleClass="inputText" />
          </children>
       </Pane>
    </children>
