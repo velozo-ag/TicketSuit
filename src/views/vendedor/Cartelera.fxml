@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../Styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CarteleraController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.vendedor.CarteleraController">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
          <children>
@@ -18,37 +20,19 @@
 
             <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Resources/Logo.png" />
+                  <Image url="@../../Resources/Logo.png" />
                </image>
             </ImageView>
-            <Pane layoutX="103.0" layoutY="164.0" prefHeight="429.0" prefWidth="306.0" styleClass="cartelera">
-               <children>
-                  <ImageView fitHeight="432.0" fitWidth="302.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" styleClass="cartelera">
-                     <image>
-                        <Image url="@../../../../../Downloads/HD-wallpaper-hotline-miami-1-hotline-miami.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane layoutX="479.0" layoutY="164.0" prefHeight="429.0" prefWidth="306.0" styleClass="cartelera">
-               <children>
-                  <ImageView fitHeight="432.0" fitWidth="302.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" styleClass="cartelera">
-                     <image>
-                        <Image url="@../../../../../Downloads/HD-wallpaper-hotline-miami-1-hotline-miami.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane layoutX="847.0" layoutY="164.0" prefHeight="429.0" prefWidth="306.0" styleClass="cartelera">
-               <children>
-                  <ImageView fitHeight="432.0" fitWidth="302.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" styleClass="cartelera">
-                     <image>
-                        <Image url="@../../../../../Downloads/HD-wallpaper-hotline-miami-1-hotline-miami.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
+            <ScrollPane layoutX="35.0" layoutY="137.0" prefHeight="540.0" prefWidth="1209.0">
+              <content>
+                <AnchorPane fx:id="spPeliculas" minHeight="0.0" minWidth="0.0" prefHeight="539.0" prefWidth="1194.0" />
+              </content>
+            </ScrollPane>
          </children>
       </Pane>
    </children>
+   <stylesheets>
+      <URL value="@../Styles/Main.css" />
+      <URL value="@../../Styles/Main.css" />
+   </stylesheets>
 </AnchorPane>
