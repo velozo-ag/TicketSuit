@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pFormulario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="977.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.PeliculaController">
+<AnchorPane fx:id="pFormulario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="977.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.AltaPeliculaController">
    <children>
       <Pane fx:id="mainPanel" layoutX="-7.0" prefHeight="558.0" prefWidth="986.0">
          <children>
@@ -56,7 +56,7 @@
             <TextField fx:id="tDuracion" layoutX="383.0" layoutY="324.0" prefHeight="35.0" prefWidth="300.0" styleClass="inputText" />
             
                   <Button layoutX="49.0" layoutY="392.0" mnemonicParsing="false" onAction="#uploadPoster" prefHeight="40.0" prefWidth="169.0" styleClass="mainButton" text="S U B I R  P O S T E R" />
-            <ComboBox fx:id="cGenero1" layoutX="383.0" layoutY="254.0" prefHeight="35.0" prefWidth="300.0" styleClass="inputText" />
+            <ComboBox fx:id="cCalificacion" layoutX="383.0" layoutY="254.0" prefHeight="35.0" prefWidth="300.0" styleClass="inputText" />
             <Label layoutX="384.0" layoutY="75.0" text="S I N O P S I S">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
@@ -78,8 +78,8 @@
                   <Button layoutX="72.5" layoutY="15.0" mnemonicParsing="false" onAction="#altaPelicula" prefHeight="40.0" prefWidth="150.0" styleClass="mainButton" text="SUBIR PELICULA" />
                </children>
             </Pane>
-            <TextArea layoutX="383.0" layoutY="107.0" prefHeight="105.0" prefWidth="300.0" styleClass="inputText" wrapText="true" />
-            <TextField fx:id="tNacionalidad1" disable="true" layoutX="233.0" layoutY="394.0" prefHeight="35.0" prefWidth="453.0" styleClass="inputText" />
+            <TextArea fx:id="tSinopsis" layoutX="383.0" layoutY="107.0" prefHeight="105.0" prefWidth="300.0" styleClass="inputText" wrapText="true" />
+            <TextField fx:id="tUrlPoster" disable="true" layoutX="233.0" layoutY="394.0" prefHeight="35.0" prefWidth="453.0" styleClass="inputText" />
             <Label layoutX="712.0" layoutY="75.0" text="P O S T E R">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />

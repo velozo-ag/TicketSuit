@@ -14,7 +14,7 @@
       <children>
           <TableView fx:id="tablaUsuarios" layoutX="123.0" layoutY="176.0" prefHeight="503.0" prefWidth="1035.0" stylesheets="@../../styles/Main.css">
               <columns>
-                <TableColumn fx:id="colIdUsuario" editable="false" prefWidth="53.0" resizable="false" sortable="false" text="ID" />
+                <TableColumn fx:id="colIdUsuario" editable="false" prefWidth="53.0" resizable="false" text="ID" />
                   <TableColumn fx:id="colNombre" prefWidth="389.0" resizable="false" text="NOMBRE" />
                   <TableColumn fx:id="colPerfil" prefWidth="192.0" resizable="false" text="PERFIL" />
                   <TableColumn fx:id="colEstado" minWidth="0.0" prefWidth="127.0" resizable="false" text="ESTADO" />

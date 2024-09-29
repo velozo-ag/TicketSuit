@@ -7,6 +7,11 @@ public class Perfil {
     public Perfil(){
     }
 
+    public Perfil(int id_perfil, String nombre){
+        this.setIdPerfil(id_perfil);
+        this.setNombre(nombre);
+    }
+
     public void setIdPerfil(int id_perfil){
         this.id_perfil = id_perfil;
     }

@@ -1,6 +1,7 @@
 package views.administrador;
 
 import java.sql.Connection;
+import java.util.List;
 
 import controllers.PerfilController;
 import controllers.UsuarioController;
@@ -20,7 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class ALTAUsuarioController {
+public class MODIFICARUsuarioController {
 
     @FXML
     private Button bCerrar;
@@ -46,11 +47,12 @@ public class ALTAUsuarioController {
     @FXML
     private PasswordField tPassword;
 
-    UsuarioController usuarioController = new UsuarioController();
+    private Usuario usuario;
+    private UsuarioController usuarioController = new UsuarioController();
+    private PerfilController perfilController = new PerfilController();
 
     @FXML
     public void initialize() {
-        PerfilController perfilController = new PerfilController();
 
         ObservableList<Boolean> estados = FXCollections.observableArrayList();
         estados.add(true);
@@ -68,17 +70,17 @@ public class ALTAUsuarioController {
     }
 
     @FXML
-    void altaUsuario(ActionEvent event) {
-
+    void modificarUsuario(ActionEvent event) {
         if (verificarCampos()) {
             Usuario usuario = new Usuario();
+            usuario.setIdUsuario(this.usuario.getIdUsuario());
             usuario.setNombre(tNombre.getText());
             usuario.setPassword(tPassword.getText());
             usuario.setIdPerfil(cPerfil.getValue().getIdPerfil());
             usuario.setEstado(cEstado.getValue());
             usuario.setIdCine(1);
 
-            usuarioController.createUsuario(usuario);
+            usuarioController.updateUsuario(usuario);
 
             CerrarFormulario(event);
         }
@@ -110,19 +112,16 @@ public class ALTAUsuarioController {
             return false;
         }
 
-        // Verificar que la contraseña tenga al menos 6 caracteres
         if (tPassword == null || tPassword.getText().length() < 6) {
             mostrarMensajeError("La contraseña debe tener al menos 6 caracteres.");
             return false;
         }
 
-        // Verificar que el perfil seleccionado no sea nulo
         if (cPerfil.getValue() == null) {
             mostrarMensajeError("Debes seleccionar un perfil.");
             return false;
         }
 
-        // Verificar que el estado sea booleano (true o false)
         if (cEstado.getValue() == null) {
             mostrarMensajeError("El estado debe ser un valor booleano (true/false).");
             return false;
@@ -138,4 +137,16 @@ public class ALTAUsuarioController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+    void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+
+        List<Perfil> perfiles = perfilController.findAll();
+
+        tNombre.setText(usuario.getNombre());
+        tPassword.setText(usuario.getPassword());
+        cEstado.setValue(usuario.getEstado());
+        cPerfil.setValue(perfiles.get(usuario.getIdPerfil()));
+    }
+
 }

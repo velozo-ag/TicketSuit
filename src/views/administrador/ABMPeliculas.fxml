@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.PeliculaController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.ABMPeliculas">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
       <children>
@@ -24,8 +24,8 @@
             <Button layoutX="175.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMUsuarios" styleClass="navButton" text="USUARIOS" />
             <Button layoutX="291.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMSalas" styleClass="navButton" text="SALAS" />
             <Button layoutX="381.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMFunciones" styleClass="navButton" text="FUNCIONES" />
-            <Button layoutX="506.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMPeliculas" styleClass="navButton" text="PELICULAS" />
-            <Button layoutX="615.0" layoutY="50.0" mnemonicParsing="false" onAction="#toLogin" styleClass="logoutButton" text="LOGOUT" />
+            <Button layoutX="506.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="PELICULAS" />
+            <Button layoutX="615.0" layoutY="50.0" mnemonicParsing="false" onAction="#logout" styleClass="logoutButton" text="LOGOUT" />
             <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/Logo.png" />

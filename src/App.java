@@ -37,7 +37,6 @@ public class App extends Application {
 
         primaryStage.setTitle("Ticket Suit");
         primaryStage.setScene(scene);
-        // primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

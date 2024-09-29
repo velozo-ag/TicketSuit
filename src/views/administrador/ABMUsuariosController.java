@@ -64,18 +64,15 @@ public class ABMUsuariosController {
     @FXML
     private TableColumn<Usuario, Void> colDesactivar;
 
-    DatabaseConnection dbController = new DatabaseConnection();
-
     private MainController mainController = new MainController();
-    private UsuarioController usuarioController = new UsuarioController(dbController.connect());
+    private UsuarioController usuarioController = new UsuarioController();
 
     @FXML
     public void initialize() {
-        System.out.println("Método initialize() ejecutado.");
 
         colIdUsuario.setCellValueFactory(new PropertyValueFactory<>("idUsuario"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colPerfil.setCellValueFactory(new PropertyValueFactory<>("idPerfil"));
+        colPerfil.setCellValueFactory(new PropertyValueFactory<>("nombrePerfil"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         asignarBotones();
@@ -107,6 +104,34 @@ public class ABMUsuariosController {
         }
     }
 
+    void modificarUsuario(Usuario usuario) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/ModificarUsuario.fxml"));
+            Parent root = loader.load();
+
+            MODIFICARUsuarioController controller = loader.getController();
+            controller.setUsuario(usuario);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modificar Usuario");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+
+            stage.setOnHidden(e -> cargarUsuarios());
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void desactivarUsuario(Usuario usuario) {
+        usuario.setEstado(!usuario.getEstado());
+        usuarioController.updateUsuario(usuario);
+        cargarUsuarios();
+    }
+
     @FXML
     void logout(ActionEvent event) {
 
@@ -134,18 +159,20 @@ public class ABMUsuariosController {
     }
 
     void asignarBotones() {
-        colModificar.setCellValueFactory(new PropertyValueFactory<>("")); // Esto debe ser vacío
+
+        colModificar.setCellValueFactory(new PropertyValueFactory<>(""));
         colModificar.setCellFactory(new Callback<TableColumn<Usuario, Void>, TableCell<Usuario, Void>>() {
             @Override
             public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
                 return new TableCell<Usuario, Void>() {
+
                     private final Button btnModificar = new Button("Modificar");
 
                     public HBox createButtonContainer() {
                         HBox hBox = new HBox();
                         hBox.getChildren().add(btnModificar);
-                        HBox.setHgrow(btnModificar, Priority.ALWAYS); // Esto asegura que el botón ocupe todo el ancho
-                        btnModificar.setMaxWidth(Double.MAX_VALUE); // Asegura que el botón use todo el ancho disponible
+                        HBox.setHgrow(btnModificar, Priority.ALWAYS);
+                        btnModificar.setMaxWidth(Double.MAX_VALUE);
                         return hBox;
                     }
 
@@ -155,11 +182,15 @@ public class ABMUsuariosController {
                         if (empty || item != null) {
                             setGraphic(null);
                         } else {
-                            btnModificar.setOnAction(event -> {
-                                Usuario usuario = getTableView().getItems().get(getIndex());
-                                // modificarUsuario(usuario);
-                            });
-                            setGraphic(createButtonContainer()); // Usar el contenedor de botones
+                            Usuario usuario = getTableView().getItems().get(getIndex());
+                            if (usuario.getIdPerfil() == 1) {
+                                setGraphic(null);
+                            } else {
+                                btnModificar.setOnAction(event -> {
+                                    modificarUsuario(usuario);
+                                });
+                                setGraphic(createButtonContainer());
+                            }
                         }
                     }
                 };
@@ -171,14 +202,13 @@ public class ABMUsuariosController {
             @Override
             public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
                 return new TableCell<Usuario, Void>() {
-                    private final Button btnDesactivar = new Button("Desactivar");
+                    private final Button btnDesactivar = new Button("AltEstado");
 
                     public HBox createButtonContainer() {
                         HBox hBox = new HBox();
                         hBox.getChildren().add(btnDesactivar);
-                        HBox.setHgrow(btnDesactivar, Priority.ALWAYS); // Esto asegura que el botón ocupe todo el ancho
-                        btnDesactivar.setMaxWidth(Double.MAX_VALUE); // Asegura que el botón use todo el ancho
-                                                                     // disponible
+                        HBox.setHgrow(btnDesactivar, Priority.ALWAYS);
+                        btnDesactivar.setMaxWidth(Double.MAX_VALUE);
                         return hBox;
                     }
 
@@ -188,11 +218,15 @@ public class ABMUsuariosController {
                         if (empty || item != null) {
                             setGraphic(null);
                         } else {
-                            btnDesactivar.setOnAction(event -> {
-                                Usuario usuario = getTableView().getItems().get(getIndex());
-                                // desactivarUsuario(usuario);
-                            });
-                            setGraphic(createButtonContainer()); // Usar el contenedor de botones
+                            Usuario usuario = getTableView().getItems().get(getIndex());
+                            if (usuario.getIdPerfil() == 1) {
+                                setGraphic(null);
+                            } else {
+                                btnDesactivar.setOnAction(event -> {
+                                    desactivarUsuario(usuario);
+                                });
+                                setGraphic(createButtonContainer());
+                            }
                         }
                     }
                 };

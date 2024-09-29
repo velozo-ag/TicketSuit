@@ -1,11 +1,14 @@
 package entities;
 
+import controllers.PerfilController;
+
 public class Usuario {
     private int id_usuario;
     private String nombre;
     private String password;
     private boolean estado;
     private int id_perfil;
+    private String nombrePerfil;
     private int id_cine;
 
     public void setIdUsuario(int id_usuario){
@@ -47,7 +50,15 @@ public class Usuario {
     public int getIdPerfil(){
         return this.id_perfil;
     }
-    
+
+    public void setNombrePerfil(String nombrePerfil){
+        this.nombrePerfil = nombrePerfil;
+    }
+
+    public String getNombrePerfil(){
+        return this.nombrePerfil;
+    }
+
     public void setIdCine(int id_cine){
         this.id_cine = id_cine;
     }
