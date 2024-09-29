@@ -61,4 +61,13 @@ public class GerenteController {
         }
     }
 
+    @FXML
+    void toPGerente(ActionEvent event) {
+        try {
+            mainController.toPGerente(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
