@@ -73,7 +73,7 @@ public class LoginController {
             mostrarMensajeError("Usuario invalido");
             return false;
         }
-        
+
         if (nombre == null) {
             mostrarMensajeError("Usuario incorrecta.");
             return false;

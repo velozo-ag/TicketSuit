@@ -72,6 +72,7 @@ public class UsuarioController {
                 usuario.setEstado(rs.getBoolean("estado"));
                 usuario.setIdPerfil(rs.getInt("id_perfil"));
                 usuario.setIdCine(rs.getInt("id_cine"));
+                
             }
         } catch (SQLException e) {
             System.out.println("Usuario no encontrado " + e.getMessage());
@@ -84,8 +85,7 @@ public class UsuarioController {
         List<Usuario> usuarios = new ArrayList<>();
         String query = "SELECT u.id_usuario, u.nombre, u.password, u.estado, u.id_perfil, p.nombre AS nombre_perfil "
                 + "FROM Usuario u "
-                + "JOIN Perfil p ON u.id_perfil = p.id_perfil"; // Asegúrate de que los nombres de las tablas y columnas
-                                                                // sean correctos
+                + "JOIN Perfil p ON u.id_perfil = p.id_perfil"; 
 
         try (Statement stmt = connection.createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {
@@ -96,7 +96,7 @@ public class UsuarioController {
                 usuario.setPassword(rs.getString("password"));
                 usuario.setEstado(rs.getBoolean("estado"));
                 usuario.setIdPerfil(rs.getInt("id_perfil"));
-                usuario.setNombrePerfil(rs.getString("nombre_perfil")); // Aquí se asigna el nombre del perfil
+                usuario.setNombrePerfil(rs.getString("nombre_perfil"));
                 usuario.setIdCine(rs.getInt(1));
                 usuarios.add(usuario);
             }

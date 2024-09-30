@@ -64,6 +64,7 @@ public class ABMUsuariosController {
     @FXML
     private TableColumn<Usuario, Void> colDesactivar;
 
+    private AdministracionController administracionController = new AdministracionController();
     private MainController mainController = new MainController();
     private UsuarioController usuarioController = new UsuarioController();
 
@@ -148,14 +149,17 @@ public class ABMUsuariosController {
 
     @FXML
     void ABMSalas(ActionEvent event) {
+        administracionController.ABMSalas(event);
     }
 
     @FXML
     void ABMFunciones(ActionEvent event) {
+        administracionController.ABMFunciones(event);
     }
 
     @FXML
     void ABMPeliculas(ActionEvent event) {
+        administracionController.ABMPeliculas(event);
     }
 
     void asignarBotones() {
