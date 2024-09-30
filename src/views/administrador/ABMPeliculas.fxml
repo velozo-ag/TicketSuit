@@ -21,8 +21,8 @@
                   <TableColumn fx:id="colDirector" minWidth="0.0" prefWidth="170.0" text="DIRECTOR" />
                   <TableColumn fx:id="colSinopsis" prefWidth="176.0" text="SINOPSIS" />
                   <TableColumn fx:id="colGeneros" prefWidth="110.0" text="GENEROS" />
-                  <TableColumn fx:id="colModificar" prefWidth="136.0" text="-" />
-                  <TableColumn fx:id="colDesactivar" prefWidth="134.0" text="-" />
+                  <TableColumn fx:id="colModificar" prefWidth="123.0" text="-" />
+                  <TableColumn fx:id="colDesactivar" prefWidth="118.0" text="-" />
               </columns>
             </TableView>
             <Button layoutX="175.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMUsuarios" styleClass="navButton" text="USUARIOS" />

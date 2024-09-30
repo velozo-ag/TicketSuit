@@ -207,3 +207,121 @@ TableColumnHeader {
 .toggleButtonButaca:hover{
     -fx-background-image: url("../Resources/AsientoHover.png");
 }
+
+.table-view {
+    -fx-background-color: #00012c;
+    -fx-table-cell-border-color: #00003A;
+    -fx-padding: 15;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ecf0f1;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:filled:selected, .table-row-cell:focused:selected {
+    -fx-background-color: #1abc9c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-cell {
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #EE6E84;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 5 10 5 10;
+}
+
+.table-cell:filled:selected, .table-cell:focused:selected {
+    -fx-background-color: #6EB8EE;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.table-view .column-header {
+    -fx-background-color: #00012c;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-weight: bold;
+    -fx-border-color: #EE6E84;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #1a1b4b;
+    -fx-text-fill: #ffffff;
+}
+
+.table-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+}
+
+.table-view .button {
+    -fx-background-color: #00012c;
+    -fx-text-fill: #EE6E84;
+    -fx-border-color: #EE6E84;
+    -fx-border-radius: 3;
+    -fx-padding: 5 10;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.table-view .button:hover {
+    -fx-background-color: #EE6E84;
+    -fx-text-fill: #00012c;
+    -fx-border-color: #EE6E84;
+}
+
+.table-view .button:pressed {
+    -fx-background-color: #b35161;
+    -fx-text-fill: white;
+    -fx-border-color: #EE6E84;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent; 
+    -fx-pref-width: 8px; 
+    -fx-pref-height: 8px; 
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #EE6E84; 
+    -fx-background-radius: 5; 
+    -fx-padding: 0.2em; 
+}
+
+.scroll-bar:vertical .track,
+.scroll-bar:horizontal .track {
+    -fx-background-color: #00003A; 
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button,
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent; 
+    -fx-padding: 0.5em;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow,
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-shape: "M0 0L1 1"; 
+    -fx-background-radius: 5;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #EE6E84; 
+}
+
+.scroll-bar:vertical .thumb:pressed,
+.scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: #b35161; 
+}
