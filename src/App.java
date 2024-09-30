@@ -20,21 +20,6 @@ public class App extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
         Scene scene = new Scene(root);
-
-        Pane panel = (Pane) scene.lookup("#mainPanel");
-
-        scene.widthProperty().addListener((observable, oldValue, newValue) -> {
-            double stageWidth = newValue.doubleValue();
-            AnchorPane.setLeftAnchor(panel, (stageWidth - panel.getPrefWidth()) / 2);
-            AnchorPane.setRightAnchor(panel, (stageWidth - panel.getPrefWidth()) / 2);
-        });
-
-        scene.heightProperty().addListener((observable, oldValue, newValue) -> {
-            double stageHeight = newValue.doubleValue();
-            AnchorPane.setTopAnchor(panel, 20.0);
-            AnchorPane.setTopAnchor(panel, (stageHeight - panel.getPrefHeight()) / 2);
-        });
-
         primaryStage.setTitle("Ticket Suit");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -98,5 +83,19 @@ public class App extends Application {
      * 
      * }
      */
+
+    // Pane panel = (Pane) scene.lookup("#mainPanel");
+
+    // scene.widthProperty().addListener((observable, oldValue, newValue) -> {
+    // double stageWidth = newValue.doubleValue();
+    // AnchorPane.setLeftAnchor(panel, (stageWidth - panel.getPrefWidth()) / 2);
+    // AnchorPane.setRightAnchor(panel, (stageWidth - panel.getPrefWidth()) / 2);
+    // });
+
+    // scene.heightProperty().addListener((observable, oldValue, newValue) -> {
+    // double stageHeight = newValue.doubleValue();
+    // AnchorPane.setTopAnchor(panel, 20.0);
+    // AnchorPane.setTopAnchor(panel, (stageHeight - panel.getPrefHeight()) / 2);
+    // });
 
 }

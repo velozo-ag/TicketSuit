@@ -42,3 +42,5 @@ database.properties
 
 # Archivos de entorno (variables de entorno locales)
 .env
+.vscode/launch.json
+.vscode/settings.json

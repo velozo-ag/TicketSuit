@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.classfile.components.ClassPrinter.Node;
 import java.util.Set;
 
+import entities.UserSession;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -29,6 +30,8 @@ public class MainController {
         Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
         scene = new Scene(root);
         Pane panel = (Pane) scene.lookup("#mainPanel");
+
+        UserSession.getInstance().cerrarSession();
 
         setUpScene(event, panel, scene);
     }
@@ -71,7 +74,7 @@ public class MainController {
         AnchorPane.setBottomAnchor(pane, (stageHeight - pane.getPrefHeight()) / 2);
     }
 
-    @FXML 
+    @FXML
     public void setUpScene(ActionEvent event, Pane pane, Scene scene) {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         double stageWidth = stage.getWidth();

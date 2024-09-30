@@ -74,7 +74,7 @@ public class UsuarioController {
                 usuario.setIdCine(rs.getInt("id_cine"));
             }
         } catch (SQLException e) {
-            System.out.println("Error al leer usuario: " + e.getMessage());
+            System.out.println("Usuario no encontrado " + e.getMessage());
         }
 
         return usuario;
@@ -104,5 +104,30 @@ public class UsuarioController {
             System.out.println("Error al leer usuarios: " + e.getMessage());
         }
         return usuarios;
+    }
+
+    public Usuario findByUser(String user){
+        String query = "SELECT * FROM Usuario WHERE nombre = ?";
+        Usuario usuario = null;
+
+        try(PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setString(1, user);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setPassword(rs.getString("password"));
+                usuario.setEstado(rs.getBoolean("estado"));
+                usuario.setIdPerfil(rs.getInt("id_perfil"));
+                usuario.setIdCine(rs.getInt("id_cine"));
+            }
+
+        }catch(SQLException e){
+            System.out.println("Usuario no encontrado");
+        }
+
+        return usuario;
     }
 }
