@@ -71,7 +71,7 @@ public class ChartsIngresosController {
     }
 
     private void populateComboBox() {
-        ObservableList<String> filters = FXCollections.observableArrayList("Total", "Anualmente", "Mensualemente", "Semanalmente");
+        ObservableList<String> filters = FXCollections.observableArrayList("Total", "Anual", "Mensual", "Semanal");
         filterComboBox.setItems(filters);
         filterComboBox.setValue("Total");
     }
@@ -104,7 +104,7 @@ public class ChartsIngresosController {
     private String buildQueryByFilter(String filter) {
         String query;
         switch (filter) {
-            case "Año":
+            case "Anual":
                 query = "SELECT p.nombre, SUM(c.subtotal) AS total_ingresos " +
                         "FROM Pelicula p " +
                         "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
@@ -115,7 +115,7 @@ public class ChartsIngresosController {
                         "GROUP BY p.nombre " +
                         "ORDER BY total_ingresos DESC;";
                 break;
-            case "Mes":
+            case "Mensual":
                 query = "SELECT p.nombre, SUM(c.subtotal) AS total_ingresos " +
                         "FROM Pelicula p " +
                         "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
@@ -126,7 +126,7 @@ public class ChartsIngresosController {
                         "GROUP BY p.nombre " +
                         "ORDER BY total_ingresos DESC;";
                 break;
-            case "Semana":
+            case "Semanal":
                 query = "SELECT p.nombre, SUM(c.subtotal) AS total_ingresos " +
                         "FROM Pelicula p " +
                         "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +

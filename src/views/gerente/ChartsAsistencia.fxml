@@ -28,7 +28,7 @@
                </image>
             </ImageView>
             <Button layoutX="151.0" layoutY="50.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
-            <BarChart layoutX="51.0" layoutY="146.0" prefHeight="250.0" prefWidth="530.0">
+            <BarChart fx:id="barChartAsistenciaPorPelicula" layoutX="51.0" layoutY="146.0" legendVisible="false" prefHeight="250.0" prefWidth="530.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -36,7 +36,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <LineChart layoutX="655.0" layoutY="436.0" prefHeight="240.0" prefWidth="530.0">
+            <LineChart fx:id="lineChartAsistencia" layoutX="655.0" layoutY="436.0" prefHeight="240.0" prefWidth="530.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -44,7 +44,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </LineChart>
-            <BarChart layoutX="51.0" layoutY="431.0" prefHeight="250.0" prefWidth="530.0">
+            <BarChart fx:id="barChartAsistenciaPorGenero" layoutX="51.0" layoutY="431.0" legendVisible="false" prefHeight="250.0" prefWidth="530.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -52,13 +52,12 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <PieChart layoutX="775.0" layoutY="85.0" prefHeight="290.0" prefWidth="290.0" />
+            <PieChart fx:id="pieChartAsistenciaPorClasificacion" layoutX="775.0" layoutY="85.0" prefHeight="290.0" prefWidth="290.0" />
             <Label layoutX="248.0" layoutY="131.0" text="Asistencia Por Pelicula" />
-            <Label layoutX="244.0" layoutY="410.0" text="Asistencia Por X Genero" />
+            <Label layoutX="215.0" layoutY="411.0" text="Asistencia Por Genero de Pelicula" />
             <Label layoutX="823.0" layoutY="411.0" text="Asistencia General Por X Tiempo" />
-            <Label layoutX="818.0" layoutY="44.0" text="Asistencia Por Clasificacion (Total)" />
-            <ComboBox layoutX="448.0" layoutY="404.0" prefHeight="27.0" prefWidth="119.0" styleClass="inputText" />
-            <ComboBox layoutX="1052.0" layoutY="405.0" prefHeight="27.0" prefWidth="119.0" styleClass="inputText" />
+            <Label layoutX="839.0" layoutY="51.0" text="Asistencia Por Clasificacion" />
+            <ComboBox fx:id="filterComboBoxAsistencia" layoutX="1052.0" layoutY="405.0" prefHeight="27.0" prefWidth="119.0" styleClass="inputText" />
          </children>
       </Pane>
    </children>

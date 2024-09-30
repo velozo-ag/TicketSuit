@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import views.AsientoManager;
 
 public class App extends Application {
     @Override
@@ -42,6 +43,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        // AsientoManager.insertarAsientos(); // Podes desactivar si ya pusiste los asientos
         launch(args);
     }
 
