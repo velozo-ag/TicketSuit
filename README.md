@@ -73,13 +73,13 @@ public class DatabaseConnection {
 ## Ejecución
 
 1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/tuusuario/TicketSuit.git
-   ```
+```bash
+git clone https://github.com/tuusuario/TicketSuit.git
+```
 
 2. Navega a la carpeta del proyecto:
 ```bash
-  cd TicketSuit
-  ```
+cd TicketSuit
+```
 
 3. Compila y ejecuta el proyecto en tu IDE.
