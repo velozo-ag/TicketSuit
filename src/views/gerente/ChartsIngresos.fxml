@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -26,15 +26,7 @@
                </image>
             </ImageView>
             <Button layoutX="151.0" layoutY="50.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
-            <StackedBarChart layoutX="64.0" layoutY="169.0" prefHeight="500.0" prefWidth="547.0">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </StackedBarChart>
-            <LineChart layoutX="640.0" layoutY="169.0" prefHeight="500.0" prefWidth="547.0">
+            <LineChart fx:id="lineChartIngresosTiempo" animated="false" layoutX="640.0" layoutY="169.0" legendVisible="false" prefHeight="500.0" prefWidth="547.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -53,8 +45,16 @@
                   <Font size="19.0" />
                </font>
             </Label>
-            <ComboBox layoutX="426.0" layoutY="141.0" prefHeight="27.0" prefWidth="171.0" styleClass="inputText" />
-            <ComboBox layoutX="1002.0" layoutY="145.0" prefHeight="27.0" prefWidth="171.0" styleClass="inputText" />
+            <ComboBox fx:id="filterComboBox" layoutX="415.0" layoutY="140.0" prefHeight="27.0" prefWidth="171.0" styleClass="inputText" />
+            <ComboBox fx:id="filterComboBoxLine" layoutX="1002.0" layoutY="145.0" prefHeight="27.0" prefWidth="171.0" styleClass="inputText" />
+            <BarChart fx:id="barChartIngresosPeliculas" animated="false" layoutX="50.0" layoutY="172.0" legendVisible="false" prefHeight="500.0" prefWidth="547.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
          </children>
       </Pane>
    </children>

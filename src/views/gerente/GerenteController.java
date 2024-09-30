@@ -29,25 +29,25 @@ public class GerenteController {
     private MainController mainController = new MainController();
 
     @FXML
-    private LineChart<String, Number> ingresosChart; // Gráfico de línea para ingresos por mes
+    private LineChart<String, Number> ingresosChart;
     @FXML
-    private PieChart generoChart;  // Gráfico de torta para géneros de películas
+    private PieChart generoChart;
     @FXML
     public PieChart ingresosPorFuncionChart; 
     @FXML
     public StackedBarChart<String, Number> capacidadSalasChart;
     @FXML
-    public NumberAxis yAxis; // Eje Y del StackedBarChart
+    public NumberAxis yAxis;
     @FXML
-    public CategoryAxis xAxis; // Eje X del StackedBarChart
+    public CategoryAxis xAxis;
     @FXML
     public BarChart<String, Number> ticketsVendidosChart;
     
     private DatabaseConnection databaseConnection = new DatabaseConnection();
-    private Connection connection; // Almacena la conexión de DatabaseConnection
+    private Connection connection;
 
     public GerenteController() {
-        this.connection = databaseConnection.getConnection(); // Usa la conexión única
+        this.connection = databaseConnection.getConnection();
     }
 
     public void cargarTicketsVendidosPorSemana() {
@@ -161,7 +161,6 @@ public class GerenteController {
         }
     }
     
-    // Este método se puede llamar al iniciar el panel para cargar ambos gráficos
     public void initialize() {
         cargarTicketsVendidosPorSemana();
         cargarIngresosPorMes();
