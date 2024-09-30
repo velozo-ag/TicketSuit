@@ -49,7 +49,7 @@
                   <NumberAxis side="LEFT" />
                </yAxis>
             </BarChart>
-            <Label layoutX="884.0" layoutY="412.0" text="Cantidad de Peliculas por Genero" />
+            <Label layoutX="884.0" layoutY="412.0" text="Cantidad de Funciones Esta Semana" />
             <StackedBarChart fx:id="capacidadSalasChart" layoutX="33.0" layoutY="176.0" legendSide="LEFT" prefHeight="501.0" prefWidth="745.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
