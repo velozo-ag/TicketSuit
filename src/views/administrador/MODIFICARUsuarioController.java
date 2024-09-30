@@ -146,7 +146,7 @@ public class MODIFICARUsuarioController {
         tNombre.setText(usuario.getNombre());
         tPassword.setText(usuario.getPassword());
         cEstado.setValue(usuario.getEstado());
-        cPerfil.setValue(perfiles.get(usuario.getIdPerfil()));
+        cPerfil.setValue(perfiles.get(usuario.getIdPerfil()-1));
     }
 
 }

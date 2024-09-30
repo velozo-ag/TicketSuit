@@ -97,7 +97,7 @@ TableColumnHeader {
 
 .table-row-cell {
     fx-padding: 20px;
-    -fx-alignment: center ;
+    -fx-alignment: center;
 }
 /* 
     
@@ -117,17 +117,31 @@ TableColumnHeader {
         #ff60c2,
         #fcc798
     );
+    -fx-cursor: hand;
 }
 
-.titleText {
+.titleText,
+.titlePelicula {
     -fx-font-weight: 700;
     -fx-font-size: 36px;
     -fx-font-family: "Montserrat Bold";
-    -fx-text-fill: #ee6e84;
     /* -fx-effect: dropshadow(gaussian, rgba(238, 110, 132, 0.6), 20, 0.5, 0, 0),
-        dropshadow(gaussian, rgba(238, 110, 132, 0.4), 30, 0.5, 0, 0); */
+    dropshadow(gaussian, rgba(238, 110, 132, 0.4), 30, 0.5, 0, 0); */
     -fx-text-alignment: center;
     -fx-padding: 20px;
+}
+
+.titleText {
+    -fx-text-fill: #ee6e84;
+}
+
+.titlePelicula {
+    -fx-font-size: 24px;
+    -fx-text-fill: #ffffff;
+}
+
+.textSinopsis{
+    -fx-font-size: 14px;
 }
 
 .optionButton {
@@ -150,4 +164,46 @@ TableColumnHeader {
     -fx-background-color: #ee6e84;
     -fx-text-fill: #050627;
     -fx-border-color: #050627;
+}
+
+.fechaButton{
+    -fx-background-color: #D9D9D9;
+    -fx-text-fill: #050627;
+    -fx-padding: 5px 10px;
+    -fx-font-weight: 700;
+    -fx-border-color: #d9d9d9;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+.fechaButtonSelected{
+    -fx-background-color: #EE6E84;
+    -fx-text-fill: #050627;
+    -fx-padding: 5px 10px;
+    -fx-font-weight: 700;
+    -fx-border-color: #d9d9d9;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-width: 64px;
+}
+
+.horarioButton{
+    -fx-background-color: none;
+    -fx-text-fill: #ffffff94;
+}
+
+.horarioButtonSelected{
+    -fx-background-color: none;
+    -fx-text-fill: #ffffff;
+}
+
+.toggleButtonButaca{
+    -fx-background-image: url("../Resources/Asiento.png");
+    -fx-background-size: cover;
+    -fx-background-color: transparent; 
+    -fx-border-color: transparent; 
+}
+
+.toggleButtonButaca:hover{
+    -fx-background-image: url("../Resources/AsientoHover.png");
 }

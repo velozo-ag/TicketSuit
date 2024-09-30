@@ -135,7 +135,11 @@ public class ABMUsuariosController {
 
     @FXML
     void logout(ActionEvent event) {
-
+        try {
+            mainController.toLogin(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

@@ -76,7 +76,17 @@ public class MainController {
 
     @FXML
     public void setUpScene(ActionEvent event, Pane pane, Scene scene) {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        } catch (ClassCastException e) {
+            System.out.println("No es un boton");
+            try {
+                stage = (Stage) ((Pane) event.getSource()).getScene().getWindow();
+            } catch (ClassCastException ex) {
+                System.out.println("No es panel");
+            }
+        }
         double stageWidth = stage.getWidth();
         double stageHeight = stage.getHeight();
 

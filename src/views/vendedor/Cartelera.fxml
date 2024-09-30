@@ -2,7 +2,9 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,7 +14,6 @@
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
          <children>
-            <Button layoutX="534.0" layoutY="57.0" mnemonicParsing="false" onAction="#toPelicula" text="*SELECCIONA PELICULA BUTTON*" />
 
             <Button layoutX="175.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="CARTELERA" />
             <Button layoutX="296.0" layoutY="50.0" mnemonicParsing="false" onAction="#toTickets" styleClass="navButton" text="TICKETS" />
@@ -28,11 +29,13 @@
                 <AnchorPane fx:id="spPeliculas" minHeight="0.0" minWidth="0.0" prefHeight="539.0" prefWidth="1194.0" />
               </content>
             </ScrollPane>
+            <TextField fx:id="tPelicula" layoutX="911.0" layoutY="48.0" prefHeight="40.0" prefWidth="240.0" promptText="Nombre de la Pelicula" styleClass="inputText" />
+            <DatePicker fx:id="dFecha" layoutX="660.0" layoutY="48.0" prefHeight="40.0" prefWidth="240.0" promptText="MM/DD/AAAA" styleClass="inputText" />
+            <Button fx:id="bFiltrar" layoutX="1160.0" layoutY="48.0" mnemonicParsing="false" styleClass="optionButton" text="Filtrar" />
          </children>
       </Pane>
    </children>
    <stylesheets>
-      <URL value="@../Styles/Main.css" />
       <URL value="@../../Styles/Main.css" />
    </stylesheets>
 </AnchorPane>
