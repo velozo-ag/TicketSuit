@@ -78,7 +78,7 @@ public class DatabaseConnection {
    ```
 
 2. Navega a la carpeta del proyecto:
-   ```bash
+```bash
   cd TicketSuit
   ```
 
