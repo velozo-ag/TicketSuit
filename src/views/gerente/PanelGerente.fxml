@@ -13,7 +13,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+
 <!-- 1 -->
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.gerente.GerenteController">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
@@ -27,7 +29,7 @@
                   <Image url="@../../resources/Logo.png" />
                </image>
             </ImageView>
-            <LineChart layoutX="34.0" layoutY="144.0" prefHeight="500.0" prefWidth="570.0">
+            <LineChart fx:id="ingresosChart" layoutX="34.0" layoutY="144.0" legendVisible="false" prefHeight="500.0" prefWidth="570.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -35,13 +37,13 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </LineChart>
-            <Label layoutX="205.0" layoutY="127.0" text="Resumen de Ingresos (Ultimo mes)">
+            <Label layoutX="205.0" layoutY="127.0" text="Resumen de Ingresos (Ultimo año)">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <PieChart layoutX="790.0" layoutY="145.0" prefHeight="220.0" prefWidth="300.0" />
-            <BarChart layoutX="640.0" layoutY="422.0" prefHeight="220.0" prefWidth="300.0">
+            <PieChart fx:id="ingresosPorFuncionChart" layoutX="790.0" layoutY="145.0" legendVisible="false" prefHeight="220.0" prefWidth="300.0" />
+            <BarChart fx:id="ticketsVendidosChart" layoutX="640.0" layoutY="422.0" prefHeight="220.0" prefWidth="300.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -49,7 +51,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <StackedBarChart layoutX="929.0" layoutY="422.0" prefHeight="220.0" prefWidth="300.0">
+            <StackedBarChart fx:id="capacidadSalasChart" layoutX="929.0" layoutY="422.0" prefHeight="220.0" prefWidth="300.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -57,9 +59,9 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </StackedBarChart>
-            <Label layoutX="698.0" layoutY="407.0" text="Tickets Vendidos Por Cartelera" />
-            <Label layoutX="949.0" layoutY="407.0" text="Capacidad Salas Utilizadas &amp; Capacidad Total " />
-            <Label layoutX="883.0" layoutY="121.0" text="Ingresos (2D &amp; 3D)" />
+            <Label layoutX="689.0" layoutY="407.0" text="Tickets Vendidos (Ultimo Trimestre)" />
+            <Label layoutX="1032.0" layoutY="407.0" text="Capacidad de Salas" />
+            <Label layoutX="852.0" layoutY="120.0" text="Ingresos Por Tipo de Funcion" />
          </children>
       </Pane>
    </children>
