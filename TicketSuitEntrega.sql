@@ -328,7 +328,7 @@ SELECT * FROM usuario;
 
 ----------------------
 ----------------------
--- Hasta aca todo bien, el problema es cuando quiero ingresar los tickets, solo me deja ingresar los que tengan id compra 1 o 2
+-- Antes de insertar ticket recuerde que tienen que existir asientos (Ejecutar Script)
 ----------------------
 ----------------------
 INSERT INTO Ticket (id_ticket, id_funcion, id_sala, id_asiento, id_compra) VALUES
@@ -417,7 +417,7 @@ select * from perfil
 select * from usuario;
 
 /*
-
+-- Selects utilizados para la busqueda de datos y creacion de los Charts
 SELECT * FROM Asiento;
 
 SELECT * FROM Funcion;
