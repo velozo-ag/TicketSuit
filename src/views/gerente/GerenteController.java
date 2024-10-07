@@ -165,7 +165,7 @@ public class GerenteController {
         cargarTicketsVendidosPorSemana();
         cargarIngresosPorMes();
         cargarIngresosPorFuncion();
-        cargarCapacidadSalas();
+        //cargarCapacidadSalas();
     }
 
     @FXML
