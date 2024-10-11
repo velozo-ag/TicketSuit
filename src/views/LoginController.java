@@ -78,7 +78,6 @@ public class LoginController {
             mostrarMensajeError("Usuario incorrecta.");
             return false;
         }
-        System.out.println(tPassword.getText() + " contrase " + password);
         if (!tPassword.getText().equals(password)) {
             mostrarMensajeError("Contraseña incorrecta.");
             return false;

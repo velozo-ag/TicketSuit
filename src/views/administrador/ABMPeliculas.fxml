@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.ABMPeliculas">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.ABMPeliculas">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
       <children>
@@ -25,18 +25,9 @@
                   <TableColumn fx:id="colDesactivar" prefWidth="134.0" text="-" />
               </columns>
             </TableView>
-            <Button layoutX="175.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMUsuarios" styleClass="navButton" text="USUARIOS" />
-            <Button layoutX="291.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMSalas" styleClass="navButton" text="SALAS" />
-            <Button layoutX="381.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMFunciones" styleClass="navButton" text="FUNCIONES" />
-            <Button layoutX="506.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="PELICULAS" />
-            <Button layoutX="615.0" layoutY="50.0" mnemonicParsing="false" onAction="#logout" styleClass="logoutButton" text="LOGOUT" />
-            <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../resources/Logo.png" />
-               </image>
-            </ImageView>
             <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="926.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioPelicula" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  C R E A R  P E L I C U L A" />
+            <fx:include  layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="906.0" layoutY="26.0" styleClass="titleText" text="PELICULAS" textAlignment="RIGHT" />
       </children>
    </Pane>

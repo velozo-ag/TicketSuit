@@ -12,10 +12,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -57,15 +60,17 @@ public class CarteleraController {
 
     @FXML
     void toTickets(ActionEvent event) {
-        Parent root;
-        try {
-            root = FXMLLoader.load(getClass().getResource("/views/vendedor/HistorialTickets.fxml"));
-            Scene scene = new Scene(root);
-            Pane panel = (Pane) scene.lookup("#mainPanel");
-            mainController.setUpScene(event, panel, scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Parent root;
+        // try {
+        // root =
+        // FXMLLoader.load(getClass().getResource("/views/vendedor/HistorialTickets.fxml"));
+        // Scene scene = new Scene(root);
+        // Pane panel = (Pane) scene.lookup("#mainPanel");
+        // mainController.setUpScene(event, panel, scene);
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
+        mostrarMensajeError("Proximamente");
     }
 
     void cargarPeliculas() {
@@ -73,12 +78,13 @@ public class CarteleraController {
         int totalPeliculas = peliculas.size();
 
         double panelWidth = 280;
+        double panelHeight = 414;
         double gap = 14.8;
         int panelsPerRow = 4;
         int i = 0;
 
         int rows = (int) Math.ceil((double) totalPeliculas / panelsPerRow);
-        double totalHeight = gap + rows * (400 + gap);
+        double totalHeight = gap + rows * (panelHeight + gap);
 
         if (totalHeight < 539) {
             totalHeight = 539;
@@ -88,21 +94,29 @@ public class CarteleraController {
 
         for (Pelicula pelicula : peliculas) {
             Pane panel = new Pane();
-            Label label = new Label(pelicula.getNombre());
             panel.setPrefWidth(panelWidth);
-            panel.setPrefHeight(400);
+            panel.setPrefHeight(panelHeight);
             panel.getStyleClass().add("cartelera");
-            panel.getChildren().add(label);
+
+            ImageView thumbnail = new ImageView();
+            thumbnail.setFitWidth(panelWidth); 
+            thumbnail.setFitHeight(panelHeight - 1);
+            thumbnail.setPreserveRatio(true); 
+            thumbnail.setImage(new Image(pelicula.getImagen())); 
+            thumbnail.setLayoutX(2);
+            thumbnail.setLayoutY(1);
+
+            panel.getChildren().add(thumbnail);
 
             int column = i % panelsPerRow;
             int row = i / panelsPerRow;
 
             double positionX = gap + column * (panelWidth + gap);
-            double positionY = gap + row * (400 + gap);
+            double positionY = gap + row * (panelHeight + gap);
 
             AnchorPane.setLeftAnchor(panel, positionX);
             AnchorPane.setTopAnchor(panel, positionY);
-            
+
             panel.setOnMouseClicked(event -> {
                 seleccionPelicula(pelicula, event);
             });
@@ -129,4 +143,11 @@ public class CarteleraController {
         }
     }
 
+    private void mostrarMensajeError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("-");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 }

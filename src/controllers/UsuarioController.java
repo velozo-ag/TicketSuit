@@ -106,6 +106,32 @@ public class UsuarioController {
         return usuarios;
     }
 
+    public List<Usuario> findNotAdmin() {
+        List<Usuario> usuarios = new ArrayList<>();
+        String query = "SELECT u.id_usuario, u.nombre, u.password, u.estado, u.id_perfil, p.nombre AS nombre_perfil "
+                + "FROM Usuario u "
+                + "JOIN Perfil p ON u.id_perfil = p.id_perfil "
+                + "WHERE u.id_perfil != 1"; 
+
+        try (Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setPassword(rs.getString("password"));
+                usuario.setEstado(rs.getBoolean("estado"));
+                usuario.setIdPerfil(rs.getInt("id_perfil"));
+                usuario.setNombrePerfil(rs.getString("nombre_perfil"));
+                usuario.setIdCine(rs.getInt(1));
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al leer usuarios: " + e.getMessage());
+        }
+        return usuarios;
+    }
+
     public Usuario findByUser(String user){
         String query = "SELECT * FROM Usuario WHERE nombre = ?";
         Usuario usuario = null;

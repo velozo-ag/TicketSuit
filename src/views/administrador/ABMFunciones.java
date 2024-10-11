@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -90,7 +91,7 @@ public class ABMFunciones {
 
     @FXML
     void formularioFuncion(ActionEvent event) {
-
+        mostrarMensajeError("Proximamente");
     }
 
     @FXML
@@ -109,6 +110,14 @@ public class ABMFunciones {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void mostrarMensajeError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("-");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
 }

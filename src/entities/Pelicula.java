@@ -96,7 +96,7 @@ public class Pelicula {
     }
 
     public String getImagen() {
-        return imagen;
+        return "@../../Resources/thumbnails/" + imagen + ".jpg";
     }
 
     public void setImagen(String imagen) {

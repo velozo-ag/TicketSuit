@@ -2,10 +2,11 @@ package views.administrador;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javafx.scene.control.TableCell;
-
+import controllers.PerfilController;
 import controllers.UsuarioController;
 import database.DatabaseConnection;
 import entities.Usuario;
@@ -20,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -64,9 +66,36 @@ public class ABMUsuariosController {
     @FXML
     private TableColumn<Usuario, Void> colDesactivar;
 
+    @FXML
+    private Pane dataPanel;
+
+    @FXML
+    private Label labelSeleccionar;
+
+    @FXML
+    private Label labId;
+
+    @FXML
+    private Label labNombre;
+
+    @FXML
+    private Label labPerfil;
+
+    @FXML
+    private Label labEstado;
+
+    @FXML
+    private Button bActivar;
+
+    @FXML
+    private Button bDesactivar;
+
     private AdministracionController administracionController = new AdministracionController();
     private MainController mainController = new MainController();
     private UsuarioController usuarioController = new UsuarioController();
+    private PerfilController perfilController = new PerfilController();
+
+    private Usuario usuarioSeleccionado;
 
     @FXML
     public void initialize() {
@@ -76,7 +105,14 @@ public class ABMUsuariosController {
         colPerfil.setCellValueFactory(new PropertyValueFactory<>("nombrePerfil"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-        asignarBotones();
+        tablaUsuarios.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                updateUsuarioSeleccionado(newValue);
+                updateDataPanel();
+            }
+        });
+
+        dataPanel.setVisible(false);
         cargarUsuarios();
     }
 
@@ -85,12 +121,36 @@ public class ABMUsuariosController {
         tablaUsuarios.setItems(usuarios);
     }
 
+    private void updateUsuarioSeleccionado(Usuario usuario) {
+        usuarioSeleccionado = usuario;
+        System.out.println(
+                "Usuario: " + usuarioSeleccionado.getNombre() + " - Perfil: " + usuarioSeleccionado.getNombrePerfil());
+    }
+
+    private void updateDataPanel() {
+        labelSeleccionar.setVisible(false);
+        dataPanel.setVisible(true);
+
+        labNombre.setText(usuarioSeleccionado.getNombre().toUpperCase());
+        labId.setText("#" + Integer.toString(usuarioSeleccionado.getIdUsuario()));
+        labPerfil.setText(perfilController.findById(usuarioSeleccionado.getIdPerfil()).getNombre());
+        labEstado.setText(usuarioSeleccionado.getEstado() ? "ACTIVO" : "INACTIVO");
+
+        if (usuarioSeleccionado.getEstado()) {
+            bDesactivar.setDisable(false);
+            bActivar.setDisable(true);
+        } else {
+            bDesactivar.setDisable(true);
+            bActivar.setDisable(false);
+        }
+    }
+
     @FXML
     void formularioUsuario(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/AltaUsuario.fxml"));
             Parent root = loader.load();
-
+            
             Stage stage = new Stage();
             stage.setTitle("Formulario");
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -98,6 +158,7 @@ public class ABMUsuariosController {
             stage.setScene(new Scene(root));
 
             stage.setOnHidden(e -> cargarUsuarios());
+            
             stage.showAndWait();
 
         } catch (Exception e) {
@@ -105,13 +166,14 @@ public class ABMUsuariosController {
         }
     }
 
-    void modificarUsuario(Usuario usuario) {
+    @FXML
+    void modificarUsuario(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/ModificarUsuario.fxml"));
             Parent root = loader.load();
 
             MODIFICARUsuarioController controller = loader.getController();
-            controller.setUsuario(usuario);
+            controller.setUsuario(usuarioSeleccionado);
 
             Stage stage = new Stage();
             stage.setTitle("Modificar Usuario");
@@ -122,15 +184,34 @@ public class ABMUsuariosController {
             stage.setOnHidden(e -> cargarUsuarios());
             stage.showAndWait();
 
+            usuarioSeleccionado = usuarioController.findById(usuarioSeleccionado.getIdUsuario());
+            updateDataPanel();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
-    void desactivarUsuario(Usuario usuario) {
-        usuario.setEstado(!usuario.getEstado());
-        usuarioController.updateUsuario(usuario);
+    void modificarEstado() throws SQLException {
+        usuarioSeleccionado.setEstado(!usuarioSeleccionado.getEstado());
+        usuarioController.updateUsuario(usuarioSeleccionado);
+        usuarioSeleccionado = usuarioController.findById(usuarioSeleccionado.getIdUsuario());
+        updateDataPanel();
         cargarUsuarios();
+    }
+
+    @FXML
+    void activarUsuario(ActionEvent event) throws SQLException {
+        modificarEstado();
+        bActivar.setDisable(true);
+        bDesactivar.setDisable(false);
+    }
+    
+    @FXML
+    void desactivarUsuario(ActionEvent event) throws SQLException {
+        modificarEstado();
+        bActivar.setDisable(false);
+        bDesactivar.setDisable(true);
     }
 
     @FXML
@@ -166,79 +247,82 @@ public class ABMUsuariosController {
         administracionController.ABMPeliculas(event);
     }
 
-    void asignarBotones() {
+    // void asignarBotones() {
 
-        colModificar.setCellValueFactory(new PropertyValueFactory<>(""));
-        colModificar.setCellFactory(new Callback<TableColumn<Usuario, Void>, TableCell<Usuario, Void>>() {
-            @Override
-            public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
-                return new TableCell<Usuario, Void>() {
+    // colModificar.setCellValueFactory(new PropertyValueFactory<>(""));
+    // colModificar.setCellFactory(new Callback<TableColumn<Usuario, Void>,
+    // TableCell<Usuario, Void>>() {
+    // @Override
+    // public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
+    // return new TableCell<Usuario, Void>() {
 
-                    private final Button btnModificar = new Button("Modificar");
+    // private final Button btnModificar = new Button("Modificar");
 
-                    public HBox createButtonContainer() {
-                        HBox hBox = new HBox();
-                        hBox.getChildren().add(btnModificar);
-                        HBox.setHgrow(btnModificar, Priority.ALWAYS);
-                        btnModificar.setMaxWidth(Double.MAX_VALUE);
-                        return hBox;
-                    }
+    // public HBox createButtonContainer() {
+    // HBox hBox = new HBox();
+    // hBox.getChildren().add(btnModificar);
+    // HBox.setHgrow(btnModificar, Priority.ALWAYS);
+    // btnModificar.setMaxWidth(Double.MAX_VALUE);
+    // return hBox;
+    // }
 
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item != null) {
-                            setGraphic(null);
-                        } else {
-                            Usuario usuario = getTableView().getItems().get(getIndex());
-                            if (usuario.getIdPerfil() == 1) {
-                                setGraphic(null);
-                            } else {
-                                btnModificar.setOnAction(event -> {
-                                    modificarUsuario(usuario);
-                                });
-                                setGraphic(createButtonContainer());
-                            }
-                        }
-                    }
-                };
-            }
-        });
+    // @Override
+    // protected void updateItem(Void item, boolean empty) {
+    // super.updateItem(item, empty);
+    // if (empty || item != null) {
+    // setGraphic(null);
+    // } else {
+    // Usuario usuario = getTableView().getItems().get(getIndex());
+    // if (usuario.getIdPerfil() == 1) {
+    // setGraphic(null);
+    // } else {
+    // btnModificar.setOnAction(event -> {
+    // modificarUsuario(usuario);
+    // });
+    // setGraphic(createButtonContainer());
+    // }
+    // }
+    // }
+    // };
+    // }
+    // });
 
-        colDesactivar.setCellValueFactory(new PropertyValueFactory<>(""));
-        colDesactivar.setCellFactory(new Callback<TableColumn<Usuario, Void>, TableCell<Usuario, Void>>() {
-            @Override
-            public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
-                return new TableCell<Usuario, Void>() {
-                    private final Button btnDesactivar = new Button("AltEstado");
+    // colDesactivar.setCellValueFactory(new PropertyValueFactory<>(""));
+    // colDesactivar.setCellFactory(new Callback<TableColumn<Usuario, Void>,
+    // TableCell<Usuario, Void>>() {
+    // @Override
+    // public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
+    // return new TableCell<Usuario, Void>() {
+    // private final Button btnDesactivar = new Button("AltEstado");
 
-                    public HBox createButtonContainer() {
-                        HBox hBox = new HBox();
-                        hBox.getChildren().add(btnDesactivar);
-                        HBox.setHgrow(btnDesactivar, Priority.ALWAYS);
-                        btnDesactivar.setMaxWidth(Double.MAX_VALUE);
-                        return hBox;
-                    }
+    // public HBox createButtonContainer() {
+    // HBox hBox = new HBox();
+    // hBox.getChildren().add(btnDesactivar);
+    // HBox.setHgrow(btnDesactivar, Priority.ALWAYS);
+    // btnDesactivar.setMaxWidth(Double.MAX_VALUE);
+    // return hBox;
+    // }
 
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item != null) {
-                            setGraphic(null);
-                        } else {
-                            Usuario usuario = getTableView().getItems().get(getIndex());
-                            if (usuario.getIdPerfil() == 1) {
-                                setGraphic(null);
-                            } else {
-                                btnDesactivar.setOnAction(event -> {
-                                    desactivarUsuario(usuario);
-                                });
-                                setGraphic(createButtonContainer());
-                            }
-                        }
-                    }
-                };
-            }
-        });
-    }
+    // @Override
+    // protected void updateItem(Void item, boolean empty) {
+    // super.updateItem(item, empty);
+    // if (empty || item != null) {
+    // setGraphic(null);
+    // } else {
+    // Usuario usuario = getTableView().getItems().get(getIndex());
+    // if (usuario.getIdPerfil() == 1) {
+    // setGraphic(null);
+    // } else {
+    // btnDesactivar.setOnAction(event -> {
+    // desactivarUsuario(usuario);
+    // });
+    // setGraphic(createButtonContainer());
+    // }
+    // }
+    // }
+    // };
+    // }
+    // });
+    // }
+
 }

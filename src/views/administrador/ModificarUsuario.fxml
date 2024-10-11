@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pFormulario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="668.0" stylesheets="@../../../../../TicketSuit/src/styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.MODIFICARUsuarioController">
+<AnchorPane fx:id="pFormulario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.MODIFICARUsuarioController">
    <children>
       <Pane fx:id="formPanel" layoutX="34.0" layoutY="48.0" prefHeight="620.0" prefWidth="600.0">
          <children>

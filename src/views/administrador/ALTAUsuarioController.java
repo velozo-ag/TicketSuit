@@ -78,29 +78,9 @@ public class ALTAUsuarioController {
             usuario.setEstado(cEstado.getValue());
             usuario.setIdCine(1);
 
-            usuarioController.createUsuario(usuario);
+        usuarioController.createUsuario(usuario);
 
             CerrarFormulario(event);
-        }
-    }
-
-    private void mostrarEstados() {
-        Boolean estado = cEstado.getValue();
-
-        if (estado != null) {
-            System.out.println(estado);
-        } else {
-            System.out.println("Estado incorrecto");
-        }
-    }
-
-    private void mostrarPerfiles() {
-        Perfil perfil = cPerfil.getValue();
-
-        if (perfil != null) {
-            System.out.println(perfil.getNombre());
-        } else {
-            System.out.println("Perfil incorrecto");
         }
     }
 
