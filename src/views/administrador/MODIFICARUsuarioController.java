@@ -53,14 +53,6 @@ public class MODIFICARUsuarioController {
 
     @FXML
     public void initialize() {
-
-        ObservableList<Boolean> estados = FXCollections.observableArrayList();
-        if (usuario.getIdPerfil() != 1) {
-            estados.add(false);
-        }
-        estados.add(true);
-        cEstado.setItems(estados);
-
         ObservableList<Perfil> perfiles = FXCollections.observableArrayList(perfilController.findAll());
         cPerfil.setItems(perfiles);
     }
@@ -129,6 +121,19 @@ public class MODIFICARUsuarioController {
         this.usuario = usuario;
 
         List<Perfil> perfiles = perfilController.findAll();
+
+        ObservableList<Boolean> estados = FXCollections.observableArrayList();
+        estados.add(false);
+        estados.add(true);
+        cEstado.setItems(estados);
+
+        if(usuario.getIdPerfil() == 1){
+            cEstado.setDisable(true);
+            cPerfil.setDisable(true);
+        }else{
+            cEstado.setDisable(false);
+            cPerfil.setDisable(false);
+        }
 
         tNombre.setText(usuario.getNombre());
         tPassword.setText(usuario.getPassword());
