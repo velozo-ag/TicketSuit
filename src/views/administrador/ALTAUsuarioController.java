@@ -78,7 +78,7 @@ public class ALTAUsuarioController {
             usuario.setEstado(cEstado.getValue());
             usuario.setIdCine(1);
 
-        usuarioController.createUsuario(usuario);
+            usuarioController.createUsuario(usuario);
 
             CerrarFormulario(event);
         }
@@ -87,6 +87,11 @@ public class ALTAUsuarioController {
     private boolean verificarCampos() {
         if (tNombre == null || tNombre.getText().length() < 5) {
             mostrarMensajeError("El nombre debe tener al menos 5 caracteres.");
+            return false;
+        }
+
+        if (usuarioController.findByUser(tNombre.getText()) != null) {
+            mostrarMensajeError("El nombre ya esta en uso.");
             return false;
         }
 

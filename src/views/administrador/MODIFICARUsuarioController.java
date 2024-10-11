@@ -55,8 +55,10 @@ public class MODIFICARUsuarioController {
     public void initialize() {
 
         ObservableList<Boolean> estados = FXCollections.observableArrayList();
+        if (usuario.getIdPerfil() != 1) {
+            estados.add(false);
+        }
         estados.add(true);
-        estados.add(false);
         cEstado.setItems(estados);
 
         ObservableList<Perfil> perfiles = FXCollections.observableArrayList(perfilController.findAll());
@@ -89,6 +91,11 @@ public class MODIFICARUsuarioController {
     private boolean verificarCampos() {
         if (tNombre == null || tNombre.getText().length() < 5) {
             mostrarMensajeError("El nombre debe tener al menos 5 caracteres.");
+            return false;
+        }
+
+        if (usuarioController.findByUser(tNombre.getText()) != null) {
+            mostrarMensajeError("El nombre ya esta en uso.");
             return false;
         }
 
@@ -126,7 +133,7 @@ public class MODIFICARUsuarioController {
         tNombre.setText(usuario.getNombre());
         tPassword.setText(usuario.getPassword());
         cEstado.setValue(usuario.getEstado());
-        cPerfil.setValue(perfiles.get(usuario.getIdPerfil()-1));
+        cPerfil.setValue(perfiles.get(usuario.getIdPerfil() - 1));
     }
 
 }

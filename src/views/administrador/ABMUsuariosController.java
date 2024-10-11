@@ -135,6 +135,12 @@ public class ABMUsuariosController {
         labId.setText("#" + Integer.toString(usuarioSeleccionado.getIdUsuario()));
         labPerfil.setText(perfilController.findById(usuarioSeleccionado.getIdPerfil()).getNombre());
         labEstado.setText(usuarioSeleccionado.getEstado() ? "ACTIVO" : "INACTIVO");
+        
+        if(usuarioSeleccionado.getIdPerfil() == 1){
+            bDesactivar.setDisable(true);
+            bActivar.setDisable(true);
+            return;
+        }
 
         if (usuarioSeleccionado.getEstado()) {
             bDesactivar.setDisable(false);
@@ -150,7 +156,7 @@ public class ABMUsuariosController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/AltaUsuario.fxml"));
             Parent root = loader.load();
-            
+
             Stage stage = new Stage();
             stage.setTitle("Formulario");
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -158,7 +164,7 @@ public class ABMUsuariosController {
             stage.setScene(new Scene(root));
 
             stage.setOnHidden(e -> cargarUsuarios());
-            
+
             stage.showAndWait();
 
         } catch (Exception e) {
@@ -206,7 +212,7 @@ public class ABMUsuariosController {
         bActivar.setDisable(true);
         bDesactivar.setDisable(false);
     }
-    
+
     @FXML
     void desactivarUsuario(ActionEvent event) throws SQLException {
         modificarEstado();
