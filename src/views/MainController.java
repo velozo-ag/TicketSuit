@@ -38,12 +38,16 @@ public class MainController {
 
     @FXML
     public void toPGerente(ActionEvent event) throws IOException {
-        App.setRoot("/views/gerente/PanelGerente.fxml");
+        Parent root = FXMLLoader.load(getClass().getResource("/views/gerente/PanelGerente.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneManager.setScene(root, stage);
     }
 
     @FXML
     public void toPVendedor(ActionEvent event) throws IOException {
-        App.setRoot("/views/vendedor/Cartelera.fxml");
+        Parent root = FXMLLoader.load(getClass().getResource("/views/vendedor/Cartelera.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneManager.setScene(root, stage);
     }
 
     @FXML
