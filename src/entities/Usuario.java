@@ -66,4 +66,5 @@ public class Usuario {
     public int getIdCine(){
         return this.id_cine;
     }
+
 }

@@ -6,9 +6,8 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -17,15 +16,8 @@
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
          <children>
-            <Button layoutX="288.0" layoutY="50.0" mnemonicParsing="false" onAction="#ChartsAsistencias" styleClass="navButton" text="ASISTENCIAS" />
-            <Button layoutX="415.0" layoutY="50.0" mnemonicParsing="false" onAction="#ChartsLogistica" styleClass="navButton" text="LOGISTICA &amp; OPERATIVA" />
-            <Button layoutX="604.0" layoutY="51.0" mnemonicParsing="false" onAction="#toLogin" onDragDetected="#toLogin" styleClass="logoutButton" text="LOGOUT" />
-            <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../resources/Logo.png" />
-               </image>
-            </ImageView>
-            <Button layoutX="151.0" layoutY="50.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
+            <fx:include layoutX="26.0" layoutY="19.0" source="../GerenteMenu.fxml" />
+            <Button layoutX="50.0" layoutY="106.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
             <LineChart fx:id="lineChartIngresosTiempo" animated="false" layoutX="640.0" layoutY="169.0" legendVisible="false" prefHeight="500.0" prefWidth="547.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
@@ -55,6 +47,10 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
+            <DatePicker fx:id="desdeDatePicker" layoutX="772.0" layoutY="57.0" />
+            <DatePicker fx:id="hastaDatePicker" layoutX="1030.0" layoutY="57.0" />
+            <Label layoutX="979.0" layoutY="61.0" text="HASTA:" />
+            <Label layoutX="720.0" layoutY="60.0" text="DESDE:" />
          </children>
       </Pane>
    </children>

@@ -120,20 +120,20 @@ public class ABMPeliculas {
 
     @FXML
     void formularioPelicula(ActionEvent event) {
-        // try {
-        //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/AltaPelicula.fxml"));
-        //     Parent root = loader.load();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/AltaPelicula.fxml"));
+            Parent root = loader.load();
 
-        //     Stage stage = new Stage();
-        //     stage.setTitle("Formulario");
-        //     stage.initModality(Modality.APPLICATION_MODAL);
-        //     stage.initStyle(StageStyle.UNDECORATED);
-        //     stage.setScene(new Scene(root));
-        //     stage.showAndWait();
+            Stage stage = new Stage();
+            stage.setTitle("Formulario");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
 
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

@@ -4,38 +4,61 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../styles/Main.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.ABMUsuariosController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.ABMUsuariosController">
    <children>
-      <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
+      <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0" styleClass="panel">
       <children>
-          <TableView fx:id="tablaUsuarios" layoutX="123.0" layoutY="176.0" prefHeight="503.0" prefWidth="1035.0" stylesheets="@../../styles/Main.css">
+            <TableView fx:id="tablaUsuarios" layoutX="123.0" layoutY="176.0" prefHeight="503.0" prefWidth="612.0" styleClass="data-panel">
               <columns>
                 <TableColumn fx:id="colIdUsuario" editable="false" prefWidth="53.0" resizable="false" text="ID" />
-                  <TableColumn fx:id="colNombre" prefWidth="389.0" resizable="false" text="NOMBRE" />
-                  <TableColumn fx:id="colPerfil" prefWidth="192.0" resizable="false" text="PERFIL" />
-                  <TableColumn fx:id="colEstado" minWidth="0.0" prefWidth="127.0" resizable="false" text="ESTADO" />
-                  <TableColumn fx:id="colModificar" minWidth="0.0" prefWidth="139.0" resizable="false" text="-" />
-                  <TableColumn fx:id="colDesactivar" prefWidth="133.0" resizable="false" text="-" />
+                  <TableColumn fx:id="colNombre" prefWidth="287.1999816894531" resizable="false" text="NOMBRE" />
+                  <TableColumn fx:id="colPerfil" prefWidth="179.20004272460938" resizable="false" text="PERFIL" />
+                  <TableColumn fx:id="colEstado" minWidth="0.0" prefWidth="78.4000244140625" resizable="false" text="ESTADO" />
               </columns>
             </TableView>
-            <Button layoutX="175.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="USUARIOS" />
-            <Button layoutX="291.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMSalas" styleClass="navButton" text="SALAS" />
-            <Button layoutX="381.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMFunciones" styleClass="navButton" text="FUNCIONES" />
-            <Button layoutX="506.0" layoutY="50.0" mnemonicParsing="false" onAction="#ABMPeliculas" styleClass="navButton" text="PELICULAS" />
-            <Button layoutX="615.0" layoutY="50.0" mnemonicParsing="false" onAction="#logout" styleClass="logoutButton" text="LOGOUT" />
-            <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../resources/Logo.png" />
-               </image>
-            </ImageView>
             <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="926.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioUsuario" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  C R E A R  U S U A R I O" textAlignment="RIGHT" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="919.0" layoutY="26.0" styleClass="titleText" text="USUARIOS" textAlignment="RIGHT" />
+            <fx:include layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
+            <Pane layoutX="750.0" layoutY="176.0" prefHeight="503.0" prefWidth="409.0" styleClass="data-panel">
+               <children>
+                  <Label fx:id="labelSeleccionar" alignment="CENTER" contentDisplay="CENTER" layoutX="108.0" layoutY="243.0" prefHeight="15.0" prefWidth="178.0" text="* Seleccione un usuario *" textAlignment="CENTER" />
+                  <Pane fx:id="dataPanel" layoutX="27.0" layoutY="38.0" prefHeight="428.0" prefWidth="355.0">
+                     <children>
+                        <Label fx:id="labNombre" alignment="CENTER" contentDisplay="CENTER" layoutX="88.0" layoutY="37.0" prefHeight="28.0" prefWidth="178.0" styleClass="titleLabel" text="NOMBRE">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <Label contentDisplay="CENTER" layoutX="14.0" layoutY="70.0" prefHeight="28.0" prefWidth="112.0" text="# ID" />
+                        <Label contentDisplay="CENTER" layoutX="14.0" layoutY="118.0" prefHeight="28.0" prefWidth="112.0" text="# PERFIL" />
+                        <Label contentDisplay="CENTER" layoutX="14.0" layoutY="166.0" prefHeight="28.0" prefWidth="112.0" text="# ESTADO" />
+                        <Button layoutX="98.0" layoutY="273.0" mnemonicParsing="false" onAction="#modificarUsuario" prefHeight="40.0" prefWidth="158.0" styleClass="optionButton" text="M O D I F I C A R" textAlignment="RIGHT" />
+                        <Button fx:id="bActivar" layoutY="330.0" mnemonicParsing="false" onAction="#activarUsuario" prefHeight="40.0" prefWidth="168.0" styleClass="optionButtonGreen" text="A C T I V A R" textAlignment="RIGHT" />
+                        <Button fx:id="bDesactivar" layoutX="186.0" layoutY="330.0" mnemonicParsing="false" onAction="#desactivarUsuario" prefHeight="40.0" prefWidth="168.0" styleClass="optionButtonRed" text="D E S A C T I V A R" textAlignment="RIGHT" />
+                        <Label fx:id="labId" contentDisplay="CENTER" layoutX="14.0" layoutY="90.0" prefHeight="28.0" prefWidth="220.0" styleClass="titleLabel" text="# ID">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labPerfil" contentDisplay="CENTER" layoutX="14.0" layoutY="138.0" prefHeight="28.0" prefWidth="220.0" styleClass="titleLabel" text="# ID">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labEstado" contentDisplay="CENTER" layoutX="14.0" layoutY="186.0" prefHeight="28.0" prefWidth="220.0" styleClass="titleLabel" text="# ID">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
       </children>
    </Pane>
    </children>
