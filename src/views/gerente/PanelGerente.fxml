@@ -18,7 +18,7 @@
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
          <children>
             <fx:include layoutX="26.0" layoutY="19.0" source="../GerenteMenu.fxml" />
-            <LineChart fx:id="ingresosChart" layoutX="34.0" layoutY="144.0" legendVisible="false" prefHeight="500.0" prefWidth="570.0">
+            <LineChart fx:id="ingresosChart" animated="false" layoutX="34.0" layoutY="144.0" legendVisible="false" prefHeight="500.0" prefWidth="570.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -31,8 +31,8 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <PieChart fx:id="ingresosPorFuncionChart" layoutX="952.0" layoutY="422.0" legendVisible="false" prefHeight="220.0" prefWidth="300.0" />
-            <BarChart fx:id="ticketsVendidosChart" layoutX="640.0" layoutY="422.0" prefHeight="220.0" prefWidth="300.0">
+            <PieChart fx:id="ingresosPorFuncionChart" animated="false" layoutX="952.0" layoutY="422.0" legendVisible="false" prefHeight="220.0" prefWidth="300.0" />
+            <BarChart fx:id="ticketsVendidosChart" animated="false" layoutX="640.0" layoutY="422.0" legendVisible="false" prefHeight="220.0" prefWidth="300.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -42,8 +42,8 @@
             </BarChart>
             <Label layoutX="750.0" layoutY="407.0" text="Tickets Vendidos" />
             <Label layoutX="1014.0" layoutY="407.0" text="Ingresos Por Tipo de Funcion" />
-            <DatePicker fx:id="desdeDatePicker" layoutX="772.0" layoutY="57.0" />
-            <DatePicker fx:id="hastaDatePicker" layoutX="1030.0" layoutY="57.0" />
+            <DatePicker fx:id="desdeDatePicker" layoutX="772.0" layoutY="57.0" styleClass="custom-date-picker" />
+            <DatePicker fx:id="hastaDatePicker" layoutX="1030.0" layoutY="57.0" styleClass="custom-date-picker" />
             <Label layoutX="979.0" layoutY="61.0" text="HASTA:" />
             <Label layoutX="720.0" layoutY="60.0" text="DESDE:" />
             <Label layoutX="818.0" layoutY="126.0" text="Acumulados entre fechas seleccionadas:">
