@@ -19,7 +19,7 @@ AnchorPane {
 .inputText {
     -fx-background: none;
     -fx-background-color: #050627;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-color: linear-gradient(
         from 0% 0% to 100% 100%,
         #ee6e84,
@@ -133,6 +133,7 @@ TableColumnHeader {
 }
 
 .titleText {
+    -fx-padding: 0px;
     -fx-text-fill: #ee6e84;
 }
 
@@ -372,4 +373,14 @@ TableColumnHeader {
 .scroll-bar:vertical .thumb:pressed,
 .scroll-bar:horizontal .thumb:pressed {
     -fx-background-color: #b35161;
+}
+
+.text-field{
+    -fx-prompt-text-fill: #b351616b;
+}
+
+.pantalla{
+    -fx-text-fill: #050627;
+    -fx-background-color: #d9d9d981;
+    -fx-font-weight: 700;
 }

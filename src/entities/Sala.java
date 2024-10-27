@@ -5,6 +5,44 @@ public class Sala {
     private String nombre;
     private int capacidad;
     private int id_cine;
+    private int estado;
+    private String estadoNombre;
+
+    private int cantFilas;
+    private int cantColumnas;
+
+    public String getEstadoNombre() {
+        return estadoNombre;
+    }
+
+    public void setEstadoNombre(String estadoNombre) {
+        this.estadoNombre = estadoNombre;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+        this.setEstadoNombre(estado == 1 ? "Activa" : "Inactiva");
+    }
+
+    public int getCantFilas() {
+        return cantFilas;
+    }
+
+    public void setCantFilas(int cantFilas) {
+        this.cantFilas = cantFilas;
+    }
+
+    public int getCantColumnas() {
+        return cantColumnas;
+    }
+
+    public void setCantColumnas(int cantColumnas) {
+        this.cantColumnas = cantColumnas;
+    }
 
     public int getIdSala() {
         return id_sala;
@@ -24,6 +62,10 @@ public class Sala {
 
     public int getCapacidad() {
         return capacidad;
+    }
+
+    public String getDimensiones() {
+        return capacidad + " (" + this.getCantFilas() + "x" + this.getCantColumnas() + ")";
     }
 
     public void setCapacidad(int capacidad) {

@@ -21,7 +21,7 @@ public class PerfilController {
 
     public List<Perfil> findAll() {
         List<Perfil> perfiles = new ArrayList<>();
-        String query = "SELECT * FROM Perfil";
+        String query = "SELECT * FROM Perfil ORDER BY id_perfil";
 
         try (Statement stmt = connection.createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {

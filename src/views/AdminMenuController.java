@@ -51,7 +51,14 @@ public class AdminMenuController {
 
     @FXML
     void ABMSalas(ActionEvent event) {
-
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/views/administrador/ABMSalas.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneManager.setScene(root, stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

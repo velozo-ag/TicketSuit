@@ -17,9 +17,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -37,6 +41,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import views.MainController;
+import views.SceneManager;
+import views.administrador.usuario.MODIFICARUsuarioController;
 import database.DatabaseConnection;
 
 public class ABMUsuariosController {
@@ -90,7 +96,9 @@ public class ABMUsuariosController {
     @FXML
     private Button bDesactivar;
 
-    private AdministracionController administracionController = new AdministracionController();
+    @FXML
+    private TextField tFiltro;
+
     private MainController mainController = new MainController();
     private UsuarioController usuarioController = new UsuarioController();
     private PerfilController perfilController = new PerfilController();
@@ -117,7 +125,14 @@ public class ABMUsuariosController {
     }
 
     private void cargarUsuarios() {
-        ObservableList<Usuario> usuarios = FXCollections.observableArrayList(usuarioController.findAll());
+        ObservableList<Usuario> usuarios = null;
+
+        if (!tFiltro.getText().isEmpty()) {
+            usuarios = FXCollections.observableArrayList(usuarioController.findByContain(tFiltro.getText()));
+            System.out.println(tFiltro.getText());
+        } else {
+            usuarios = FXCollections.observableArrayList(usuarioController.findAll());
+        }
         tablaUsuarios.setItems(usuarios);
     }
 
@@ -135,8 +150,8 @@ public class ABMUsuariosController {
         labId.setText("#" + Integer.toString(usuarioSeleccionado.getIdUsuario()));
         labPerfil.setText(perfilController.findById(usuarioSeleccionado.getIdPerfil()).getNombre());
         labEstado.setText(usuarioSeleccionado.getEstado() ? "ACTIVO" : "INACTIVO");
-        
-        if(usuarioSeleccionado.getIdPerfil() == 1){
+
+        if (usuarioSeleccionado.getIdPerfil() == 1) {
             bDesactivar.setDisable(true);
             bActivar.setDisable(true);
             return;
@@ -154,13 +169,12 @@ public class ABMUsuariosController {
     @FXML
     void formularioUsuario(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/AltaUsuario.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/usuario/AltaUsuario.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
             stage.setTitle("Formulario");
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
 
             stage.setOnHidden(e -> cargarUsuarios());
@@ -175,16 +189,16 @@ public class ABMUsuariosController {
     @FXML
     void modificarUsuario(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/ModificarUsuario.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/administrador/usuario/ModificarUsuario.fxml"));
             Parent root = loader.load();
 
-            MODIFICARUsuarioController controller = loader.getController();
-            controller.setUsuario(usuarioSeleccionado);
+            MODIFICARUsuarioController modificarUsuarioController = loader.getController();
+            modificarUsuarioController.setUsuario(usuarioSeleccionado);
 
             Stage stage = new Stage();
             stage.setTitle("Modificar Usuario");
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
 
             stage.setOnHidden(e -> cargarUsuarios());
@@ -198,6 +212,11 @@ public class ABMUsuariosController {
 
     }
 
+    @FXML
+    void filtrarUsuarios(ActionEvent event) {
+        cargarUsuarios();
+    }
+
     void modificarEstado() throws SQLException {
         usuarioSeleccionado.setEstado(!usuarioSeleccionado.getEstado());
         usuarioController.updateUsuario(usuarioSeleccionado);
@@ -208,16 +227,24 @@ public class ABMUsuariosController {
 
     @FXML
     void activarUsuario(ActionEvent event) throws SQLException {
-        modificarEstado();
-        bActivar.setDisable(true);
-        bDesactivar.setDisable(false);
+        boolean res = mensajeConfirmacion("Desea activar al usuario " + usuarioSeleccionado.getNombre() + "?");
+
+        if (res) {
+            modificarEstado();
+            bActivar.setDisable(true);
+            bDesactivar.setDisable(false);
+        }
     }
 
     @FXML
     void desactivarUsuario(ActionEvent event) throws SQLException {
-        modificarEstado();
-        bActivar.setDisable(false);
-        bDesactivar.setDisable(true);
+        boolean res = mensajeConfirmacion("Desea desactivar al usuario " + usuarioSeleccionado.getNombre() + "?");
+
+        if (res) {
+            modificarEstado();
+            bActivar.setDisable(false);
+            bDesactivar.setDisable(true);
+        }
     }
 
     @FXML
@@ -238,97 +265,24 @@ public class ABMUsuariosController {
         }
     }
 
-    @FXML
-    void ABMSalas(ActionEvent event) {
-        administracionController.ABMSalas(event);
+    private boolean mensajeConfirmacion(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+
+        ButtonType buttonAceptar = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
+        ButtonType buttonCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonAceptar, buttonCancelar);
+
+        alert.showAndWait();
+
+        if (alert.getResult() == buttonAceptar) {
+            return true;
+        }
+
+        return false;
     }
-
-    @FXML
-    void ABMFunciones(ActionEvent event) {
-        administracionController.ABMFunciones(event);
-    }
-
-    @FXML
-    void ABMPeliculas(ActionEvent event) {
-        administracionController.ABMPeliculas(event);
-    }
-
-    // void asignarBotones() {
-
-    // colModificar.setCellValueFactory(new PropertyValueFactory<>(""));
-    // colModificar.setCellFactory(new Callback<TableColumn<Usuario, Void>,
-    // TableCell<Usuario, Void>>() {
-    // @Override
-    // public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
-    // return new TableCell<Usuario, Void>() {
-
-    // private final Button btnModificar = new Button("Modificar");
-
-    // public HBox createButtonContainer() {
-    // HBox hBox = new HBox();
-    // hBox.getChildren().add(btnModificar);
-    // HBox.setHgrow(btnModificar, Priority.ALWAYS);
-    // btnModificar.setMaxWidth(Double.MAX_VALUE);
-    // return hBox;
-    // }
-
-    // @Override
-    // protected void updateItem(Void item, boolean empty) {
-    // super.updateItem(item, empty);
-    // if (empty || item != null) {
-    // setGraphic(null);
-    // } else {
-    // Usuario usuario = getTableView().getItems().get(getIndex());
-    // if (usuario.getIdPerfil() == 1) {
-    // setGraphic(null);
-    // } else {
-    // btnModificar.setOnAction(event -> {
-    // modificarUsuario(usuario);
-    // });
-    // setGraphic(createButtonContainer());
-    // }
-    // }
-    // }
-    // };
-    // }
-    // });
-
-    // colDesactivar.setCellValueFactory(new PropertyValueFactory<>(""));
-    // colDesactivar.setCellFactory(new Callback<TableColumn<Usuario, Void>,
-    // TableCell<Usuario, Void>>() {
-    // @Override
-    // public TableCell<Usuario, Void> call(TableColumn<Usuario, Void> param) {
-    // return new TableCell<Usuario, Void>() {
-    // private final Button btnDesactivar = new Button("AltEstado");
-
-    // public HBox createButtonContainer() {
-    // HBox hBox = new HBox();
-    // hBox.getChildren().add(btnDesactivar);
-    // HBox.setHgrow(btnDesactivar, Priority.ALWAYS);
-    // btnDesactivar.setMaxWidth(Double.MAX_VALUE);
-    // return hBox;
-    // }
-
-    // @Override
-    // protected void updateItem(Void item, boolean empty) {
-    // super.updateItem(item, empty);
-    // if (empty || item != null) {
-    // setGraphic(null);
-    // } else {
-    // Usuario usuario = getTableView().getItems().get(getIndex());
-    // if (usuario.getIdPerfil() == 1) {
-    // setGraphic(null);
-    // } else {
-    // btnDesactivar.setOnAction(event -> {
-    // desactivarUsuario(usuario);
-    // });
-    // setGraphic(createButtonContainer());
-    // }
-    // }
-    // }
-    // };
-    // }
-    // });
-    // }
 
 }
