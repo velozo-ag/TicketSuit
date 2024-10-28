@@ -20,12 +20,15 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.Pane;
 import views.MainController;
+import java.time.temporal.ChronoUnit;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import javafx.scene.control.Label;
 /**1 */
 public class GerenteController {
 
@@ -49,6 +52,12 @@ public class GerenteController {
     private DatePicker desdeDatePicker;
     @FXML
     private DatePicker hastaDatePicker;
+    @FXML
+    private Label ticketsLabel;
+    @FXML
+    private Label ingresosLabel;
+    @FXML
+    private Label tipoFuncionLabel;
     
     private DatabaseConnection databaseConnection = new DatabaseConnection();
     private Connection connection;
@@ -57,108 +66,108 @@ public class GerenteController {
         this.connection = databaseConnection.getConnection();
     }
 
-    public void cargarTicketsVendidosPorSemana(LocalDate desde, LocalDate hasta) {
-        XYChart.Series<String, Number> seriesTicketsVendidos = new XYChart.Series<>();
-        String query = "SELECT DATEPART(YEAR, c.fecha) AS anio, DATEPART(WEEK, c.fecha) AS semana, " +
-                       "COUNT(t.id_ticket) AS total_tickets_vendidos " +
-                       "FROM Ticket t " +
-                       "JOIN Compra c ON t.id_compra = c.id_compra " +
-                       "WHERE c.fecha BETWEEN '" + desde + "' AND '" + hasta + "' " +
-                       "GROUP BY DATEPART(YEAR, c.fecha), DATEPART(WEEK, c.fecha) " +
-                       "ORDER BY anio, semana;";
+    public void cargarTicketsVendidosPorMes(LocalDate desde, LocalDate hasta) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        String query = "SELECT YEAR(sala_funcion.inicio_funcion) AS anio, " +
+                       "MONTH(sala_funcion.inicio_funcion) AS mes, " +
+                       "COUNT(ticket.id_ticket) AS total_tickets " +
+                       "FROM Ticket ticket " +
+                       "JOIN Sala_Funcion sala_funcion ON ticket.id_funcion = sala_funcion.id_funcion " +
+                       "WHERE sala_funcion.inicio_funcion BETWEEN ? AND ? " +
+                       "GROUP BY YEAR(sala_funcion.inicio_funcion), MONTH(sala_funcion.inicio_funcion) " +
+                       "ORDER BY anio, mes;";
     
-        seriesTicketsVendidos.setName("Tickets/Semana");
-    
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                String semana = "S " + rs.getInt("semana");
-                int totalTicketsVendidos = rs.getInt("total_tickets_vendidos");
-                seriesTicketsVendidos.getData().add(new XYChart.Data<>(semana, totalTicketsVendidos));
+        int totalTickets = 0;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String label = obtenerNombreMes(rs.getInt("mes")) + String.valueOf(rs.getInt("anio")).substring(2);
+                    int tickets = rs.getInt("total_tickets");
+                    series.getData().add(new XYChart.Data<>(label, tickets));
+                    totalTickets += tickets;
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Error al cargar datos de tickets vendidos por semana: " + e.getMessage());
+            System.out.println("Error al cargar datos de tickets vendidos por mes: " + e.getMessage());
         }
     
         ticketsVendidosChart.getData().clear();
-        ticketsVendidosChart.getData().add(seriesTicketsVendidos);
+        ticketsVendidosChart.getData().add(series);
+        ticketsLabel.setText("Tickets Vendidos: " + totalTickets);
     }
 
-    public void cargarCapacidadSalas(LocalDate desde, LocalDate hasta) {
-        XYChart.Series<String, Number> capacidadTotalSeries = new XYChart.Series<>();
-        XYChart.Series<String, Number> capacidadUtilizadaSeries = new XYChart.Series<>();
-        
-        String query = "SELECT S.nombre AS sala, S.capacidad AS capacidad_total, COUNT(T.id_ticket) AS capacidad_utilizada " +
-                       "FROM Sala S " +
-                       "LEFT JOIN Sala_Funcion SF ON S.id_sala = SF.id_sala " +
-                       "LEFT JOIN Ticket T ON SF.id_funcion = T.id_funcion " +
-                       "LEFT JOIN Compra C ON T.id_compra = C.id_compra " +
-                       "WHERE C.fecha BETWEEN '" + desde + "' AND '" + hasta + "' " +
-                       "GROUP BY S.nombre, S.capacidad " +
-                       "ORDER BY S.nombre;";
+    public void cargarCantidadTicketsPorFuncion(LocalDate desde, LocalDate hasta) {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        String query = "SELECT TF.descripcion AS tipo_funcion, COUNT(T.id_ticket) AS total_tickets " +
+                        "FROM Ticket T " +
+                        "JOIN Sala_Funcion SF ON T.id_funcion = SF.id_funcion " +
+                        "JOIN Funcion F ON SF.id_funcion = F.id_funcion " +
+                        "JOIN TipoFuncion TF ON F.id_tipoFuncion = TF.id_tipoFuncion " +
+                        "WHERE SF.inicio_funcion BETWEEN ? AND ? " +
+                        "GROUP BY TF.descripcion;";
     
-        capacidadTotalSeries.setName("Capacidad Total");
-        capacidadUtilizadaSeries.setName("Capacidad Utilizada");
+        int totalTickets = 0;
     
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                String sala = rs.getString("sala");
-                int capacidadTotal = rs.getInt("capacidad_total");
-                int capacidadUtilizada = rs.getInt("capacidad_utilizada");
-                capacidadUtilizadaSeries.getData().add(new XYChart.Data<>(sala, capacidadUtilizada));
-                capacidadTotalSeries.getData().add(new XYChart.Data<>(sala, capacidadTotal - capacidadUtilizada));
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String tipoFuncion = rs.getString("tipo_funcion");
+                    int cantidadTickets = rs.getInt("total_tickets");
+                    pieChartData.add(new PieChart.Data(tipoFuncion, cantidadTickets));
+                    totalTickets += cantidadTickets;
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Error al cargar datos de capacidad de salas: " + e.getMessage());
+            System.out.println("Error al cargar datos de cantidad de tickets por función: " + e.getMessage());
         }
     
-        capacidadSalasChart.getData().clear();
-        capacidadSalasChart.getData().addAll(capacidadTotalSeries, capacidadUtilizadaSeries);
-    }
-
-    public void cargarIngresosPorFuncion(LocalDate desde, LocalDate hasta) {
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        String query = "SELECT T.descripcion AS tipo_funcion, SUM(C.subtotal) AS total_ingresos " +
-                       "FROM Compra C " +
-                       "JOIN Ticket TICK ON C.id_compra = TICK.id_compra " +
-                       "JOIN Sala_Funcion SF ON TICK.id_funcion = SF.id_funcion " +
-                       "JOIN Funcion F ON SF.id_funcion = F.id_funcion " +
-                       "JOIN TipoFuncion T ON F.id_tipoFuncion = T.id_tipoFuncion " +
-                       "WHERE C.fecha BETWEEN '" + desde + "' AND '" + hasta + "' " +
-                       "AND T.descripcion IN ('2D', '3D') " +
-                       "GROUP BY T.descripcion;";
+        StringBuilder tipoFuncionInfo = new StringBuilder("");
+        for (PieChart.Data data : pieChartData) {
+            double ticketsTipo = data.getPieValue();
+            double porcentaje = (ticketsTipo / totalTickets) * 100;
+            tipoFuncionInfo.append(String.format("%.0f%% %s - ", porcentaje, data.getName()));
+        }
     
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                String tipoFuncion = rs.getString("tipo_funcion");
-                double ingresos = rs.getDouble("total_ingresos");
-                pieChartData.add(new PieChart.Data(tipoFuncion, ingresos));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al cargar datos de ingresos por función: " + e.getMessage());
+        if (tipoFuncionInfo.length() > 0) {
+            tipoFuncionInfo.setLength(tipoFuncionInfo.length() - 3);
         }
     
         ingresosPorFuncionChart.setData(pieChartData);
+        tipoFuncionLabel.setText(tipoFuncionInfo.toString());
     }
 
     public void cargarIngresosPorMes(LocalDate desde, LocalDate hasta) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        String query = "SELECT MONTH(fecha) AS mes, SUM(subtotal) AS total_ingresos " +
-                       "FROM Compra " +
-                       "WHERE fecha BETWEEN '" + desde + "' AND '" + hasta + "' " +
-                       "GROUP BY MONTH(fecha) ORDER BY MONTH(fecha);";
-    
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                String mes = obtenerNombreMes(rs.getInt("mes"));
-                double ingresos = rs.getDouble("total_ingresos");
-                series.getData().add(new XYChart.Data<>(mes, ingresos));
+        String query = "SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes, SUM(subtotal) AS total_ingresos " +
+                    "FROM Compra " +
+                    "WHERE fecha BETWEEN ? AND ? " +
+                    "GROUP BY YEAR(fecha), MONTH(fecha) ORDER BY YEAR(fecha), MONTH(fecha);";
+
+        
+        int totalIngresos = 0;
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String label = obtenerNombreMes(rs.getInt("mes")) + String.valueOf(rs.getInt("anio")).substring(2);
+                    double ingresos = rs.getDouble("total_ingresos");
+                    series.getData().add(new XYChart.Data<>(label, ingresos));
+                    totalIngresos+=ingresos;
+                }
             }
         } catch (SQLException e) {
             System.out.println("Error al cargar datos de ingresos por mes: " + e.getMessage());
         }
-    
+
         ingresosChart.getData().clear();
         ingresosChart.getData().add(series);
+        ingresosLabel.setText("Ingresos Totales: $" + totalIngresos);
     }
 
     private String obtenerNombreMes(int mes) {
@@ -178,28 +187,28 @@ public class GerenteController {
             default: return "Mes desconocido";
         }
     }
-    
+
     public void initialize() {
         LocalDate hoy = LocalDate.now();
         LocalDate desde = LocalDate.of(2024, 1, 1);
-    
+
         desdeDatePicker.setValue(desde);
         hastaDatePicker.setValue(hoy);
 
         hastaDatePicker.setDayCellFactory(picker -> new DateCell() {
-        @Override
-        public void updateItem(LocalDate date, boolean empty) {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 setDisable(empty || date.isAfter(hoy));
             }
         });
 
         desdeDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-        if (newValue != null && hastaDatePicker.getValue() != null && newValue.isAfter(hastaDatePicker.getValue())) {
-            hastaDatePicker.setValue(newValue);
-        }
+            if (newValue != null && hastaDatePicker.getValue() != null && newValue.isAfter(hastaDatePicker.getValue())) {
+                hastaDatePicker.setValue(newValue);
+            }
 
-        hastaDatePicker.setDayCellFactory(picker -> new DateCell() {
+            hastaDatePicker.setDayCellFactory(picker -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
@@ -221,28 +230,27 @@ public class GerenteController {
                 desdeDatePicker.setValue(newValue);
             }
         });
-    
-        cargarTicketsVendidosPorSemana(desde, hoy);
+
+        cargarTicketsVendidosPorMes(desde, hoy);
         cargarIngresosPorMes(desde, hoy);
-        cargarIngresosPorFuncion(desde, hoy);
-    
+        cargarCantidadTicketsPorFuncion(desde, hoy);
+
         desdeDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filtrarPorFecha());
         hastaDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filtrarPorFecha());
     }
 
-    
-    
     private void filtrarPorFecha() {
         LocalDate desde = desdeDatePicker.getValue();
         LocalDate hasta = hastaDatePicker.getValue();
-    
+
         if (desde != null && hasta != null) {
-            cargarTicketsVendidosPorSemana(desde, hasta);
+            cargarTicketsVendidosPorMes(desde, hasta);
             cargarIngresosPorMes(desde, hasta);
-            cargarIngresosPorFuncion(desde, hasta);
-            // cargarCapacidadSalas(desde, hasta);
+            cargarCantidadTicketsPorFuncion(desde, hasta);
         }
     }
+
+    
 
     @FXML
     void toLogin(ActionEvent event) {

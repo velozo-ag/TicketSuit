@@ -375,6 +375,125 @@ TableColumnHeader {
     -fx-background-color: #b35161;
 }
 
+/* DatePicker Base Styles */
+.date-picker {
+    -fx-background-color: #050627; /* Fijar color de fondo */
+    -fx-border-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #ee6e84,
+        #fcc798
+    );
+    -fx-border-width: 2px;
+    -fx-text-fill: #ee6e84;
+}
+
+.date-picker:hover {
+    -fx-border-color: #ee6e84;
+    -fx-background-color: #050627;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #050627; /* Color de fondo fijado */
+    -fx-text-fill: #ee6e84;
+    -fx-border-color: transparent;
+}
+
+.date-picker .arrow {
+    -fx-background-color: #050627;
+    -fx-border-color: #ee6e84;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #050627;
+    -fx-padding: 5px;
+    -fx-cursor: hand;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #ee6e84;
+}
+
+.date-picker-popup {
+    -fx-background-color: #050627;
+    -fx-border-color: #fcc798;
+}
+
+.date-picker-popup .day-cell {
+    -fx-background-color: #050627; /* Fondo por defecto */
+    -fx-text-fill: #ffffff;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #1a1b4b;
+    -fx-text-fill: #ffffff;
+}
+
+.date-picker-popup .day-cell:selected {
+    -fx-background-color: #ee6e84; /* Cambiar fondo de la fecha seleccionada */
+    -fx-text-fill: #050627;
+    -fx-font-weight: bold;
+}
+
+/* Estilo cuando la fecha está seleccionada en el campo */
+.date-picker .text-field:focused {
+    -fx-background-color: #1a1b4b; /* Fondo acorde al resto de la página */
+    -fx-text-fill: #ee6e84;
+}
+
+.date-picker .button {
+    -fx-background-color: #050627;
+    -fx-text-fill: #ee6e84;
+    -fx-cursor: hand;
+}
+
+.date-picker .button:hover {
+    -fx-background-color: #ee6e84;
+    -fx-text-fill: #050627;
+}
+
+/* Estilos del área de selección de mes y año */
+.date-picker-popup .month-label,
+.date-picker-popup .year-label {
+    -fx-background-color: #050627; /* Cambiar el fondo del mes y año */
+    -fx-text-fill: #ee6e84; /* Cambiar el color del texto */
+    -fx-padding: 5px;
+    -fx-border-color: #ee6e84; /* Bordes para que coincida con el estilo general */
+    -fx-border-width: 1px;
+}
+
+/* Botones de flecha de mes y año */
+.date-picker-popup .button {
+    -fx-background-color: #050627; /* Fondo oscuro para los botones de flecha */
+    -fx-text-fill: #ee6e84;
+    -fx-border-color: #ee6e84;
+}
+
+.date-picker-popup .button:hover {
+    -fx-background-color: #ee6e84; /* Cambiar color al pasar el mouse */
+    -fx-text-fill: #050627;
+}
+
+
+/* Fondo del selector de mes y año */
+.date-picker-popup .spinner .text-field {
+    -fx-background-color: #050627; /* Fondo oscuro */
+    -fx-text-fill: #ee6e84; /* Texto de color acorde */
+    -fx-border-color: #ee6e84; /* Bordes acorde al resto */
+}
+
+/* Botones de flecha de mes y año */
+.date-picker-popup .spinner .arrow-button {
+    -fx-background-color: #050627; /* Fondo oscuro para los botones de flecha */
+    -fx-text-fill: #ee6e84;
+}
+
+.date-picker-popup .spinner .arrow-button:hover {
+    -fx-background-color: #ee6e84; /* Cambiar color al pasar el mouse */
+    -fx-text-fill: #050627;
+}
+
 .text-field{
     -fx-prompt-text-fill: #b351616b;
 }
@@ -384,3 +503,4 @@ TableColumnHeader {
     -fx-background-color: #d9d9d981;
     -fx-font-weight: 700;
 }
+
