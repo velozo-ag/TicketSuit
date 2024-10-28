@@ -30,29 +30,6 @@ public class App extends Application {
         primaryStage.setTitle("Ticket Suit");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        // SalaController salaController = new SalaController();
-        // Sala sala = new Sala();
-        // sala.setIdCine(1);
-        // sala.setNombre("SALA 1");
-        // sala.setCantFilas(7);
-        // sala.setCantColumnas(8);
-        // sala.setCapacidad(sala.getCantColumnas() * sala.getCantFilas());
-        // salaController.createSala(sala);
-
-        // sala.setIdCine(1);
-        // sala.setNombre("SALA 2");
-        // sala.setCantFilas(8);
-        // sala.setCantColumnas(10);
-        // sala.setCapacidad(sala.getCantColumnas() * sala.getCantFilas());
-        // salaController.createSala(sala);
-        
-        // sala.setIdCine(1);
-        // sala.setNombre("SALA 3");
-        // sala.setCantFilas(8);
-        // sala.setCantColumnas(12);
-        // sala.setCapacidad(sala.getCantColumnas() * sala.getCantFilas());
-        // salaController.createSala(sala);
     }
 
     // Esto solamente cambia el contenido del root - Recibe la ruta del archivo FXML

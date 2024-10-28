@@ -6,6 +6,7 @@ import java.sql.Date;
 import controllers.FuncionController;
 import entities.Funcion;
 import entities.Pelicula;
+import entities.Sala;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,28 +24,22 @@ public class ABMFunciones {
     private TableView<Funcion> tablaFunciones;
 
     @FXML
-    private TableColumn<Funcion, Date> colFecha;
+    private TableView<Sala> tablaSalas;
     
     @FXML
-    private TableColumn<Funcion, String> colHoraFinal;
-    
-    @FXML
-    private TableColumn<Funcion, String> colHoraInicio;
-    
-    @FXML
-    private TableColumn<Funcion, Integer> colIdFuncion;
-    
-    @FXML
-    private TableColumn<Funcion, Void> colDesactivar;
+    private TableColumn<Sala, String> colNombreSala;
 
     @FXML
-    private TableColumn<Funcion, Void> colModificar;
+    private TableColumn<Funcion, Integer> colIdFuncion;
+
+    @FXML
+    private TableColumn<Funcion, String> colInicio;
+
+    @FXML
+    private TableColumn<Funcion, String> colFinal;
 
     @FXML
     private TableColumn<Funcion, Pelicula> colPelicula;
-
-    @FXML
-    private TableColumn<Funcion, ?> colSala;
 
     @FXML
     private TableColumn<Funcion, Integer> colTipoFuncion;
@@ -59,13 +54,10 @@ public class ABMFunciones {
     public void initialize() {
         colIdFuncion.setCellValueFactory(new PropertyValueFactory<>("idFuncion"));
         colPelicula.setCellValueFactory(new PropertyValueFactory<>("nombrePelicula"));
-        colHoraInicio.setCellValueFactory(new PropertyValueFactory<>("hora_inicio"));
-        colHoraFinal.setCellValueFactory(new PropertyValueFactory<>("hora_final"));
-        colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        colInicio.setCellValueFactory(new PropertyValueFactory<>("inicio"));
+        colFinal.setCellValueFactory(new PropertyValueFactory<>("final"));
         colTipoFuncion.setCellValueFactory(new PropertyValueFactory<>("tipoFuncion"));
-        // colSala.setCellValueFactory(new PropertyValueFactory<>("sala"));
 
-        // asignarBotones();
         cargarFunciones();
     }
 

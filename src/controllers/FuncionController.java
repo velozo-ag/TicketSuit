@@ -14,34 +14,56 @@ import entities.Pelicula;
 public class FuncionController {
     Connection connection;
 
-    public FuncionController(){
+    public FuncionController() {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
-    public List<Funcion> findAll(){
-        String query = "SELECT Funcion.id_funcion, Funcion.hora_inicio, Funcion.hora_final, Funcion.fecha, Funcion.id_pelicula, Funcion.id_tipoFuncion FROM Funcion";
+    public List<Funcion> findAll() {
+        String query = "SELECT * FROM Funcion ORDER BY id_funcion";
         List<Funcion> funciones = new ArrayList<>();
 
-        try{
+        try {
             PreparedStatement stmt = connection.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Funcion funcion = new Funcion();
-                funcion.setIdFuncion(rs.getInt("id_funcion"));
-                funcion.setHora_inicio(rs.getString("hora_inicio"));
-                funcion.setHora_final(rs.getString("hora_final"));
-                funcion.setFecha(rs.getDate("fecha"));
-                funcion.setIdPelicula(rs.getInt("id_pelicula"));
-                funcion.setIdTipoFuncion(rs.getInt("id_tipoFuncion"));
-                // funcion.set
+                funcion.setId_funcion(rs.getInt("id_funcion"));
+                funcion.setId_pelicula(rs.getInt("id_pelicula"));
+                funcion.setId_tipoFuncion(rs.getInt("id_tipoFuncion"));
+                funcion.setFechaIngreso(rs.getDate("fecha_ingreso"));
+                funcion.setFechaFinal(rs.getDate("fecha_final"));
 
                 funciones.add(funcion);
             }
-        }catch(SQLException e){
-            System.out.println("Error al encontrar peliculas: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error al encontrar funciones: " + e.getMessage());
         }
 
         return funciones;
+    }
+
+    public Funcion findById(int id_funcion) {
+        String query = "SELECT * FROM Funcion WHERE id_funcion = ?";
+        Funcion funcion = new Funcion();
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, id_funcion);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                funcion.setId_funcion(rs.getInt("id_funcion"));
+                funcion.setId_pelicula(rs.getInt("id_pelicula"));
+                funcion.setId_tipoFuncion(rs.getInt("id_tipoFuncion"));
+                funcion.setFechaIngreso(rs.getDate("fecha_ingreso"));
+                funcion.setFechaFinal(rs.getDate("fecha_final"));
+            }
+            System.out.println("Funcion encontrada");
+
+        } catch (SQLException e) {
+            System.out.println("Error al encontrar funcion: " + e.getMessage());
+        }
+
+        return funcion;
     }
 }
