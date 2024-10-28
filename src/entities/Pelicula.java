@@ -25,6 +25,20 @@ public class Pelicula {
         return generos;
     }
 
+    public String getNombreGeneros(){
+        String generos = "";
+
+        if(this.generos.size() > 1){
+            for(Genero genero : this.getGeneros()){
+                generos += genero.getDescripcion() + ", ";
+            }
+        }else{
+            return this.generos.get(0).getDescripcion();
+        }
+
+        return generos;
+    }
+
     public void setGeneros(List<Genero> generos) {
         this.generos = generos;
     }

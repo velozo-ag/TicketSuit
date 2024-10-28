@@ -4,32 +4,81 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.ABMPeliculas">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
       <children>
-         <TableView fx:id="tablaPeliculas" layoutX="123.0" layoutY="176.0" prefHeight="503.0" prefWidth="1035.0">
+         <TableView fx:id="tablaPeliculas" layoutX="546.0" layoutY="176.0" prefHeight="503.0" prefWidth="612.0">
               <columns>
                 <TableColumn fx:id="colNombre" editable="false" prefWidth="154.0" resizable="false" sortable="false" text="NOMBRE" />
-                  <TableColumn fx:id="colDuracion" prefWidth="43.20001220703125" text=" (min)" />
-                  <TableColumn fx:id="colClasificacion" prefWidth="107.79998779296875" text="CLAS" />
-                  <TableColumn fx:id="colDirector" minWidth="0.0" prefWidth="170.0" text="DIRECTOR" />
-                  <TableColumn fx:id="colSinopsis" prefWidth="176.0" text="SINOPSIS" />
-                  <TableColumn fx:id="colGeneros" prefWidth="110.0" text="GENEROS" />
-                  <TableColumn fx:id="colModificar" prefWidth="123.0" text="-" />
-                  <TableColumn fx:id="colDesactivar" prefWidth="118.0" text="-" />
+                  <TableColumn fx:id="colClasificacion" prefWidth="49.5999755859375" text="CLAS" />
+                  <TableColumn fx:id="colDirector" minWidth="0.0" prefWidth="179.20001220703125" text="DIRECTOR" />
+                  <TableColumn fx:id="colSinopsis" prefWidth="146.4000244140625" text="SINOPSIS" />
+                  <TableColumn fx:id="colGeneros" prefWidth="111.20001220703125" text="GENEROS" />
               </columns>
             </TableView>
             <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="926.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioPelicula" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  C R E A R  P E L I C U L A" />
-            <fx:include  layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
+            <fx:include layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="906.0" layoutY="26.0" styleClass="titleText" text="PELICULAS" textAlignment="RIGHT" />
       </children>
    </Pane>
+      <Pane layoutX="123.0" layoutY="176.0" prefHeight="503.0" prefWidth="409.0" styleClass="data-panel">
+         <children>
+            <Label fx:id="labelSeleccionar" alignment="CENTER" contentDisplay="CENTER" layoutX="116.0" layoutY="244.0" prefHeight="15.0" prefWidth="178.0" text="* Seleccione un usuario *" textAlignment="CENTER" />
+            <Pane fx:id="dataPanel" layoutX="9.0" layoutY="15.0" prefHeight="474.0" prefWidth="393.0">
+               <children>
+                  <ImageView fx:id="portadaPelicula" fitHeight="259.0" fitWidth="171.0" layoutX="16.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="labNombre" alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="197.0" layoutY="14.0" prefHeight="58.0" prefWidth="196.0" styleClass="titleLabel" text="NOMBRE DE PELICULA LARGA" wrapText="true">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="197.0" layoutY="70.0" prefHeight="28.0" prefWidth="112.0" text="# DIRECTOR" />
+                  <Label fx:id="labDirector" contentDisplay="CENTER" layoutX="197.0" layoutY="90.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="197.0" layoutY="110.0" prefHeight="28.0" prefWidth="112.0" text="# DURACION" />
+                  <Label fx:id="labDuracion" contentDisplay="CENTER" layoutX="197.0" layoutY="130.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="197.0" layoutY="150.0" prefHeight="28.0" prefWidth="112.0" text="# GENERO" />
+                  <Label fx:id="labGenero" contentDisplay="CENTER" layoutX="197.0" layoutY="170.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="197.0" layoutY="190.0" prefHeight="28.0" prefWidth="112.0" text="# CLASIFICACION" />
+                  <Label fx:id="labClasificacion" contentDisplay="CENTER" layoutX="197.0" layoutY="210.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="197.0" layoutY="230.0" prefHeight="28.0" prefWidth="112.0" text="# NACIONALIDAD" />
+                  <Label fx:id="labNacionalidad" contentDisplay="CENTER" layoutX="197.0" layoutY="250.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="16.0" layoutY="282.0" prefHeight="28.0" prefWidth="112.0" text="# SINOPSIS" />
+                  <Label fx:id="labSinopsis" alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="16.0" layoutY="302.0" prefHeight="100.0" prefWidth="362.0" styleClass="titleLabel" text="# ID" wrapText="true">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="16.0" layoutY="419.0" mnemonicParsing="false" onAction="#modificarPelicula" prefHeight="40.0" prefWidth="362.0" styleClass="optionButton" text="M O D I F I C A R" textAlignment="RIGHT" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

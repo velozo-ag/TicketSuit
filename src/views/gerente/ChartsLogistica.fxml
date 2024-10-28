@@ -3,7 +3,7 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -19,7 +19,7 @@
          <children>
             <fx:include layoutX="26.0" layoutY="19.0" source="../GerenteMenu.fxml" />
             <Button layoutX="51.0" layoutY="116.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
-            <BarChart fx:id="barChartPeliculasPorGenero" layoutX="790.0" layoutY="169.0" legendVisible="false" prefHeight="250.0" prefWidth="390.0">
+            <BarChart fx:id="barChartPeliculasPorGenero" animated="false" layoutX="790.0" layoutY="169.0" legendVisible="false" prefHeight="250.0" prefWidth="390.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -27,33 +27,25 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <Label layoutX="264.0" layoutY="142.0" text="Capacidad de Salas Utilizadas &amp; Capacidad Total">
+            <Label layoutX="343.0" layoutY="142.0" text="Cantidad de Peliculas Total">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
             <Label layoutX="897.0" layoutY="147.0" text="Cantidad de Peliculas por Genero" />
-            <BarChart fx:id="barChartFuncionesPorDia" layoutX="790.0" layoutY="446.0" legendVisible="false" prefHeight="231.0" prefWidth="390.0">
-               <xAxis>
-                  <CategoryAxis side="BOTTOM" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis side="LEFT" />
-               </yAxis>
-            </BarChart>
-            <Label layoutX="890.0" layoutY="427.0" text="Cantidad de Funciones Esta Semana" />
-            <StackedBarChart fx:id="capacidadSalasChart" layoutX="33.0" layoutY="176.0" legendSide="LEFT" prefHeight="501.0" prefWidth="745.0">
+            <DatePicker fx:id="desdeDatePicker" layoutX="772.0" layoutY="57.0" />
+            <DatePicker fx:id="hastaDatePicker" layoutX="1030.0" layoutY="57.0" />
+            <Label layoutX="979.0" layoutY="61.0" text="HASTA:" />
+            <Label layoutX="720.0" layoutY="60.0" text="DESDE:" />
+            <PieChart fx:id="pieChartPeliculasPorGenero" animated="false" layoutX="818.0" layoutY="403.0" legendVisible="false" prefHeight="304.0" prefWidth="390.0" />
+            <BarChart fx:id="peliculasPorMesChart" animated="false" layoutX="119.0" layoutY="170.0" legendVisible="false" prefHeight="466.0" prefWidth="656.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
               <yAxis>
                 <NumberAxis side="LEFT" />
               </yAxis>
-            </StackedBarChart>
-            <DatePicker fx:id="desdeDatePicker" layoutX="772.0" layoutY="57.0" />
-            <DatePicker fx:id="hastaDatePicker" layoutX="1030.0" layoutY="57.0" />
-            <Label layoutX="979.0" layoutY="61.0" text="HASTA:" />
-            <Label layoutX="720.0" layoutY="60.0" text="DESDE:" />
+            </BarChart>
          </children>
       </Pane>
    </children>

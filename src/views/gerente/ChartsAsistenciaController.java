@@ -13,6 +13,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.layout.Pane;
 import views.MainController;
 /**1 */
@@ -20,8 +21,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javafx.scene.control.DatePicker;
+import java.sql.PreparedStatement;
+import java.time.LocalDate;
 
 import database.DatabaseConnection;
+
 
 public class ChartsAsistenciaController {
 
@@ -34,9 +39,17 @@ public class ChartsAsistenciaController {
     @FXML
     private PieChart pieChartAsistenciaPorClasificacion;
     @FXML
-    private LineChart <String, Number> lineChartAsistencia;
+    private LineChart<String, Number> lineChartAsistencia;
     @FXML
     private ComboBox<String> filterComboBoxAsistencia;
+    @FXML
+    private DatePicker desdeDatePicker;
+    @FXML
+    private DatePicker hastaDatePicker;
+
+    public ChartsAsistenciaController(){
+        this.connection = DatabaseConnection.getInstance().getConnection();
+    }
 
     @FXML
     void toLogin(ActionEvent event) {
@@ -47,200 +60,166 @@ public class ChartsAsistenciaController {
         }
     }
 
-    public ChartsAsistenciaController(){
-        this.connection = DatabaseConnection.getInstance().getConnection();
-    }
+    private void loadAsistenciaPorPelicula(LocalDate desde, LocalDate hasta) {
+        barChartAsistenciaPorPelicula.getData().clear();
 
-    private void loadAsistenciaPorPelicula() {
-    barChartAsistenciaPorPelicula.getData().clear(); // Limpiar los datos previos
+        String query = "SELECT p.nombre AS pelicula, COUNT(t.id_ticket) AS total_asistencia " +
+                       "FROM Pelicula p " +
+                       "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
+                       "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
+                       "WHERE f.fecha_ingreso BETWEEN ? AND ? " +
+                       "GROUP BY p.nombre " +
+                       "ORDER BY total_asistencia DESC;";
 
-    String query = "SELECT p.nombre AS pelicula, COUNT(t.id_ticket) AS total_asistencia " +
-                   "FROM Pelicula p " +
-                   "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                   "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
-                   "GROUP BY p.nombre " +
-                   "ORDER BY total_asistencia DESC;";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
 
-    try (Statement stmt = connection.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName("Asistencia por Película");
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Asistencia por Película");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String pelicula = rs.getString("pelicula");
+                    int totalAsistencia = rs.getInt("total_asistencia");
+                    series.getData().add(new XYChart.Data<>(pelicula, totalAsistencia));
+                }
+            }
 
-        while (rs.next()) {
-            String pelicula = rs.getString("pelicula");
-            int totalAsistencia = rs.getInt("total_asistencia");
+            barChartAsistenciaPorPelicula.getData().add(series);
 
-            // Añadir los datos al gráfico de asistencia por película
-            series.getData().add(new XYChart.Data<>(pelicula, totalAsistencia));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        barChartAsistenciaPorPelicula.getData().add(series);
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
     }
 
-    private void loadAsistenciaPorGenero() {
-        barChartAsistenciaPorGenero.getData().clear(); // Limpiar los datos previos
-    
+    private void loadAsistenciaPorGenero(LocalDate desde, LocalDate hasta) {
+        barChartAsistenciaPorGenero.getData().clear();
+
         String query = "SELECT g.descripcion AS genero, COUNT(t.id_ticket) AS total_asistencia " +
                        "FROM Genero g " +
                        "JOIN Genero_Pelicula gp ON g.id_genero = gp.id_genero " +
                        "JOIN Pelicula p ON gp.id_pelicula = p.id_pelicula " +
                        "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
                        "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
+                       "WHERE f.fecha_ingreso BETWEEN ? AND ? " +
                        "GROUP BY g.descripcion " +
                        "ORDER BY total_asistencia DESC;";
-    
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-    
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
+
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName("Asistencia por Género");
-    
-            while (rs.next()) {
-                String genero = rs.getString("genero");
-                int totalAsistencia = rs.getInt("total_asistencia");
-    
-                // Añadir los datos al gráfico de asistencia por género
-                series.getData().add(new XYChart.Data<>(genero, totalAsistencia));
-            }
-    
-            barChartAsistenciaPorGenero.getData().add(series);
-    
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void loadAsistenciaPorClasificacion() {
-    pieChartAsistenciaPorClasificacion.getData().clear(); // Limpiar los datos previos
-
-    String query = "SELECT cl.nombre AS clasificacion, COUNT(t.id_ticket) AS total_asistencia " +
-                   "FROM Clasificacion cl " +
-                   "JOIN Pelicula p ON cl.id_clasificacion = p.id_clasificacion " +
-                   "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                   "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
-                   "GROUP BY cl.nombre " +
-                   "ORDER BY total_asistencia DESC;";
-
-    try (Statement stmt = connection.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
-
-        // Añadir los datos al PieChart
-        while (rs.next()) {
-            String clasificacion = rs.getString("clasificacion");
-            int totalAsistencia = rs.getInt("total_asistencia");
-
-            PieChart.Data slice = new PieChart.Data(clasificacion, totalAsistencia);
-            pieChartAsistenciaPorClasificacion.getData().add(slice);
-        }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-        }
-    }
-
-    private void populateComboBoxAsistencia() {
-        ObservableList<String> filtersAsistencia = FXCollections.observableArrayList("Total", "Año", "Trimestre", "Semana");
-        filterComboBoxAsistencia.setItems(filtersAsistencia);
-        filterComboBoxAsistencia.setValue("Total"); // Valor por defecto
-    }
-
-    private void loadAsistenciaGeneralData(String filter) {
-        lineChartAsistencia.getData().clear(); // Limpiar los datos previos
-    
-        String query = buildQueryForAsistencia(filter);
-    
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-    
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Asistencia General");
-    
-            while (rs.next()) {
-                String label;
-                int totalAsistencia = rs.getInt("total_asistencia");
-    
-                // Define las etiquetas dependiendo del filtro
-                switch (filter) {
-                    case "Año":
-                        label = String.valueOf(rs.getInt("mes")); // Meses del año actual
-                        break;
-                    case "Trimestre":
-                        label = "Semana " + rs.getInt("semana"); // Semanas del trimestre actual
-                        break;
-                    case "Semana":
-                        label = "Día " + rs.getInt("dia"); // Días de la semana actual
-                        break;
-                    default: // Total (Por Años)
-                        label = String.valueOf(rs.getInt("anio")); // Años
-                        break;
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String genero = rs.getString("genero");
+                    int totalAsistencia = rs.getInt("total_asistencia");
+                    series.getData().add(new XYChart.Data<>(genero, totalAsistencia));
                 }
-    
-                series.getData().add(new XYChart.Data<>(label, totalAsistencia));
             }
-    
-            lineChartAsistencia.getData().add(series);
-    
+
+            barChartAsistenciaPorGenero.getData().add(series);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private String buildQueryForAsistencia(String filter) {
-        String query;
-        switch (filter) {
-            case "Año":
-                query = "SELECT MONTH(f.fecha) AS mes, COUNT(t.id_ticket) AS total_asistencia " +
-                        "FROM Funcion f " +
-                        "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
-                        "WHERE YEAR(f.fecha) = YEAR(GETDATE()) " +
-                        "GROUP BY MONTH(f.fecha) " +
-                        "ORDER BY mes;";
-                break;
-            case "Trimestre":
-                query = "SELECT DATEPART(WEEK, f.fecha) AS semana, COUNT(t.id_ticket) AS total_asistencia " +
-                        "FROM Funcion f " +
-                        "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
-                        "WHERE YEAR(f.fecha) = YEAR(GETDATE()) " +
-                        "AND DATEPART(QUARTER, f.fecha) = DATEPART(QUARTER, GETDATE()) " +
-                        "GROUP BY DATEPART(WEEK, f.fecha) " +
-                        "ORDER BY semana;";
-                break;
-            case "Semana":
-                query = "SELECT DATEPART(WEEKDAY, f.fecha) AS dia, COUNT(t.id_ticket) AS total_asistencia " +
-                        "FROM Funcion f " +
-                        "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
-                        "WHERE YEAR(f.fecha) = YEAR(GETDATE()) " +
-                        "AND DATEPART(WEEK, f.fecha) = DATEPART(WEEK, GETDATE()) " +
-                        "GROUP BY DATEPART(WEEKDAY, f.fecha) " +
-                        "ORDER BY dia;";
-                break;
-            default: // Total (Por Años)
-                query = "SELECT YEAR(f.fecha) AS anio, COUNT(t.id_ticket) AS total_asistencia " +
-                        "FROM Funcion f " +
-                        "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
-                        "GROUP BY YEAR(f.fecha) " +
-                        "ORDER BY anio;";
-                break;
-        }
-        return query;
-    }
+    private void loadAsistenciaPorClasificacion(LocalDate desde, LocalDate hasta) {
+        pieChartAsistenciaPorClasificacion.getData().clear();
 
+        String query = "SELECT cl.nombre AS clasificacion, COUNT(t.id_ticket) AS total_asistencia " +
+                       "FROM Clasificacion cl " +
+                       "JOIN Pelicula p ON cl.id_clasificacion = p.id_clasificacion " +
+                       "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
+                       "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
+                       "WHERE f.fecha_ingreso BETWEEN ? AND ? " +
+                       "GROUP BY cl.nombre " +
+                       "ORDER BY total_asistencia DESC;";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String clasificacion = rs.getString("clasificacion");
+                    int totalAsistencia = rs.getInt("total_asistencia");
+                    PieChart.Data slice = new PieChart.Data(clasificacion, totalAsistencia);
+                    pieChartAsistenciaPorClasificacion.getData().add(slice);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void initialize() {
-        populateComboBoxAsistencia();
-        loadAsistenciaPorGenero();
-        loadAsistenciaPorPelicula();
-        loadAsistenciaPorClasificacion();
-        filterComboBoxAsistencia.setOnAction(event -> {
-            String selectedFilter = filterComboBoxAsistencia.getValue();
-            loadAsistenciaGeneralData(selectedFilter);
+        LocalDate hoy = LocalDate.now();
+        LocalDate desde = LocalDate.of(2024, 1, 1);
+
+        desdeDatePicker.setValue(desde);
+        hastaDatePicker.setValue(hoy);
+
+        hastaDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isAfter(hoy));
+            }
         });
+
+        desdeDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && hastaDatePicker.getValue() != null && newValue.isAfter(hastaDatePicker.getValue())) {
+                hastaDatePicker.setValue(newValue);
+            }
+
+            hastaDatePicker.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    setDisable(empty || date.isAfter(hoy) || date.isBefore(newValue));
+                }
+            });
+        });
+
+        desdeDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isAfter(hoy));
+            }
+        });
+
+        hastaDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && desdeDatePicker.getValue() != null && newValue.isBefore(desdeDatePicker.getValue())) {
+                desdeDatePicker.setValue(newValue);
+            }
+        });
+
+        loadAsistenciaPorPelicula(desde, hoy);
+        loadAsistenciaPorGenero(desde, hoy);
+        loadAsistenciaPorClasificacion(desde, hoy);
+
+        desdeDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filtrarPorFecha());
+        hastaDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filtrarPorFecha());
     }
+
+    private void filtrarPorFecha() {
+        LocalDate desde = desdeDatePicker.getValue();
+        LocalDate hasta = hastaDatePicker.getValue();
+
+        if (desde != null && hasta != null) {
+            loadAsistenciaPorPelicula(desde, hasta);
+            loadAsistenciaPorGenero(desde, hasta);
+            loadAsistenciaPorClasificacion(desde, hasta);
+        }
+    }
+
 
     @FXML
     void ChartsIngresos(ActionEvent event){

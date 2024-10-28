@@ -2,11 +2,9 @@
 
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -20,7 +18,7 @@
          <children>
             <fx:include layoutX="26.0" layoutY="19.0" source="../GerenteMenu.fxml" />
             <Button layoutX="51.0" layoutY="106.0" mnemonicParsing="false" onAction="#toPGerente" styleClass="navButton" text="&lt;&lt; DASHBOARD" />
-            <BarChart fx:id="barChartAsistenciaPorPelicula" layoutX="51.0" layoutY="146.0" legendVisible="false" prefHeight="250.0" prefWidth="530.0">
+            <BarChart fx:id="barChartAsistenciaPorPelicula" animated="false" layoutX="51.0" layoutY="146.0" legendVisible="false" prefHeight="250.0" prefWidth="530.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -28,15 +26,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <LineChart fx:id="lineChartAsistencia" layoutX="655.0" layoutY="436.0" prefHeight="240.0" prefWidth="530.0">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </LineChart>
-            <BarChart fx:id="barChartAsistenciaPorGenero" layoutX="51.0" layoutY="431.0" legendVisible="false" prefHeight="250.0" prefWidth="530.0">
+            <BarChart fx:id="barChartAsistenciaPorGenero" animated="false" layoutX="375.0" layoutY="428.0" legendVisible="false" prefHeight="250.0" prefWidth="530.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -44,12 +34,10 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
-            <PieChart fx:id="pieChartAsistenciaPorClasificacion" layoutX="764.0" layoutY="131.0" prefHeight="250.0" prefWidth="290.0" />
+            <PieChart fx:id="pieChartAsistenciaPorClasificacion" animated="false" layoutX="764.0" layoutY="131.0" prefHeight="250.0" prefWidth="290.0" />
             <Label layoutX="248.0" layoutY="131.0" text="Asistencia Por Pelicula" />
-            <Label layoutX="215.0" layoutY="411.0" text="Asistencia Por Genero de Pelicula" />
-            <Label layoutX="823.0" layoutY="411.0" text="Asistencia General Por X Tiempo" />
+            <Label layoutX="563.0" layoutY="411.0" text="Asistencia Por Genero de Pelicula" />
             <Label layoutX="837.0" layoutY="131.0" text="Asistencia Por Clasificacion" />
-            <ComboBox fx:id="filterComboBoxAsistencia" layoutX="1052.0" layoutY="405.0" prefHeight="27.0" prefWidth="119.0" styleClass="inputText" />
             <DatePicker fx:id="desdeDatePicker" layoutX="772.0" layoutY="57.0" />
             <DatePicker fx:id="hastaDatePicker" layoutX="1030.0" layoutY="57.0" />
             <Label layoutX="979.0" layoutY="61.0" text="HASTA:" />

@@ -41,7 +41,7 @@
               </yAxis>
             </BarChart>
             <Label layoutX="750.0" layoutY="407.0" text="Tickets Vendidos" />
-            <Label layoutX="1014.0" layoutY="407.0" text="Ingresos Por Tipo de Funcion" />
+            <Label layoutX="1004.0" layoutY="407.0" text="Tickets Vendidos por tipo de Funcion" />
             <DatePicker fx:id="desdeDatePicker" layoutX="772.0" layoutY="57.0" styleClass="custom-date-picker" />
             <DatePicker fx:id="hastaDatePicker" layoutX="1030.0" layoutY="57.0" styleClass="custom-date-picker" />
             <Label layoutX="979.0" layoutY="61.0" text="HASTA:" />
@@ -53,24 +53,24 @@
             </Label>
             <Pane layoutX="665.0" layoutY="160.0" prefHeight="200.0" prefWidth="570.0" styleClass="cartelera">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" prefHeight="18.0" prefWidth="338.0" text="Ingresos Totales: $0">
+                  <Label fx:id="ingresosLabel" layoutX="14.0" layoutY="14.0" prefHeight="18.0" prefWidth="338.0" text="Ingresos Totales: $0.0">
                      <font>
-                        <Font size="14.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="14.0" layoutY="60.0" prefHeight="18.0" prefWidth="391.0" text="Tickets Vendidos: X">
+                  <Label fx:id="ticketsLabel" layoutX="14.0" layoutY="79.0" prefHeight="18.0" prefWidth="391.0" text="Tickets Vendidos: 0">
                      <font>
-                        <Font size="14.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="14.0" layoutY="109.0" prefHeight="18.0" prefWidth="537.0" text="La pelicula mas rentable entre dichas fechas fue:">
+                  <Label layoutX="17.0" layoutY="133.0" prefHeight="18.0" prefWidth="537.0" text="Porcentaje de Tickets por Funcion:">
                      <font>
-                        <Font size="14.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="14.0" layoutY="159.0" prefHeight="18.0" prefWidth="537.0" text="Ingresos por Funcion: %c -  0$ , %c - 0$ etc">
+                  <Label fx:id="tipoFuncionLabel" layoutX="17.0" layoutY="159.0" prefHeight="18.0" prefWidth="537.0" text="X% Y%">
                      <font>
-                        <Font size="14.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
                </children>

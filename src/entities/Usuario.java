@@ -10,6 +10,15 @@ public class Usuario {
     private int id_perfil;
     private String nombrePerfil;
     private int id_cine;
+    private int dni;
+
+    public int getDni() {
+        return dni;
+    }
+
+    public void setDni(int dni) {
+        this.dni = dni;
+    }
 
     public void setIdUsuario(int id_usuario){
         this.id_usuario = id_usuario;

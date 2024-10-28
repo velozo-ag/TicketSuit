@@ -1,7 +1,7 @@
-package views.administrador;
+package views.administrador.usuario;
 
 import java.sql.Connection;
-import java.util.List;
+import java.sql.SQLException;
 
 import controllers.PerfilController;
 import controllers.UsuarioController;
@@ -21,7 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class MODIFICARUsuarioController {
+public class ALTAUsuarioController {
 
     @FXML
     private Button bCerrar;
@@ -45,24 +45,30 @@ public class MODIFICARUsuarioController {
     private TextField tNombre;
 
     @FXML
+    private TextField tDni;
+
+    @FXML
     private PasswordField tPassword;
 
-    private Usuario usuario;
-    private UsuarioController usuarioController = new UsuarioController();
-    private PerfilController perfilController = new PerfilController();
+    UsuarioController usuarioController = new UsuarioController();
 
     @FXML
     public void initialize() {
+        PerfilController perfilController = new PerfilController();
 
         ObservableList<Boolean> estados = FXCollections.observableArrayList();
-        if (usuario.getIdPerfil() != 1) {
-            estados.add(false);
-        }
         estados.add(true);
+        estados.add(false);
         cEstado.setItems(estados);
 
         ObservableList<Perfil> perfiles = FXCollections.observableArrayList(perfilController.findAll());
         cPerfil.setItems(perfiles);
+
+        tDni.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                tDni.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     @FXML
@@ -72,68 +78,80 @@ public class MODIFICARUsuarioController {
     }
 
     @FXML
-    void modificarUsuario(ActionEvent event) {
+    void altaUsuario(ActionEvent event) {
+
         if (verificarCampos()) {
             Usuario usuario = new Usuario();
-            usuario.setIdUsuario(this.usuario.getIdUsuario());
             usuario.setNombre(tNombre.getText());
             usuario.setPassword(tPassword.getText());
             usuario.setIdPerfil(cPerfil.getValue().getIdPerfil());
             usuario.setEstado(cEstado.getValue());
             usuario.setIdCine(1);
+            usuario.setDni(Integer.parseInt(tDni.getText()));
 
-            usuarioController.updateUsuario(usuario);
+            usuarioController.createUsuario(usuario);
 
+            mensajeExito("Usuario creado con exito!");
             CerrarFormulario(event);
         }
     }
 
     private boolean verificarCampos() {
         if (tNombre == null || tNombre.getText().length() < 5) {
-            mostrarMensajeError("El nombre debe tener al menos 5 caracteres.");
+            mensajeError("El nombre debe tener al menos 5 caracteres.");
+            return false;
+        }
+
+        if (tDni == null || tDni.getText().length() != 8) {
+            mensajeError("El DNI debe tener 8 digitos.");
+            return false;
+        }
+
+        if (usuarioController.findByDni(Integer.parseInt(tDni.getText())) != null) {
+            mensajeError("El DNI ya existe.");
             return false;
         }
 
         if (usuarioController.findByUser(tNombre.getText()) != null) {
-            mostrarMensajeError("El nombre ya esta en uso.");
+            mensajeError("El nombre ya esta en uso.");
             return false;
         }
 
+        // Verificar que la contraseña tenga al menos 6 caracteres
         if (tPassword == null || tPassword.getText().length() < 6) {
-            mostrarMensajeError("La contraseña debe tener al menos 6 caracteres.");
+            mensajeError("La contraseña debe tener al menos 6 caracteres.");
             return false;
         }
 
+        // Verificar que el perfil seleccionado no sea nulo
         if (cPerfil.getValue() == null) {
-            mostrarMensajeError("Debes seleccionar un perfil.");
+            mensajeError("Debes seleccionar un perfil.");
             return false;
         }
 
+        // Verificar que el estado sea booleano (true o false)
         if (cEstado.getValue() == null) {
-            mostrarMensajeError("El estado debe ser un valor booleano (true/false).");
+            mensajeError("El estado debe ser un valor booleano (true/false).");
             return false;
         }
 
         return true;
     }
 
-    private void mostrarMensajeError(String mensaje) {
+    private void mensajeError(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error de Validación");
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
 
-    void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-
-        List<Perfil> perfiles = perfilController.findAll();
-
-        tNombre.setText(usuario.getNombre());
-        tPassword.setText(usuario.getPassword());
-        cEstado.setValue(usuario.getEstado());
-        cPerfil.setValue(perfiles.get(usuario.getIdPerfil() - 1));
+    private void mensajeExito(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
 }

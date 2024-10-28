@@ -4,27 +4,72 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.ABMSalas">
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
       <children>
-          <TableView layoutX="123.0" layoutY="176.0" prefHeight="503.0" prefWidth="1035.0">
+         <TableView fx:id="tablaSalas" layoutX="123.0" layoutY="176.0" prefHeight="503.0" prefWidth="552.0">
               <columns>
-                <TableColumn editable="false" prefWidth="223.9999542236328" resizable="false" sortable="false" text="USUARIO" />
-                  <TableColumn prefWidth="217.5999755859375" text="PERFIL" />
-                  <TableColumn prefWidth="165.60003662109375" text="ACTIVIDAD" />
-                  <TableColumn minWidth="0.0" prefWidth="424.60003662109375" text="ESTADO" />
+                <TableColumn fx:id="colSalaID" editable="false" prefWidth="54.39996337890625" resizable="false" sortable="false" text="ID" />
+                  <TableColumn fx:id="colNombreSala" editable="false" prefWidth="251.1999969482422" resizable="false" sortable="false" text="NOMBRE" />
+                  <TableColumn fx:id="colCapacidad" editable="false" prefWidth="111.20001220703125" resizable="false" sortable="false" text="CAPACIDAD" />
+                  <TableColumn fx:id="colEstado" prefWidth="124.0" text="ESTADO" />
               </columns>
-            </TableView>
+         </TableView>
             <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="926.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioSala" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  C R E A R  S A L A" textAlignment="RIGHT" />
-            <fx:include  layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
+            <fx:include layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="995.0" layoutY="25.0" styleClass="titleText" text="SALAS" textAlignment="RIGHT" />
+            <Pane fx:id="asientosPanel" layoutX="688.0" layoutY="404.0" prefHeight="275.0" prefWidth="470.0" styleClass="data-panel">
+               <children>
+                  <Pane fx:id="dataPanel2" prefHeight="275.0" prefWidth="470.0">
+                     <children>
+                        <Button layoutX="102.0" layoutY="220.0" mnemonicParsing="false" onAction="#modificarAsientos" prefHeight="40.0" prefWidth="266.0" styleClass="optionButton" text="M O D I F I C A R  A S I E N T O S" textAlignment="RIGHT" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="94.0" layoutY="2.0" prefHeight="28.0" prefWidth="282.0" styleClass="pantalla" text="PANTALLA" textAlignment="CENTER" />
+                     </children>
+                  </Pane>
+                  <Label fx:id="labelSeleccionar2" alignment="CENTER" contentDisplay="CENTER" layoutX="147.0" layoutY="119.0" prefHeight="15.0" prefWidth="178.0" text="* Seleccione una sala *" textAlignment="CENTER" />
+               </children>
+            </Pane>
+            <Pane layoutX="688.0" layoutY="176.0" prefHeight="211.0" prefWidth="470.0" styleClass="data-panel">
+               <children>
+                  <Label fx:id="labelSeleccionar" alignment="CENTER" contentDisplay="CENTER" layoutX="146.0" layoutY="98.0" prefHeight="15.0" prefWidth="178.0" text="* Seleccione una sala *" textAlignment="CENTER" />
+                  <Pane fx:id="dataPanel" prefHeight="211.0" prefWidth="470.0">
+                     <children>
+                        <Label fx:id="labNombre" alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="16.0" layoutY="29.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="NOMBRE SALA" wrapText="true">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label contentDisplay="CENTER" layoutX="16.0" layoutY="55.0" prefHeight="28.0" prefWidth="112.0" text="# ID" />
+                        <Label fx:id="labId" contentDisplay="CENTER" layoutX="16.0" layoutY="75.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label contentDisplay="CENTER" layoutX="16.0" layoutY="95.0" prefHeight="28.0" prefWidth="112.0" text="# CAPACIDAD" />
+                        <Label fx:id="labCapacidad" contentDisplay="CENTER" layoutX="16.0" layoutY="115.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label contentDisplay="CENTER" layoutX="16.0" layoutY="135.0" prefHeight="28.0" prefWidth="245.0" text="# DIMENSIONES (FILAS X COLUMNAS)" />
+                        <Label fx:id="labDimensiones" contentDisplay="CENTER" layoutX="16.0" layoutY="155.0" prefHeight="28.0" prefWidth="196.0" styleClass="titleLabel" text="# ID">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="278.0" layoutY="140.0" mnemonicParsing="false" onAction="#modificarSala" prefHeight="40.0" prefWidth="179.0" styleClass="optionButton" text="M O D I F I C A R" textAlignment="RIGHT" />
+                        <Button fx:id="bDesactivar" layoutX="278.0" layoutY="90.0" mnemonicParsing="false" onAction="#desactivarSala" prefHeight="40.0" prefWidth="179.0" styleClass="optionButtonRed" text="D E S A C T I V A R" textAlignment="RIGHT" />
+                        <Button fx:id="bActivar" layoutX="278.0" layoutY="40.0" mnemonicParsing="false" onAction="#activarSala" prefHeight="40.0" prefWidth="179.0" styleClass="optionButtonGreen" text="A C T I V A R" textAlignment="RIGHT" />
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
 
       </children>
    </Pane>

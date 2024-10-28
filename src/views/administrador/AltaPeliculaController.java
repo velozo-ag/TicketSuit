@@ -47,7 +47,7 @@ public class AltaPeliculaController {
     private TextField tNombre;
 
     @FXML
-    private TextArea tSinopsis;
+    private TextField tSinopsis;
 
     @FXML
     private TextField tUrlPoster;
