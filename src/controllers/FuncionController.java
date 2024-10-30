@@ -66,4 +66,22 @@ public class FuncionController {
 
         return funcion;
     }
+
+    public void createFuncion(Funcion funcion){
+        String query = "INSERT INTO Funcion (id_pelicula, id_tipoFuncion, fecha_ingreso, fecha_final) VALUES (?, ?, ?, ?)";
+
+        try(PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setInt(1, funcion.getId_pelicula());
+            stmt.setInt(2, funcion.getId_tipoFuncion());
+            stmt.setDate(3, funcion.getFechaIngreso());
+            stmt.setDate(4, funcion.getFechaFinal());
+
+            stmt.executeQuery();
+
+            System.out.println("Funcion creada con exito");
+
+        }catch(SQLException e){
+            System.out.println("Error al crear funcion: " + e.getMessage());
+        }
+    }
 }

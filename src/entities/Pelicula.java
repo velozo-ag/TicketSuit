@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.List;
+import java.sql.Time;
 
 import controllers.ClasificacionController;
 import controllers.DirectorController;
@@ -67,6 +68,18 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
+    public Time getTimeDuracion(){
+        int duracion = this.getDuracion();
+        int h = (int) duracion / 60;
+        int m = duracion - (h * 60);
+
+        String hora = h % 10 < 1 ? String.valueOf(h) : ("0" + h);
+        String min = m % 10 < 1 ? String.valueOf(m) : ("0" + m);
+
+        Time timeDuracion = Time.valueOf(hora + ":" + min + ":00");
+        return timeDuracion;
+    }
+
     public int getIdClasificacion() {
         return id_clasificacion;
     }
@@ -123,5 +136,9 @@ public class Pelicula {
 
     public void setNacionalidad(String nacionalidad) {
         this.nacionalidad = nacionalidad;
+    }
+
+    public String toString(){
+        return this.getNombre();
     }
 }

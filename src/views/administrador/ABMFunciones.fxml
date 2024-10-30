@@ -14,11 +14,12 @@
       <children>
           <TableView fx:id="tablaFunciones" layoutX="338.0" layoutY="176.0" prefHeight="503.0" prefWidth="478.0">
               <columns>
-                <TableColumn fx:id="colIdFuncion" editable="false" prefWidth="37.0" resizable="false" sortable="false" text="ID" />
-                  <TableColumn fx:id="colInicio" prefWidth="100.79998779296875" text="INICIO" />
-                  <TableColumn fx:id="colPelicula" prefWidth="184.0" text="PELICULA" />
-                  <TableColumn fx:id="colFinal" prefWidth="92.79998779296875" text="FINAL" />
-                  <TableColumn fx:id="colTipoFuncion" prefWidth="53.5999755859375" text="TIPO" />
+              <!-- resizable="false" -->
+                <TableColumn fx:id="colIdFuncion" editable="false" prefWidth="90.0"  sortable="false" text="FECHA" />
+                  <TableColumn fx:id="colInicio" prefWidth="80.79998779296875" text="INICIO" />
+                  <TableColumn fx:id="colPelicula" prefWidth="170.0" text="PELICULA" />
+                  <TableColumn fx:id="colFinal" prefWidth="80.79998779296875" text="FINAL" />
+                  <TableColumn fx:id="colTipoFuncion" prefWidth="45.5999755859375" text="TIPO" />
               </columns>
             </TableView>
             <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
@@ -32,6 +33,7 @@
             </TableView>
             <DatePicker layoutX="338.0" layoutY="127.0" prefHeight="36.0" styleClass="inputText" />
             <Pane layoutX="823.0" layoutY="176.0" prefHeight="503.0" prefWidth="335.0" styleClass="data-panel" />
+            <Button layoutX="681.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioSalaFuncion" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  A S I G N A R  F U N C I O N" textAlignment="RIGHT" />
       </children>
    </Pane>
    </children>

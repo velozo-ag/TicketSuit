@@ -32,7 +32,7 @@ public class Funcion {
         this.id_pelicula = id_pelicula;
     }
 
-    public String getNombrePelicula(){
+    public String getNombrePelicula() {
         return peliculaController.findById(this.getId_pelicula()).getNombre();
     }
 
@@ -62,6 +62,10 @@ public class Funcion {
 
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
+    }
+
+    public String toString() {
+        return this.getTipoFuncion() + " - " + this.getNombrePelicula();
     }
 
 }

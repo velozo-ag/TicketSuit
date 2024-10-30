@@ -28,4 +28,8 @@ public class TipoFuncion {
     public void setPrecio(float precio) {
         this.precio = precio;
     }
+
+    public String toString(){
+        return this.getDescripcion();
+    }
 }

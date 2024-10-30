@@ -80,4 +80,8 @@ public class Sala {
         this.id_cine = id_cine;
     }
 
+    public String toString(){
+        return this.getNombre();
+    }
+    
 }
