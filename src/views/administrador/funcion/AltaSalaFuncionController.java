@@ -118,7 +118,7 @@ public class AltaSalaFuncionController {
         int duracion = peliculaController.findById(cFuncion.getValue().getId_pelicula()).getDuracion();
 
         ObservableList<Horario> horarios = FXCollections
-                .observableArrayList(horarioController.findBySalaDuracion(cSala.getValue().getIdSala(), duracion, Date.valueOf(dFecha.getValue())));
+                .observableArrayList(horarioController.findBySalaDuracion(cSala.getValue().getIdSala(), duracion));
         cHorario.setItems(horarios);
     }
 
