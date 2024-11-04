@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pFormulario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="977.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.AltaPeliculaController">
+<AnchorPane fx:id="pFormulario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="977.0" stylesheets="@../../Styles/Styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.AltaPeliculaController">
    <children>
-      <Pane fx:id="mainPanel" layoutX="-7.0" prefHeight="558.0" prefWidth="986.0">
+      <Pane fx:id="mainPanel" layoutX="-7.0" prefHeight="558.0" prefWidth="986.0" styleClass="panel">
          <children>
             <Label layoutX="47.0" layoutY="80.0" text="N O M B R E">
                <font>
@@ -27,12 +27,11 @@
             </Label>
             <ComboBox fx:id="cGenero" layoutX="49.0" layoutY="175.0" prefHeight="35.0" prefWidth="300.0" styleClass="inputText" />
       
-            <Label layoutX="49.0" layoutY="220.0" text="D I R E C T O R">
+            <Label layoutX="49.0" layoutY="229.0" text="D I R E C T O R">
                <font>
                   <Font name="Montserrat Regular" size="14.0" />
                </font>
-            </Label> 
-            <TextField fx:id="tDirector" layoutX="49.0" layoutY="245.0" prefHeight="35.0" prefWidth="300.0" styleClass="inputText" />
+            </Label>
       
             <Label layoutX="49.0" layoutY="300.0" text="N A C I O N A L I D A D">
                <font>
@@ -84,6 +83,7 @@
                </font>
             </Label>
             <TextField fx:id="tSinopsis" layoutX="383.0" layoutY="105.0" prefHeight="105.0" prefWidth="300.0" styleClass="inputText" />
+            <ComboBox fx:id="cGenero1" layoutX="49.0" layoutY="254.0" prefHeight="35.0" prefWidth="300.0" styleClass="inputText" />
          </children>
       </Pane>
    </children>

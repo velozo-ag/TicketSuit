@@ -31,7 +31,6 @@ public class ChartsLogisticaController {
 
     private MainController mainController = new MainController();
 
-    private DatabaseConnection databaseConnection = new DatabaseConnection();
     private Connection connection;
     @FXML
     private Pane mainPanel;
@@ -51,7 +50,7 @@ public class ChartsLogisticaController {
 
 
     public ChartsLogisticaController(){
-        this.connection = databaseConnection.getConnection();
+        this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
     public void initialize() {
@@ -61,7 +60,6 @@ public class ChartsLogisticaController {
         desdeDatePicker.setValue(desde);
         hastaDatePicker.setValue(hoy);
 
-        // Configurar limitaciones de selección en los DatePickers
         hastaDatePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -97,10 +95,8 @@ public class ChartsLogisticaController {
             }
         });
 
-        // Cargar datos iniciales
         filtrarPorFecha();
 
-        // Listeners para los DatePickers
         desdeDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filtrarPorFecha());
         hastaDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filtrarPorFecha());
     }
@@ -110,7 +106,6 @@ public class ChartsLogisticaController {
         LocalDate hasta = hastaDatePicker.getValue();
 
         if (desde != null && hasta != null) {
-            // cargarCapacidadSalas(desde, hasta);
             cargarPeliculasPorMes(desde, hasta);
             loadPeliculasPorGeneroData(desde, hasta);
             cargarPeliculasPorGenero(desde, hasta);
@@ -238,7 +233,7 @@ public class ChartsLogisticaController {
     
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    String label = obtenerNombreMes(rs.getInt("mes")) + " '" + String.valueOf(rs.getInt("anio")).substring(2);
+                    String label = obtenerNombreMes(rs.getInt("mes")) + String.valueOf(rs.getInt("anio")).substring(2);
                     int peliculas = rs.getInt("total_peliculas");
                     series.getData().add(new XYChart.Data<>(label, peliculas));
                     totalPeliculas += peliculas;
@@ -248,9 +243,9 @@ public class ChartsLogisticaController {
             System.out.println("Error al cargar datos de películas por mes: " + e.getMessage());
         }
     
-        peliculasPorMesChart.getData().clear(); // Asegúrate de que barChartPeliculasPorMes sea el ID de tu BarChart
+        peliculasPorMesChart.getData().clear(); 
         peliculasPorMesChart.getData().add(series);
-        // peliculasLabel.setText("Películas Estrenadas: " + totalPeliculas); // Reemplaza peliculasLabel con la etiqueta que muestras en la UI
+        // peliculasLabel.setText("Películas Estrenadas: " + totalPeliculas);
     }
 
     private String obtenerNombreMes(int mes) {

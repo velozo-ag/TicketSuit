@@ -5,8 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="98.0" prefWidth="682.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.AdminMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="98.0" prefWidth="805.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.AdminMenuController">
    <children>
       <Button layoutX="159.0" layoutY="31.0" mnemonicParsing="false" onAction="#ABMUsuarios" styleClass="navButton" text="USUARIOS" />
       <Button layoutX="275.0" layoutY="31.0" mnemonicParsing="false" onAction="#ABMSalas" styleClass="navButton" text="SALAS" />
@@ -18,5 +17,6 @@
             <Image url="@../resources/Logo.png" />
          </image>
       </ImageView>
+      <Button layoutX="694.0" layoutY="31.0" mnemonicParsing="false" onAction="#toBackUp" styleClass="navButton" text="BACKUP" />
    </children>
 </Pane>

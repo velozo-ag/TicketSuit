@@ -60,8 +60,8 @@
                   </Pane>
                </children>
             </Pane>
-            <Button layoutX="1047.0" layoutY="176.0" mnemonicParsing="false" onAction="#filtrarUsuarios" prefHeight="42.0" prefWidth="112.0" styleClass="optionButton" text="B U S C A R" textAlignment="RIGHT" />
-            <TextField fx:id="tFiltro" layoutX="750.0" layoutY="176.0" prefHeight="42.0" prefWidth="291.0" promptText="ingresar nombre" styleClass="inputText" />
+            <Button layoutX="1040.0" layoutY="176.0" mnemonicParsing="false" onAction="#filtrarUsuarios" prefHeight="42.0" prefWidth="119.0" styleClass="optionButton" text="B U S C A R" textAlignment="RIGHT" />
+            <TextField fx:id="tFiltro" layoutX="750.0" layoutY="176.0" prefHeight="42.0" prefWidth="283.0" promptText="ingresar nombre" styleClass="inputText" />
       </children>
    </Pane>
    </children>

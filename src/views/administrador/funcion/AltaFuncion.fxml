@@ -7,21 +7,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.funcion.AltaFuncionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../Styles/Styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.administrador.funcion.AltaFuncionController">
    <children>
       <Pane prefHeight="400.0" prefWidth="600.0">
          <children>
             <Label layoutX="255.0" layoutY="45.0" text="CREAR FUNCION" />
-            <DatePicker fx:id="dFechaIngreso" layoutX="69.0" layoutY="113.0" />
-            <DatePicker fx:id="dFechaFinal" layoutX="306.0" layoutY="113.0" />
-            <Label layoutX="69.0" layoutY="96.0" text="FECHA INGRESO" />
-            <Label layoutX="306.0" layoutY="96.0" text="FECHA FINAL" />
-            <ComboBox fx:id="cPelicula" layoutX="68.0" layoutY="164.0" prefHeight="25.0" prefWidth="175.0" />
-            <Label layoutX="69.0" layoutY="147.0" text="PELICULA" />
-            <ComboBox fx:id="cTipoFuncion" layoutX="308.0" layoutY="164.0" prefHeight="25.0" prefWidth="175.0" />
-            <Label layoutX="309.0" layoutY="147.0" text="TIPO FUNCION" />
-            <Button layoutX="174.0" layoutY="243.0" mnemonicParsing="false" onAction="#altaFuncion" text="CREAR" />
-            <Button fx:id="bCerrar" layoutX="300.0" layoutY="243.0" mnemonicParsing="false" onAction="#cerrarFormulario" text="CANCELAR" />
+            <DatePicker fx:id="dFechaIngreso" layoutX="101.0" layoutY="113.0" />
+            <DatePicker fx:id="dFechaFinal" layoutX="323.0" layoutY="113.0" />
+            <Label layoutX="100.0" layoutY="96.0" text="FECHA INGRESO" />
+            <Label layoutX="323.0" layoutY="96.0" text="FECHA FINAL" />
+            <ComboBox fx:id="cPelicula" layoutX="100.0" layoutY="164.0" prefHeight="25.0" prefWidth="175.0" styleClass="inputText" />
+            <Label layoutX="100.0" layoutY="147.0" text="PELICULA" />
+            <ComboBox fx:id="cTipoFuncion" layoutX="322.0" layoutY="164.0" prefHeight="25.0" prefWidth="175.0" styleClass="inputText" />
+            <Label layoutX="322.0" layoutY="147.0" text="TIPO FUNCION" />
+            <Button layoutX="165.0" layoutY="243.0" mnemonicParsing="false" onAction="#altaFuncion" prefHeight="42.0" prefWidth="110.0" styleClass="mainButton" text="CREAR" />
+            <Button fx:id="bCerrar" layoutX="300.0" layoutY="243.0" mnemonicParsing="false" onAction="#cerrarFormulario" styleClass="optionButton" text="CANCELAR" />
          </children>
       </Pane>
    </children>
