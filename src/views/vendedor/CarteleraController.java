@@ -10,6 +10,7 @@ import entities.Pelicula;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -22,7 +23,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import views.MainController;
+import views.SceneManager;
 
 public class CarteleraController {
 
@@ -99,10 +102,10 @@ public class CarteleraController {
             panel.getStyleClass().add("cartelera");
 
             ImageView thumbnail = new ImageView();
-            thumbnail.setFitWidth(panelWidth); 
+            thumbnail.setFitWidth(panelWidth);
             thumbnail.setFitHeight(panelHeight - 1);
-            thumbnail.setPreserveRatio(true); 
-            thumbnail.setImage(new Image(pelicula.getImagen())); 
+            thumbnail.setPreserveRatio(true);
+            thumbnail.setImage(new Image(pelicula.getImagen()));
             thumbnail.setLayoutX(2);
             thumbnail.setLayoutY(1);
 
@@ -135,9 +138,8 @@ public class CarteleraController {
             PeliculaSeleccionadaController peliculaSeleccionadaController = loader.getController();
             peliculaSeleccionadaController.setPelicula(pelicula);
 
-            Scene scene = new Scene(root);
-            Pane panel = (Pane) scene.lookup("#mainPanel");
-            mainController.setUpScene(new ActionEvent(event.getSource(), event.getTarget()), panel, scene);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneManager.setScene(root, stage);
         } catch (IOException e) {
             e.printStackTrace();
         }

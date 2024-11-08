@@ -2,6 +2,7 @@ package views.vendedor;
 
 import java.io.IOException;
 
+import entities.Pelicula;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -21,6 +22,8 @@ public class SeleccionAsientoController {
 
     MainController mainController = new MainController();
 
+    Pelicula pelicula;
+
     @FXML
     void toPVendedor(ActionEvent event) {
         try {
@@ -28,6 +31,10 @@ public class SeleccionAsientoController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setPelicula(Pelicula pelicula){
+        this.pelicula = pelicula;
     }
 
 }
