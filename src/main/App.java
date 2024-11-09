@@ -2,12 +2,11 @@ package main;
 
 import java.io.IOException;
 
-import controllers.SalaController;
-import entities.Sala;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -21,13 +20,14 @@ public class App extends Application {
         primaryStage = stage;
 
         // Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/views/administrador/ABMFunciones.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/vendedor/Cartelera.fxml"));
         scene = new Scene(root);
 
         root.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());
 
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setTitle("Ticket Suit");
+        primaryStage.getIcons().add(new Image("/Resources/LogoThumbnail.png"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -41,6 +41,7 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 
 }

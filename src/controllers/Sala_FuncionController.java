@@ -64,4 +64,31 @@ public class Sala_FuncionController {
             System.out.println("Error al insertar Sala_Funcion: " + e.getMessage());
         }
     }
+
+    public List<Sala_Funcion> findByIdPelicula(int id_pelicula){
+        String query = "SELECT sf.* FROM Sala_Funcion sf INNER JOIN Funcion f ON f.id_funcion = sf.id_funcion WHERE f.id_pelicula = ?";
+        List<Sala_Funcion> funciones = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setInt(1, id_pelicula);;
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Sala_Funcion funcion = new Sala_Funcion();
+                funcion.setId_funcion(rs.getInt("id_funcion"));
+                funcion.setId_sala(rs.getInt("id_sala"));
+                funcion.setInicioFuncion(rs.getTimestamp("inicio_funcion"));
+                funcion.setFinalFuncion(rs.getTimestamp("final_funcion"));
+
+                funciones.add(funcion);
+            }
+
+            System.out.println("Sala_Funcion encontrados");
+            
+        } catch (SQLException e) {
+            System.out.println("Error al encontrar funciones: " + e.getMessage());
+        }
+
+        return funciones;
+    }
 }
