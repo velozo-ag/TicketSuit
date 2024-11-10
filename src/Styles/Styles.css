@@ -8,6 +8,10 @@ Label {
     -fx-text-fill: #ee6e83ad;
 }
 
+.nombre-pelicula{
+    -fx-font-weight: 700;
+}
+
 AnchorPane {
     -fx-background-image: url("../Resources/BlueBackground.png");
     -fx-background-position: center;
