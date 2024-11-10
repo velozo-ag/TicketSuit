@@ -1,9 +1,11 @@
 package controllers;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +52,25 @@ public class HorarioController {
 
     }
 
-    public List<Horario> findBySalaDuracion(int id_sala, int duracion) {
-        String query = "SELECT h.* FROM Horario h WHERE NOT EXISTS ( SELECT 1 FROM Sala_Funcion sf  WHERE sf.id_sala = ? AND ( (h.horario BETWEEN DATEADD(MINUTE, ?, CAST(sf.inicio_funcion AS TIME)) AND DATEADD(MINUTE, 30, CAST(sf.final_funcion AS TIME)))  OR (CAST(sf.inicio_funcion AS TIME) > CAST(sf.final_funcion AS TIME) AND  (h.horario < DATEADD(MINUTE, 30, CAST(sf.final_funcion AS TIME)) OR h.horario > DATEADD(MINUTE, ?, CAST(sf.inicio_funcion AS TIME))))  ) ) OR NOT EXISTS (SELECT 1 FROM Sala_Funcion sf WHERE sf.id_sala = ?) ";
+    public List<Horario> findBySalaDuracion(int id_sala, int duracion, Date fecha) {
+        // String query = "SELECT h.* FROM Horario h WHERE NOT EXISTS ( SELECT 1 FROM Sala_Funcion sf  WHERE sf.id_sala = ? AND ( (h.horario BETWEEN DATEADD(MINUTE, ?, CAST(sf.inicio_funcion AS TIME)) AND DATEADD(MINUTE, 30, CAST(sf.final_funcion AS TIME)))  OR (CAST(sf.inicio_funcion AS TIME) > CAST(sf.final_funcion AS TIME) AND  (h.horario < DATEADD(MINUTE, 30, CAST(sf.final_funcion AS TIME)) OR h.horario > DATEADD(MINUTE, ?, CAST(sf.inicio_funcion AS TIME))))  ) ) OR NOT EXISTS (SELECT 1 FROM Sala_Funcion sf WHERE sf.id_sala = ?) ";
+        String query = "SELECT h.* FROM Horario h WHERE NOT EXISTS" +
+                        "(SELECT 1 FROM Sala_Funcion sf WHERE sf.id_sala = ? " +
+                        "   AND ( " +
+                        "       (h.horario BETWEEN DATEADD (MINUTE, ? , CAST(sf.inicio_funcion AS TIME)) AND DATEADD  (MINUTE, 30, CAST(sf.final_funcion AS TIME))) " +
+                        "       OR " +
+                        "       (CAST(sf.inicio_funcion AS TIME) > CAST(sf.final_funcion AS TIME) " +
+                        "       AND " +
+                        "           (h.horario < DATEADD (MINUTE, 30, CAST(sf.final_funcion AS TIME)) " +
+                        "           OR h.horario > DATEADD (MINUTE, ? , CAST(sf.inicio_funcion AS TIME))) " +
+                        "       )" +
+                        "   ) " +
+                        "   AND (" +
+                        "       CAST(sf.inicio_funcion AS DATE) = ? " +
+                        "   )" +
+                        ")" +
+                        "OR NOT EXISTS (SELECT 1 FROM Sala_Funcion sf WHERE sf.id_sala = ? )";
+
 
         List<Horario> horarios = new ArrayList<>();
 
@@ -62,7 +81,9 @@ public class HorarioController {
             stmt.setInt(1, id_sala);
             stmt.setInt(2, -duracion - 30);
             stmt.setInt(3, -duracion - 30);
-            stmt.setInt(4, id_sala);
+            stmt.setDate(4, fecha);
+            System.out.println(fecha);
+            stmt.setInt(5, id_sala);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

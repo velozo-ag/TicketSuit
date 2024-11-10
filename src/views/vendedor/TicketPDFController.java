@@ -23,7 +23,8 @@ public class TicketPDFController {
         Document document = new Document(PageSize.A6, 20, 20, 20, 20);
 
         try { 
-            String basePath = "D:\\Repos2\\TicketSuit\\tickets\\Ticket_" + ticketId;
+            String basePath = "@../../Resources/thumbnails/Ticket_" + ticketId;
+            // String basePath = "D:\\Repos2\\TicketSuit\\tickets\\Ticket_" + ticketId;
             String outputPath = obtenerRutaDisponible(basePath); 
 
             PdfWriter.getInstance(document, new FileOutputStream(outputPath));

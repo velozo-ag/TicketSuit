@@ -63,19 +63,26 @@ public class AltaSalaFuncionController {
 
         // COMO HAGO ESTE LISTENER
         cSala.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && cFuncion.getValue() != null) {
+            if (newValue != null && cFuncion.getValue() != null && dFecha.getValue() != null) {
                 cargarHorarios();
                 cHorario.setDisable(false);
             }
         });
 
         cFuncion.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && cSala.getValue() != null) {
+            if (newValue != null && cSala.getValue() != null && dFecha.getValue() != null) {
                 cargarHorarios();
                 cHorario.setDisable(false);
             }
         });
-
+        
+        dFecha.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && cSala.getValue() != null && cFuncion.getValue() != null) {
+                cargarHorarios();
+                cHorario.setDisable(false);
+            }
+        });
+        
         cHorario.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 calcularHorarioFinal();
@@ -118,7 +125,7 @@ public class AltaSalaFuncionController {
         int duracion = peliculaController.findById(cFuncion.getValue().getId_pelicula()).getDuracion();
 
         ObservableList<Horario> horarios = FXCollections
-                .observableArrayList(horarioController.findBySalaDuracion(cSala.getValue().getIdSala(), duracion));
+                .observableArrayList(horarioController.findBySalaDuracion(cSala.getValue().getIdSala(), duracion, Date.valueOf(dFecha.getValue())));
         cHorario.setItems(horarios);
     }
 

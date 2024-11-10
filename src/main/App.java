@@ -1,6 +1,8 @@
 package main;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +22,7 @@ public class App extends Application {
         primaryStage = stage;
 
         // Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/views/vendedor/Cartelera.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/administrador/ABMFunciones.fxml"));
         scene = new Scene(root);
 
         root.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());
@@ -40,8 +42,10 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        Logger logger = Logger.getLogger("javafx");
+        logger.setLevel(Level.SEVERE); // Muestra solo errores severos, ignora warnings
+        
         launch(args);
-
     }
 
 }

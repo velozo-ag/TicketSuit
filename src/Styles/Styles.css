@@ -126,8 +126,6 @@ TableColumnHeader {
     -fx-font-weight: 700;
     -fx-font-size: 36px;
     -fx-font-family: "Montserrat Bold";
-    /* -fx-effect: dropshadow(gaussian, rgba(238, 110, 132, 0.6), 20, 0.5, 0, 0),
-    dropshadow(gaussian, rgba(238, 110, 132, 0.4), 30, 0.5, 0, 0); */
     -fx-text-alignment: center;
     -fx-padding: 20px;
 }
