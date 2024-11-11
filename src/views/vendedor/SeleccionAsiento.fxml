@@ -19,12 +19,12 @@
                   <Image url="@../../Resources/Logo.png" />
                </image>
             </ImageView>
-            <Button layoutX="211.0" layoutY="115.0" mnemonicParsing="false" onAction="#toPVendedor" styleClass="navButton" text="&lt; &lt; V O L V E R" />
+            <Button layoutX="211.0" layoutY="115.0" mnemonicParsing="false" onAction="#volverPelicula" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Label fx:id="tNombrePelicula" layoutX="523.0" layoutY="81.0" styleClass="titlePelicula" text="NOMBRE PELICULA" />
             <Pane fx:id="mainButton" layoutX="516.0" layoutY="581.0" prefHeight="60.0" prefWidth="300.0">
                <children>
                   <Pane layoutX="77.5" layoutY="20.0" prefHeight="40.0" prefWidth="150.0" scaleZ="0.0" styleClass="mainButtonBG" />
-                  <Button layoutX="72.5" layoutY="15.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" styleClass="mainButton" text="C O M P R A R" />
+                  <Button layoutX="72.5" layoutY="15.0" mnemonicParsing="false" onAction="#confirmarAsientos" prefHeight="40.0" prefWidth="150.0" styleClass="mainButton" text="C O M P R A R" />
                </children>
             </Pane>
          </children>
