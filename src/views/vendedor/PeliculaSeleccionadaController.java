@@ -1,6 +1,8 @@
 package views.vendedor;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import controllers.FuncionController;
@@ -9,8 +11,14 @@ import controllers.TipoFuncionController;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import entities.Funcion;
 import entities.Pelicula;
 import entities.Sala_Funcion;
@@ -18,6 +26,7 @@ import entities.TipoFuncion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -34,32 +43,78 @@ public class PeliculaSeleccionadaController {
     private Pane mainPanel;
 
     @FXML
+    private Pane panelImagen;
+
+    @FXML
     private Label tNombrePelicula;
 
     @FXML
     private Label tSinopsis;
+
+    @FXML
+    private Label lPrecio;
+
+    @FXML
+    private TextField tCantidad;
 
     private FuncionController funcionController = new FuncionController();
     private TipoFuncionController tipoFuncionController = new TipoFuncionController();
     private MainController mainController = new MainController();
     private Sala_FuncionController sala_FuncionController = new Sala_FuncionController();
     public Pelicula pelicula;
+    public Date fecha;
+    public Sala_Funcion funcionSeleccionada = null;
     public List<Sala_Funcion> funciones;
 
     @FXML
     void initialize() {
-        // cargarFunciones();
+        lPrecio.setText("0");
+        tCantidad.setText("1");
+
+        tCantidad.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                tCantidad.setText(newValue.replaceAll("[^\\d]", ""));
+            } else if (!newValue.isEmpty()) {
+
+                int cantidad = Integer.parseInt(newValue);
+
+                if (cantidad > 16) {
+                    tCantidad.setText("16");
+                    mensajeError("No hay tantos asientos disponibles");
+                }
+
+                if (cantidad <= 0) {
+                    tCantidad.setText("1");
+                }
+
+                if (funcionSeleccionada == null) {
+                    tCantidad.setText("1");
+                    mensajeError("Seleccione una funcion");
+                }
+
+            }
+        });
     }
 
     @FXML
     void continuarCompra(ActionEvent event) {
+        if (funcionSeleccionada == null) {
+            mensajeError("Seleccione un horario para continuar");
+            return;
+        }
+
+        if (tCantidad.getText().isEmpty()) {
+            mensajeError("Ingrese una cantidad de tickets valida para continuar");
+            return;
+        }
+
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/SeleccionAsiento.fxml"));
             root = loader.load();
 
             SeleccionAsientoController seleccionAsientoController = loader.getController();
-            seleccionAsientoController.setPelicula(pelicula);
+            seleccionAsientoController.setValores(pelicula, funcionSeleccionada, Integer.parseInt(tCantidad.getText()));
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             SceneManager.setScene(root, stage);
@@ -80,16 +135,26 @@ public class PeliculaSeleccionadaController {
     public void setPelicula(Pelicula pelicula) {
         this.pelicula = pelicula;
         tNombrePelicula.setText(pelicula.getNombre());
-        tSinopsis.setText(pelicula.getSinopsis());
 
+        ImageView thumbnail = new ImageView();
+        thumbnail.setFitWidth(panelImagen.getPrefWidth());
+        thumbnail.setFitHeight(panelImagen.getPrefHeight() - 2);
+        thumbnail.setPreserveRatio(true);
+        thumbnail.setImage(new Image(pelicula.getImagen()));
+        thumbnail.setLayoutX(1);
+        thumbnail.setLayoutY(1);
+
+        panelImagen.getChildren().add(thumbnail);
+
+        tSinopsis.setText(pelicula.getSinopsis());
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
         cargarFunciones();
     }
 
     private void cargarFunciones() {
-        int panelHeight = 180;
-        int panelWidth = 128;
-        int rowHeight = 30;
-
         double PosY = 337;
         double ColPos2D = 546;
         double ColPos3D = 705;
@@ -106,29 +171,59 @@ public class PeliculaSeleccionadaController {
         gridPaneIMAX.setLayoutX(ColPosIMAX);
         gridPaneIMAX.setLayoutY(PosY);
 
-        funciones = sala_FuncionController.findByIdPelicula(this.pelicula.getIdPelicula());
+        ToggleGroup toggleGroup = new ToggleGroup();
+        funciones = sala_FuncionController.findByPeliculaFecha(pelicula.getIdPelicula(), fecha);
 
         for (Sala_Funcion funcion : funciones) {
             TipoFuncion tipoFuncion = tipoFuncionController
                     .findById(funcionController.findById(funcion.getId_funcion()).getId_tipoFuncion());
 
-            Button button = new Button(funcion.getPelicula().getNombre() + " " + funcion.getInicioFuncion());
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+            ToggleButton boton = new ToggleButton(formatter.format(funcion.getInicioFuncion()));
+            boton.getStyleClass().add("horarioPelicula");
+            boton.setToggleGroup(toggleGroup);
+            gridPane3D.setMargin(boton, new Insets(2));
 
-            if (tipoFuncion.getIdTipoFuncion() == 1) {
-                gridPane2D.add(button, 0, gridPane2D.getRowCount());
-            }
+            boton.onActionProperty().set(c -> seleccionFuncion(funcion));
 
-            if (tipoFuncion.getIdTipoFuncion() == 2) {
-                gridPane3D.add(button, 0, gridPane3D.getRowCount());
-            }
+            switch (tipoFuncion.getIdTipoFuncion()) {
+                case 1:
+                    gridPane2D.add(boton, 0, gridPane2D.getRowCount());
+                    break;
+                case 2:
+                    gridPane3D.add(boton, 0, gridPane3D.getRowCount());
+                    break;
+                case 3:
+                    gridPaneIMAX.add(boton, 0, gridPaneIMAX.getRowCount());
+                    break;
 
-            if (tipoFuncion.getIdTipoFuncion() == 3) {
-                gridPaneIMAX.add(button, 0, gridPaneIMAX.getRowCount());
             }
         }
 
         mainPanel.getChildren().addAll(gridPane2D, gridPane3D, gridPaneIMAX);
 
+    }
+
+    void seleccionFuncion(Sala_Funcion funcion) {
+        this.funcionSeleccionada = funcion;
+        lPrecio.setText(Integer.parseInt(tCantidad.getText())
+                * funcionController.findById(funcion.getId_funcion()).getTipoFuncion().getPrecio() + "");
+    }
+
+    private void mensajeError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void mensajeExito(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
 }

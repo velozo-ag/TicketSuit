@@ -3,7 +3,6 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,106 +12,7 @@
    <children>
       <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
          <children>
-            <Pane layoutX="223.0" layoutY="160.0" prefHeight="400.0" prefWidth="887.0" styleClass="inputText">
-               <children>
-                  <ToggleButton layoutX="361.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="531.0" layoutY="92.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="361.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="403.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="319.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="277.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="529.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="571.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="487.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="445.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="207.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="165.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="207.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="165.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="207.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="165.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="207.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="165.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="207.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="165.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="207.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="165.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="207.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="165.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="641.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="683.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="641.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="683.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="641.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="683.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="641.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="683.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="641.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-                  <ToggleButton layoutX="683.0" layoutY="227.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="40.0" styleClass="toggleButtonButaca" />
-               </children>
-            </Pane>
+            <Pane fx:id="panelAsientos" layoutX="223.0" layoutY="160.0" prefHeight="400.0" prefWidth="887.0" styleClass="inputText" />
 
             <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
                <image>

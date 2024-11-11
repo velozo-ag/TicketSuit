@@ -69,7 +69,7 @@ public class ABMFunciones {
         colPelicula.setCellValueFactory(new PropertyValueFactory<>("pelicula"));
         colInicio.setCellValueFactory(new PropertyValueFactory<>("horaInicio"));
         colFinal.setCellValueFactory(new PropertyValueFactory<>("horaFinal"));
-        colTipoFuncion.setCellValueFactory(new PropertyValueFactory<>("tipoFuncion"));
+        colTipoFuncion.setCellValueFactory(new PropertyValueFactory<>("tipoFuncionNombre"));
 
         colNombreSala.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         tablaSalas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

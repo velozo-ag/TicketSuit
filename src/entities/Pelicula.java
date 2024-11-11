@@ -139,6 +139,6 @@ public class Pelicula {
     }
 
     public String toString(){
-        return this.getNombre();
+        return this.getIdPelicula() + " " + this.getNombre();
     }
 }

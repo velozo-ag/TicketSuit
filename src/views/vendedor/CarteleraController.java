@@ -2,12 +2,18 @@ package views.vendedor;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.Action;
 
 import controllers.PeliculaController;
+import controllers.Sala_FuncionController;
 import entities.Pelicula;
+import entities.Sala_Funcion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +26,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -27,6 +35,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import views.MainController;
 import views.SceneManager;
@@ -46,6 +55,9 @@ public class CarteleraController {
     private Pane mainPanel;
 
     @FXML
+    private Pane panelFechas;
+
+    @FXML
     private AnchorPane spPeliculas;
 
     @FXML
@@ -53,10 +65,14 @@ public class CarteleraController {
 
     private MainController mainController = new MainController();
     private PeliculaController peliculaController = new PeliculaController();
+    private Sala_FuncionController sala_FuncionController = new Sala_FuncionController();
+
+    private int posicionFecha = 0;
 
     @FXML
     public void initialize() {
-        cargarPeliculas();
+        cargarPeliculasPorDia(Date.valueOf(LocalDate.now()));
+        cargarDias(posicionFecha);
     }
 
     @FXML
@@ -84,35 +100,36 @@ public class CarteleraController {
     }
 
     @FXML
-    void filtrarPeliculas(ActionEvent event) {
-        if (dFecha.getValue() == null || tPelicula.getText() == "") {
-            mostrarMensajeError("Debe llenar ambos campos para filtrar");
-        } else {
-            cargarPeliculas();
+    void adelantarFechas(ActionEvent event) {
+        List<Date> dias = sala_FuncionController.findDias();
+        if (dias.size() > 5) {
+            posicionFecha += 5;
+            cargarDias(posicionFecha);
+        }
+
+        if (dias.size() < posicionFecha) {
+            posicionFecha = 0;
+            cargarDias(posicionFecha);
         }
     }
 
     @FXML
-    void limpiarFiltro(ActionEvent event) {
-        tPelicula.setText("");
-        dFecha.setValue(null);
-        cargarPeliculas();
+    void atrasarFechas(ActionEvent event) {
+        // List<Date> dias = sala_FuncionController.findDias();
+
+        if (posicionFecha <= 0) {
+            posicionFecha = 0;
+            cargarDias(posicionFecha);
+        } else {
+            posicionFecha -= 5;
+            cargarDias(posicionFecha);
+        }
     }
 
-    void cargarPeliculas() {
+    void cargarPeliculasPorDia(Date fecha) {
         List<Pelicula> peliculas;
         spPeliculas.getChildren().clear();
-
-        if (!tPelicula.getText().isEmpty() && dFecha.getValue() != null) {
-            peliculas = peliculaController.findByNombreFecha(tPelicula.getText(), Date.valueOf(dFecha.getValue()));
-            if (peliculas.size() == 0) {
-                mostrarMensajeError("No hay peliculas con esas especificaciones");
-                peliculas = peliculaController.findAll();
-            }
-        } else {
-            peliculas = peliculaController.findAll();
-        }
-        
+        peliculas = peliculaController.findByFecha(fecha);
 
         int totalPeliculas = peliculas.size();
         double panelWidth = 120;
@@ -124,7 +141,7 @@ public class CarteleraController {
         int rows = (int) Math.ceil((double) totalPeliculas / panelsPerRow);
         double totalHeight = gap + rows * (panelHeight + gap);
 
-        spPeliculas.setPrefHeight(Math.max(totalHeight, 539));
+        spPeliculas.setPrefHeight(Math.max(totalHeight, 479));
 
         for (Pelicula pelicula : peliculas) {
             HBox hbox = new HBox(10);
@@ -157,7 +174,7 @@ public class CarteleraController {
 
             vboxInfo.getChildren().addAll(lNombre, lSinopsis);
 
-            panel.setOnMouseClicked(event -> seleccionPelicula(pelicula, event));
+            panel.setOnMouseClicked(event -> seleccionPelicula(pelicula, fecha, event));
 
             hbox.getChildren().addAll(panel, vboxInfo);
 
@@ -175,7 +192,72 @@ public class CarteleraController {
         }
     }
 
-    void seleccionPelicula(Pelicula pelicula, MouseEvent event) {
+    void cargarDias(int inicio) {
+        List<Date> dias = sala_FuncionController.findDias();
+        int gap = 10;
+        int buttonWidth = 77;
+        int buttonHeight = 75;
+        int initial_posX = 97;
+        int initial_posY = 8;
+        int cant = 0;
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        if (dias.size() == 0) {
+            System.out.println("No hay funciones programdas");
+            return;
+        }
+
+        panelFechas.getChildren().clear();
+
+        if (dias.size() < 5 || dias.size() - inicio < 5) {
+            for (int i = inicio; i < dias.size(); i++) {
+                ToggleButton boton = new ToggleButton(diaToString(dias.get(i)).toUpperCase());
+                boton.setPrefWidth(buttonWidth);
+                boton.getStyleClass().add("botonFecha");
+                boton.setWrapText(true);
+                boton.setTextAlignment(TextAlignment.CENTER);
+                boton.setPrefHeight(buttonHeight);
+                boton.setLayoutX(initial_posX + cant * (buttonWidth + gap));
+                boton.setLayoutY(initial_posY);
+
+                boton.setToggleGroup(toggleGroup);
+
+                Date fecha = dias.get(i);
+                boton.onActionProperty().set(c -> cargarPeliculasPorDia(fecha));
+                panelFechas.getChildren().add(boton);
+
+                cant++;
+            }
+        } else if (dias.size() > 5) {
+            for (int i = inicio; i < inicio + 5; i++) {
+                ToggleButton boton = new ToggleButton(diaToString(dias.get(i)).toUpperCase());
+                boton.setPrefWidth(buttonWidth);
+                boton.getStyleClass().add("botonFecha");
+                boton.setWrapText(true);
+                boton.setTextAlignment(TextAlignment.CENTER);
+                boton.setPrefHeight(buttonHeight);
+                boton.setLayoutX(initial_posX + cant * (buttonWidth + gap));
+                boton.setLayoutY(initial_posY);
+
+                boton.setToggleGroup(toggleGroup);
+
+                Date fecha = dias.get(i);
+                boton.onActionProperty().set(c -> cargarPeliculasPorDia(fecha));
+                panelFechas.getChildren().add(boton);
+
+                cant++;
+            }
+        }
+
+    }
+
+    String diaToString(Date dia) {
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE dd", new Locale("es", "ES"));
+        return formatter.format(dia);
+    }
+
+    void seleccionPelicula(Pelicula pelicula, Date fecha, MouseEvent event) {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/PeliculaSeleccionada.fxml"));
@@ -183,6 +265,7 @@ public class CarteleraController {
 
             PeliculaSeleccionadaController peliculaSeleccionadaController = loader.getController();
             peliculaSeleccionadaController.setPelicula(pelicula);
+            peliculaSeleccionadaController.setFecha(fecha);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             SceneManager.setScene(root, stage);

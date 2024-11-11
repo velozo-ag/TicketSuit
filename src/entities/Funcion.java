@@ -44,8 +44,12 @@ public class Funcion {
         this.id_tipoFuncion = id_tipoFuncion;
     }
 
-    public String getTipoFuncion() {
+    public String getTipoFuncionNombre() {
         return tipoFuncionController.findById(this.getId_tipoFuncion()).getDescripcion();
+    }
+
+    public TipoFuncion getTipoFuncion() {
+        return tipoFuncionController.findById(this.getId_tipoFuncion());
     }
 
     public Date getFechaIngreso() {
