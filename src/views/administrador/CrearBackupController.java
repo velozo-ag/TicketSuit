@@ -77,12 +77,24 @@ public class CrearBackupController {
 
         if (selectedFile != null) {
             String backupPath = selectedFile.getAbsolutePath();
-            String restoreQuery = "RESTORE DATABASE TicketSuit FROM DISK = '" + backupPath + "' WITH REPLACE";
+            String setSingleUserQuery = "ALTER DATABASE TicketSuit SET SINGLE_USER WITH ROLLBACK IMMEDIATE;";
+            String restoreQuery = "RESTORE DATABASE TicketSuit FROM DISK = '" + backupPath + "' WITH REPLACE;";
+            String setMultiUserQuery = "ALTER DATABASE TicketSuit SET MULTI_USER;";
 
             try (Connection connection = databaseConnection.connect();
-                 Statement statement = connection.createStatement()) {
+                Statement statement = connection.createStatement()) {
 
+                // Cambiar a la base de datos master
+                connection.setCatalog("master");
+
+                // Cerrar conexiones activas
+                statement.executeUpdate(setSingleUserQuery);
+
+                // Restaurar la base de datos
                 statement.executeUpdate(restoreQuery);
+
+                // Volver a modo multiusuario
+                statement.executeUpdate(setMultiUserQuery);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Restauración Exitosa");

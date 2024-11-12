@@ -22,7 +22,7 @@ public class App extends Application {
         primaryStage = stage;
 
         // Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/views/administrador/ABMPeliculas.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/gerente/PanelGerente.fxml"));
         scene = new Scene(root);
 
         root.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());

@@ -22,6 +22,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Tooltip;
+
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
 
@@ -87,6 +89,7 @@ public class ChartsAsistenciaController {
             }
 
             barChartAsistenciaPorPelicula.getData().add(series);
+            ChartsUtilController.addTooltipToBarChartAsist(series);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,6 +125,7 @@ public class ChartsAsistenciaController {
             }
 
             barChartAsistenciaPorGenero.getData().add(series);
+            ChartsUtilController.addTooltipToBarChartAsist(series);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -130,33 +134,67 @@ public class ChartsAsistenciaController {
 
     private void loadAsistenciaPorClasificacion(LocalDate desde, LocalDate hasta) {
         pieChartAsistenciaPorClasificacion.getData().clear();
-
-        String query = "SELECT cl.nombre AS clasificacion, COUNT(t.id_ticket) AS total_asistencia " +
-                       "FROM Clasificacion cl " +
-                       "JOIN Pelicula p ON cl.id_clasificacion = p.id_clasificacion " +
-                       "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                       "JOIN Ticket t ON f.id_funcion = t.id_funcion " +
-                       "WHERE f.fecha_ingreso BETWEEN ? AND ? " +
-                       "GROUP BY cl.nombre " +
-                       "ORDER BY total_asistencia DESC;";
-
+    
+        String query = """
+            SELECT cl.nombre AS clasificacion, COUNT(t.id_ticket) AS total_asistencia
+            FROM Clasificacion cl
+            JOIN Pelicula p ON cl.id_clasificacion = p.id_clasificacion
+            JOIN Funcion f ON p.id_pelicula = f.id_pelicula
+            JOIN Ticket t ON f.id_funcion = t.id_funcion
+            WHERE f.fecha_ingreso BETWEEN ? AND ?
+            GROUP BY cl.nombre
+            ORDER BY total_asistencia DESC;
+        """;
+    
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setDate(1, java.sql.Date.valueOf(desde));
             pstmt.setDate(2, java.sql.Date.valueOf(hasta));
-
+    
+            int totalTickets = 0;
+    
+            // Primera pasada: calcular el total general de tickets
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    totalTickets += rs.getInt("total_asistencia");
+                }
+            }
+    
+            // Crear el tooltip UNA sola vez
+            Tooltip tooltip = new Tooltip();
+            Tooltip.install(pieChartAsistenciaPorClasificacion, tooltip);
+    
+            // Segunda pasada: cargar datos y agregar tooltips
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     String clasificacion = rs.getString("clasificacion");
                     int totalAsistencia = rs.getInt("total_asistencia");
+                    double porcentaje = (totalTickets > 0) ? (totalAsistencia * 100.0 / totalTickets) : 0.0;
+    
                     PieChart.Data slice = new PieChart.Data(clasificacion, totalAsistencia);
                     pieChartAsistenciaPorClasificacion.getData().add(slice);
+    
+                    // Establecer comportamiento para mostrar el tooltip solo cuando se hace clic
+                    slice.getNode().setOnMouseClicked(event -> {
+                        // Verifica si el Tooltip está visible, y si lo está, lo cierra
+                        if (tooltip.isShowing()) {
+                            tooltip.hide();
+                        } else {
+                            // Si no está visible, muestra el Tooltip
+                            String tooltipText = String.format("%s: %.2f%% (%d tickets)", clasificacion, porcentaje, totalAsistencia);
+                            tooltip.setText(tooltipText);
+    
+                            // Mostrar el tooltip en la posición del mouse
+                            tooltip.show(slice.getNode(), event.getScreenX(), event.getScreenY());
+                        }
+                    });
                 }
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
 
     public void initialize() {
         LocalDate hoy = LocalDate.now();

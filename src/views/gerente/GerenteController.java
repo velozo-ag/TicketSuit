@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 /**1 */
 public class GerenteController {
 
@@ -59,11 +60,10 @@ public class GerenteController {
     @FXML
     private Label tipoFuncionLabel;
     
-    private DatabaseConnection databaseConnection = new DatabaseConnection();
     private Connection connection;
 
-    public GerenteController() {
-        this.connection = databaseConnection.getConnection();
+    public GerenteController(){
+        this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
     public void cargarTicketsVendidosPorMes(LocalDate desde, LocalDate hasta) {
@@ -96,20 +96,23 @@ public class GerenteController {
     
         ticketsVendidosChart.getData().clear();
         ticketsVendidosChart.getData().add(series);
+        ChartsUtilController.addTooltipToBarChartDash(series);
         ticketsLabel.setText("Tickets Vendidos: " + totalTickets);
     }
 
     public void cargarCantidadTicketsPorFuncion(LocalDate desde, LocalDate hasta) {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        String query = "SELECT TF.descripcion AS tipo_funcion, COUNT(T.id_ticket) AS total_tickets " +
-                        "FROM Ticket T " +
-                        "JOIN Sala_Funcion SF ON T.id_funcion = SF.id_funcion " +
-                        "JOIN Funcion F ON SF.id_funcion = F.id_funcion " +
-                        "JOIN TipoFuncion TF ON F.id_tipoFuncion = TF.id_tipoFuncion " +
-                        "WHERE SF.inicio_funcion BETWEEN ? AND ? " +
-                        "GROUP BY TF.descripcion;";
+        String query = """
+            SELECT TF.descripcion AS tipo_funcion, COUNT(T.id_ticket) AS total_tickets
+            FROM Ticket T
+            JOIN Sala_Funcion SF ON T.id_funcion = SF.id_funcion
+            JOIN Funcion F ON SF.id_funcion = F.id_funcion
+            JOIN TipoFuncion TF ON F.id_tipoFuncion = TF.id_tipoFuncion
+            WHERE SF.inicio_funcion BETWEEN ? AND ?
+            GROUP BY TF.descripcion;
+        """;
     
-        int totalTickets = 0;
+        final int[] totalTickets = {0}; // Array mutable para manejar totalTickets
     
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setDate(1, java.sql.Date.valueOf(desde));
@@ -119,36 +122,58 @@ public class GerenteController {
                     String tipoFuncion = rs.getString("tipo_funcion");
                     int cantidadTickets = rs.getInt("total_tickets");
                     pieChartData.add(new PieChart.Data(tipoFuncion, cantidadTickets));
-                    totalTickets += cantidadTickets;
+                    totalTickets[0] += cantidadTickets; // Sumar al total
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error al cargar datos de cantidad de tickets por función: " + e.getMessage());
-        }
-    
-        StringBuilder tipoFuncionInfo = new StringBuilder("");
-        for (PieChart.Data data : pieChartData) {
-            double ticketsTipo = data.getPieValue();
-            double porcentaje = (ticketsTipo / totalTickets) * 100;
-            tipoFuncionInfo.append(String.format("%.0f%% %s - ", porcentaje, data.getName()));
-        }
-    
-        if (tipoFuncionInfo.length() > 0) {
-            tipoFuncionInfo.setLength(tipoFuncionInfo.length() - 3);
+            e.printStackTrace();
         }
     
         ingresosPorFuncionChart.setData(pieChartData);
-        tipoFuncionLabel.setText(tipoFuncionInfo.toString());
+    
+        // Crear un tooltip mutable para controlar el actual
+        final Tooltip[] currentTooltip = {null};
+    
+        // Configurar comportamiento del tooltip
+        ingresosPorFuncionChart.getData().forEach(slice -> {
+            slice.getNode().setOnMouseClicked(event -> {
+                // Ocultar el tooltip actual si existe
+                if (currentTooltip[0] != null) {
+                    currentTooltip[0].hide();
+                    currentTooltip[0] = null;
+                }
+    
+                // Crear y mostrar un nuevo tooltip
+                Tooltip tooltip = new Tooltip();
+                String tipoFuncion = slice.getName();
+                int cantidadTickets = (int) slice.getPieValue();
+                double porcentaje = (totalTickets[0] > 0) ? (cantidadTickets * 100.0 / totalTickets[0]) : 0.0;
+                tooltip.setText(String.format("%s: %.2f%% (%d tickets)", tipoFuncion, porcentaje, cantidadTickets));
+                tooltip.show(slice.getNode(), event.getScreenX(), event.getScreenY());
+                currentTooltip[0] = tooltip;
+    
+                // Configurar evento para ocultar el tooltip al hacer clic fuera
+                ingresosPorFuncionChart.getScene().setOnMousePressed(e -> {
+                    if (currentTooltip[0] != null) {
+                        currentTooltip[0].hide();
+                        currentTooltip[0] = null;
+                        ingresosPorFuncionChart.getScene().setOnMousePressed(null); // Limpiar el evento
+                    }
+                });
+    
+                event.consume(); // Evitar que el evento de clic se propague
+            });
+        });
     }
 
     public void cargarIngresosPorMes(LocalDate desde, LocalDate hasta) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         String query = "SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes, SUM(subtotal) AS total_ingresos " +
-                    "FROM Compra " +
-                    "WHERE fecha BETWEEN ? AND ? " +
-                    "GROUP BY YEAR(fecha), MONTH(fecha) ORDER BY YEAR(fecha), MONTH(fecha);";
-
-        
+                       "FROM Compra " +
+                       "WHERE fecha BETWEEN ? AND ? " +
+                       "GROUP BY YEAR(fecha), MONTH(fecha) ORDER BY YEAR(fecha), MONTH(fecha);";
+    
         int totalIngresos = 0;
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setDate(1, java.sql.Date.valueOf(desde));
@@ -158,18 +183,21 @@ public class GerenteController {
                     String label = obtenerNombreMes(rs.getInt("mes")) + String.valueOf(rs.getInt("anio")).substring(2);
                     double ingresos = rs.getDouble("total_ingresos");
                     series.getData().add(new XYChart.Data<>(label, ingresos));
-                    totalIngresos+=ingresos;
+                    totalIngresos += ingresos;
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error al cargar datos de ingresos por mes: " + e.getMessage());
         }
-
+    
         ingresosChart.getData().clear();
         ingresosChart.getData().add(series);
         ingresosLabel.setText("Ingresos Totales: $" + totalIngresos);
+    
+        // Llamar al método modularizado para agregar tooltips
+        ChartsUtilController.configurarTooltipsLineChart(ingresosChart); // Llamada estática
     }
-
+    
     private String obtenerNombreMes(int mes) {
         switch (mes) {
             case 1: return "Ene";

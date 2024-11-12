@@ -16,6 +16,7 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import views.MainController;
 
@@ -113,16 +114,18 @@ public class ChartsLogisticaController {
     }
 
     private void loadPeliculasPorGeneroData(LocalDate desde, LocalDate hasta) {
-        barChartPeliculasPorGenero.getData().clear(); 
+        barChartPeliculasPorGenero.getData().clear();
     
-        String query = "SELECT g.descripcion AS genero, COUNT(DISTINCT gp.id_pelicula) AS cantidad_peliculas " +
-                       "FROM Genero g " +
-                       "JOIN Genero_Pelicula gp ON g.id_genero = gp.id_genero " +
-                       "JOIN Pelicula p ON gp.id_pelicula = p.id_pelicula " +
-                       "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                       "WHERE f.fecha_ingreso BETWEEN ? AND ? OR f.fecha_final BETWEEN ? AND ? " +
-                       "GROUP BY g.descripcion " +
-                       "ORDER BY cantidad_peliculas DESC;";
+        String query = """
+            SELECT g.descripcion AS genero, COUNT(DISTINCT gp.id_pelicula) AS cantidad_peliculas
+            FROM Genero g
+            JOIN Genero_Pelicula gp ON g.id_genero = gp.id_genero
+            JOIN Pelicula p ON gp.id_pelicula = p.id_pelicula
+            JOIN Funcion f ON p.id_pelicula = f.id_pelicula
+            WHERE (f.fecha_ingreso BETWEEN ? AND ? OR f.fecha_final BETWEEN ? AND ?)
+            GROUP BY g.descripcion
+            ORDER BY cantidad_peliculas DESC;
+        """;
     
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setDate(1, java.sql.Date.valueOf(desde));
@@ -141,77 +144,85 @@ public class ChartsLogisticaController {
             }
     
             barChartPeliculasPorGenero.getData().add(series);
-    
+            ChartsUtilController.addTooltipToBarChartLog(series);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    
 
     public void cargarPeliculasPorGenero(LocalDate desde, LocalDate hasta) {
-    String query = "SELECT g.descripcion AS genero, COUNT(gp.id_pelicula) AS cantidad_peliculas " +
-                   "FROM Genero g " +
-                   "JOIN Genero_Pelicula gp ON g.id_genero = gp.id_genero " +
-                   "JOIN Pelicula p ON gp.id_pelicula = p.id_pelicula " +
-                   "JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
-                   "WHERE f.fecha_ingreso BETWEEN ? AND ? " +
-                   "GROUP BY g.descripcion " +
-                   "ORDER BY cantidad_peliculas DESC;";
-
-    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-
+        // Consulta para calcular películas por género con COUNT(DISTINCT)
+        String query = """
+            SELECT g.descripcion AS genero, COUNT(DISTINCT gp.id_pelicula) AS cantidad_peliculas
+            FROM Genero g
+            JOIN Genero_Pelicula gp ON g.id_genero = gp.id_genero
+            JOIN Pelicula p ON gp.id_pelicula = p.id_pelicula
+            JOIN Funcion f ON f.id_pelicula = p.id_pelicula
+            WHERE (f.fecha_ingreso BETWEEN ? AND ? OR f.fecha_final BETWEEN ? AND ?)
+            GROUP BY g.descripcion
+            ORDER BY cantidad_peliculas DESC;
+        """;
+    
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        final int[] totalPeliculas = {0}; // Usamos un arreglo para almacenar el total de películas
+    
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setDate(1, java.sql.Date.valueOf(desde));
             pstmt.setDate(2, java.sql.Date.valueOf(hasta));
-
+            pstmt.setDate(3, java.sql.Date.valueOf(desde));
+            pstmt.setDate(4, java.sql.Date.valueOf(hasta));
+    
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     String genero = rs.getString("genero");
                     int cantidadPeliculas = rs.getInt("cantidad_peliculas");
-                    pieChartData.add(new PieChart.Data(genero, cantidadPeliculas));
+                    totalPeliculas[0] += cantidadPeliculas; // Sumar al total
+                    pieChartData.add(new PieChart.Data(genero, cantidadPeliculas)); // Agregar al gráfico
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error al cargar datos de películas por género: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        pieChartPeliculasPorGenero.setData(pieChartData); // Asegúrate de que pieChartPeliculasPorGenero sea el ID de tu PieChart
+    
+        pieChartPeliculasPorGenero.setData(pieChartData);
+    
+        // Crear una referencia al Tooltip actual para controlarlo
+        final Tooltip[] currentTooltip = {null};
+    
+        // Configurar comportamiento del tooltip
+        pieChartPeliculasPorGenero.getData().forEach(slice -> {
+            slice.getNode().setOnMouseClicked(event -> {
+                // Ocultar el tooltip actual si existe
+                if (currentTooltip[0] != null) {
+                    currentTooltip[0].hide();
+                    currentTooltip[0] = null;
+                }
+    
+                // Crear y mostrar un nuevo tooltip
+                Tooltip tooltip = new Tooltip();
+                String genero = slice.getName();
+                int cantidadPeliculas = (int) slice.getPieValue();
+                double porcentaje = (totalPeliculas[0] > 0) ? (cantidadPeliculas * 100.0 / totalPeliculas[0]) : 0.0;
+                tooltip.setText(String.format("%s: %.2f%% (%d películas)", genero, porcentaje, cantidadPeliculas));
+                tooltip.show(slice.getNode(), event.getScreenX(), event.getScreenY());
+                currentTooltip[0] = tooltip;
+    
+                // Configurar evento para ocultar el tooltip al hacer clic fuera
+                pieChartPeliculasPorGenero.getScene().setOnMousePressed(e -> {
+                    if (currentTooltip[0] != null) {
+                        currentTooltip[0].hide();
+                        currentTooltip[0] = null;
+                        pieChartPeliculasPorGenero.getScene().setOnMousePressed(null); // Limpiar el evento
+                    }
+                });
+    
+                event.consume(); // Evitar que el evento de clic se propague
+            });
+        });
     }
-
-    // public void cargarCapacidadSalas(LocalDate desde, LocalDate hasta) {
-    //     capacidadSalasChart.getData().clear();
-    //     XYChart.Series<String, Number> capacidadTotalSeries = new XYChart.Series<>();
-    //     XYChart.Series<String, Number> capacidadUtilizadaSeries = new XYChart.Series<>();
-        
-    //     String query = "SELECT S.nombre AS sala, S.capacidad AS capacidad_total, COUNT(T.id_ticket) AS capacidad_utilizada " +
-    //                    "FROM Sala S LEFT JOIN Sala_Funcion SF ON S.id_sala = SF.id_sala " +
-    //                    "LEFT JOIN Ticket T ON SF.id_funcion = T.id_funcion " +
-    //                    "WHERE SF.inicio_funcion BETWEEN ? AND ? " +
-    //                    "GROUP BY S.nombre, S.capacidad " +
-    //                    "ORDER BY S.nombre;";
-
-    //     capacidadTotalSeries.setName("Capacidad Total");
-    //     capacidadUtilizadaSeries.setName("Capacidad Utilizada");
-
-    //     try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-    //         pstmt.setDate(1, java.sql.Date.valueOf(desde));
-    //         pstmt.setDate(2, java.sql.Date.valueOf(hasta));
-    //         ResultSet rs = pstmt.executeQuery();
-
-    //         while (rs.next()) {
-    //             String sala = rs.getString("sala");
-    //             int capacidadTotal = rs.getInt("capacidad_total");
-    //             int capacidadUtilizada = rs.getInt("capacidad_utilizada");
-
-    //             capacidadUtilizadaSeries.getData().add(new XYChart.Data<>(sala, capacidadUtilizada));
-    //             capacidadTotalSeries.getData().add(new XYChart.Data<>(sala, capacidadTotal - capacidadUtilizada));
-    //         }
-
-    //         capacidadSalasChart.getData().addAll(capacidadTotalSeries, capacidadUtilizadaSeries);
-
-    //     } catch (SQLException e) {
-    //         System.out.println("Error al cargar datos de capacidad de salas: " + e.getMessage());
-    //     }
-    // }
+    
 
     public void cargarPeliculasPorMes(LocalDate desde, LocalDate hasta) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -245,6 +256,7 @@ public class ChartsLogisticaController {
     
         peliculasPorMesChart.getData().clear(); 
         peliculasPorMesChart.getData().add(series);
+        ChartsUtilController.addTooltipToBarChartLog(series);
         // peliculasLabel.setText("Películas Estrenadas: " + totalPeliculas);
     }
 

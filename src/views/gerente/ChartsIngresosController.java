@@ -1,6 +1,6 @@
 package views.gerente;
 import java.io.IOException;
-
+import views.gerente.ChartsUtilController;
 import database.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,10 +22,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 /**1 */
+import java.time.LocalDate;
+
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+
+
 public class ChartsIngresosController {
 
     private MainController mainController = new MainController();
     private Connection connection;
+
     @FXML
     private Pane mainPanel;
 
@@ -33,195 +40,165 @@ public class ChartsIngresosController {
     private BarChart<String, Number> barChartIngresosPeliculas;
 
     @FXML
-    private ComboBox<String> filterComboBox;
+    private BarChart<String, Number> barChartIngresosPorGenero;
 
     @FXML
-    private LineChart<String, Number> lineChartIngresosTiempo;
+    private DatePicker desdeDatePicker;
 
     @FXML
-    private ComboBox<String> filterComboBoxLine; 
-    
+    private DatePicker hastaDatePicker;
+
     public ChartsIngresosController() {
-        this.connection = DatabaseConnection.getInstance().getConnection(); 
+        this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
     public void initialize() {
-        populateComboBox();
-        populateComboBoxLine(); 
-        loadTotalIngresosData("Total");
-    
-        
-        filterComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            barChartIngresosPeliculas.getData().clear();
-            loadTotalIngresosData(newValue);
-        });
+        LocalDate hoy = LocalDate.now();
+        LocalDate inicioAño = LocalDate.of(hoy.getYear(), 1, 1);
 
-        loadIngresosTiempoData("Año");
+        desdeDatePicker.setValue(inicioAño);
+        hastaDatePicker.setValue(hoy);
 
-        filterComboBoxLine.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            lineChartIngresosTiempo.getData().clear();
-            loadIngresosTiempoData(newValue);
-        });
+        configurarDatePickers(hoy);
+
+        // Cargar gráficos con el rango inicial
+        actualizarGraficos(inicioAño, hoy);
+
+        desdeDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> actualizarGraficos(newValue, hastaDatePicker.getValue()));
+        hastaDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> actualizarGraficos(desdeDatePicker.getValue(), newValue));
     }
 
-    @FXML
-    void onFilterChange(ActionEvent event) {
-        String selectedFilter = filterComboBox.getValue();
-        loadTotalIngresosData(selectedFilter);
-    }
-
-    private void populateComboBox() {
-        ObservableList<String> filters = FXCollections.observableArrayList("Total", "Anual", "Mensual", "Semanal");
-        filterComboBox.setItems(filters);
-        filterComboBox.setValue("Total");
-    }
-
-    private void loadTotalIngresosData(String filter) {
-        barChartIngresosPeliculas.getData().clear();
-
-        String query = buildQueryByFilter(filter);
-
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Ingresos Totales");
-
-            while (rs.next()) {
-                String nombrePelicula = rs.getString("nombre");
-                double totalIngresos = rs.getDouble("total_ingresos");
-
-                series.getData().add(new XYChart.Data<>(nombrePelicula, totalIngresos));
+    private void configurarDatePickers(LocalDate hoy) {
+        desdeDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isAfter(hoy));
             }
+        });
 
-            barChartIngresosPeliculas.getData().add(series);
+        hastaDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isAfter(hoy) || date.isBefore(desdeDatePicker.getValue()));
+            }
+        });
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        desdeDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && hastaDatePicker.getValue() != null && newValue.isAfter(hastaDatePicker.getValue())) {
+                hastaDatePicker.setValue(newValue);
+            }
+        });
+
+        hastaDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && desdeDatePicker.getValue() != null && newValue.isBefore(desdeDatePicker.getValue())) {
+                desdeDatePicker.setValue(newValue);
+            }
+        });
+    }
+
+    private void actualizarGraficos(LocalDate desde, LocalDate hasta) {
+        if (desde != null && hasta != null) {
+            loadTotalIngresosData(desde, hasta);
+            loadTotalIngresosPorGenero(desde, hasta);
         }
     }
 
-    private String buildQueryByFilter(String filter) {
-        String query;
-        switch (filter) {
-            case "Anual":
-                query = "SELECT p.nombre, SUM(c.subtotal) AS total_ingresos " +
-                        "FROM Pelicula p " +
-                        "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                        "JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
-                        "JOIN Ticket t ON t.id_funcion = sf.id_funcion AND t.id_sala = sf.id_sala " +
-                        "JOIN Compra c ON c.id_compra = t.id_compra " +
-                        "WHERE YEAR(c.fecha) = YEAR(GETDATE()) " +
-                        "GROUP BY p.nombre " +
-                        "ORDER BY total_ingresos DESC;";
-                break;
-            case "Mensual":
-                query = "SELECT p.nombre, SUM(c.subtotal) AS total_ingresos " +
-                        "FROM Pelicula p " +
-                        "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                        "JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
-                        "JOIN Ticket t ON t.id_funcion = sf.id_funcion AND t.id_sala = sf.id_sala " +
-                        "JOIN Compra c ON c.id_compra = t.id_compra " +
-                        "WHERE YEAR(c.fecha) = YEAR(GETDATE()) AND MONTH(c.fecha) = MONTH(GETDATE()) " +
-                        "GROUP BY p.nombre " +
-                        "ORDER BY total_ingresos DESC;";
-                break;
-            case "Semanal":
-                query = "SELECT p.nombre, SUM(c.subtotal) AS total_ingresos " +
-                        "FROM Pelicula p " +
-                        "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                        "JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
-                        "JOIN Ticket t ON t.id_funcion = sf.id_funcion AND t.id_sala = sf.id_sala " +
-                        "JOIN Compra c ON c.id_compra = t.id_compra " +
-                        "WHERE YEAR(c.fecha) = YEAR(GETDATE()) AND DATEPART(WEEK, c.fecha) = DATEPART(WEEK, GETDATE()) " +
-                        "GROUP BY p.nombre " +
-                        "ORDER BY total_ingresos DESC;";
-                break;
-            default: // Total
-                query = "SELECT p.nombre, SUM(c.subtotal) AS total_ingresos " +
-                        "FROM Pelicula p " +
-                        "JOIN Funcion f ON p.id_pelicula = f.id_pelicula " +
-                        "JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
-                        "JOIN Ticket t ON t.id_funcion = sf.id_funcion AND t.id_sala = sf.id_sala " +
-                        "JOIN Compra c ON c.id_compra = t.id_compra " +
-                        "GROUP BY p.nombre " +
-                        "ORDER BY total_ingresos DESC;";
-                break;
-        }
-        return query;
-    }
-
-    private void populateComboBoxLine() {
-        ObservableList<String> filtersLine = FXCollections.observableArrayList("Año", "Mes", "Trimestre");
-        filterComboBoxLine.setItems(filtersLine);
-        filterComboBoxLine.setValue("Año");
-    }
+    private void loadTotalIngresosData(LocalDate desde, LocalDate hasta) {
+        barChartIngresosPeliculas.getData().clear();
     
-    private void loadIngresosTiempoData(String filter) {
-        lineChartIngresosTiempo.getData().clear();
-        String query = buildQueryForTiempo(filter);
+        String query = """
+            SELECT 
+                p.nombre AS pelicula, 
+                SUM(t.valor) AS total_recaudado
+            FROM 
+                Ticket t
+            JOIN 
+                Sala_Funcion sf ON t.id_funcion = sf.id_funcion AND t.id_sala = sf.id_sala AND t.inicio_funcion = sf.inicio_funcion
+            JOIN 
+                Funcion f ON sf.id_funcion = f.id_funcion
+            JOIN 
+                Pelicula p ON f.id_pelicula = p.id_pelicula
+            WHERE 
+                sf.inicio_funcion BETWEEN ? AND ?
+            GROUP BY 
+                p.nombre
+            ORDER BY 
+                total_recaudado DESC;
+        """;
     
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
     
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName("Ingresos Totales");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                XYChart.Series<String, Number> series = new XYChart.Series<>();
+                series.setName("Total Recaudado");
     
-            while (rs.next()) {
-                String label;
-                double totalIngresos = rs.getDouble("total_ingresos");
-                switch (filter) {
-                    case "Año":
-                        label = String.valueOf(rs.getInt("anio"));
-                        break;
-                    case "Mes":
-                        label = String.valueOf(rs.getInt("mes"));
-                        break;
-                    case "Trimestre":
-                        label = "Semana " + rs.getInt("semana");
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Filtro no reconocido: " + filter);
+                while (rs.next()) {
+                    String pelicula = rs.getString("pelicula");
+                    double totalRecaudado = rs.getDouble("total_recaudado");
+                    series.getData().add(new XYChart.Data<>(pelicula, totalRecaudado));
                 }
     
-                series.getData().add(new XYChart.Data<>(label, totalIngresos));
+                barChartIngresosPeliculas.getData().add(series);
+    
+                // Añadir Tooltips
+                ChartsUtilController.addTooltipToBarChartCash(series);
             }
-    
-            lineChartIngresosTiempo.getData().add(series);
-    
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private void loadTotalIngresosPorGenero(LocalDate desde, LocalDate hasta) {
+        barChartIngresosPorGenero.getData().clear();
     
-    private String buildQueryForTiempo(String filter) {
-        String query;
-        switch (filter) {
-            case "Año":
-                query = "SELECT YEAR(c.fecha) AS anio, SUM(c.subtotal) AS total_ingresos " +
-                        "FROM Compra c " +
-                        "GROUP BY YEAR(c.fecha) " +
-                        "ORDER BY anio;";
-                break;
-            case "Mes":
-                query = "SELECT MONTH(c.fecha) AS mes, SUM(c.subtotal) AS total_ingresos " +
-                        "FROM Compra c " +
-                        "WHERE YEAR(c.fecha) = YEAR(GETDATE()) " +
-                        "GROUP BY MONTH(c.fecha) " +
-                        "ORDER BY mes;";
-                break;
-            case "Trimestre":
-                query = "SELECT DATEPART(WEEK, c.fecha) AS semana, SUM(c.subtotal) AS total_ingresos " +
-                        "FROM Compra c " +
-                        "WHERE YEAR(c.fecha) = YEAR(GETDATE()) " +
-                        "AND DATEPART(QUARTER, c.fecha) = DATEPART(QUARTER, GETDATE()) " +
-                        "GROUP BY DATEPART(WEEK, c.fecha) " +
-                        "ORDER BY semana;";
-                break;
-            default:
-                throw new IllegalArgumentException("Filtro no reconocido: " + filter);
+        String query = """
+            SELECT 
+                g.descripcion AS genero, 
+                SUM(t.valor) AS total_recaudado
+            FROM 
+                Ticket t
+            JOIN 
+                Sala_Funcion sf ON t.id_funcion = sf.id_funcion AND t.id_sala = sf.id_sala AND t.inicio_funcion = sf.inicio_funcion
+            JOIN 
+                Funcion f ON sf.id_funcion = f.id_funcion
+            JOIN 
+                Pelicula p ON f.id_pelicula = p.id_pelicula
+            JOIN 
+                Genero_Pelicula gp ON p.id_pelicula = gp.id_pelicula
+            JOIN 
+                Genero g ON gp.id_genero = g.id_genero
+            WHERE 
+                sf.inicio_funcion BETWEEN ? AND ?
+            GROUP BY 
+                g.descripcion
+            ORDER BY 
+                total_recaudado DESC;
+        """;
+    
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(desde));
+            pstmt.setDate(2, java.sql.Date.valueOf(hasta));
+    
+            try (ResultSet rs = pstmt.executeQuery()) {
+                XYChart.Series<String, Number> series = new XYChart.Series<>();
+                series.setName("Ingresos por Género");
+    
+                while (rs.next()) {
+                    String genero = rs.getString("genero");
+                    double totalRecaudado = rs.getDouble("total_recaudado");
+                    series.getData().add(new XYChart.Data<>(genero, totalRecaudado));
+                }
+    
+                barChartIngresosPorGenero.getData().add(series);
+                ChartsUtilController.addTooltipToBarChartCash(series);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return query;
     }
 
     @FXML
