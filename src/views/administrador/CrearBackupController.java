@@ -10,6 +10,7 @@ import controllers.UsuarioController;
 import database.DatabaseConnection;
 import entities.Perfil;
 import entities.Usuario;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -98,9 +99,10 @@ public class CrearBackupController {
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Restauración Exitosa");
-                alert.setHeaderText(null);
+                alert.setHeaderText("La restauración se realizo exitosamente. Reinicie la app para finalizar.");
                 alert.setContentText("La base de datos ha sido restaurada desde: " + backupPath);
                 alert.showAndWait();
+                Platform.exit();
 
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -1,9 +1,8 @@
 package main;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import database.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,32 +19,38 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
-
-        // Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/views/gerente/PanelGerente.fxml"));
+    
+        DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        String initialView;
+    
+        if (!dbConnection.checkDatabaseExists()) {
+            System.out.println("Base de datos no encontrada. Cargando ventana de restauración...");
+            initialView = "/views/Restore.fxml";
+        } else {
+            if (!dbConnection.isConnected()) {
+                dbConnection.connect(); 
+            }
+            if (!dbConnection.hasAdminUser()) {
+                System.out.println("No hay usuarios administradores. Cargando ventana de restauración...");
+                initialView = "/views/Restore.fxml";
+            } else {
+                System.out.println("Base de datos lista. Cargando login...");
+                initialView = "/views/Login.fxml";
+            }
+        }
+    
+        Parent root = FXMLLoader.load(getClass().getResource(initialView));
         scene = new Scene(root);
-
         root.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());
-
+    
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setTitle("Ticket Suit");
         primaryStage.getIcons().add(new Image("/Resources/LogoThumbnail.png"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-    // Esto solamente cambia el contenido del root - Recibe la ruta del archivo FXML
-    public static void setRoot(String route) throws IOException {
-        Parent newRoot = FXMLLoader.load(App.class.getResource(route));
-        scene.setRoot(newRoot);
-        System.out.println(scene.getStylesheets());
-    }
-
+    
     public static void main(String[] args) {
-        Logger logger = Logger.getLogger("javafx");
-        logger.setLevel(Level.SEVERE); // Muestra solo errores severos, ignora warnings
-        
         launch(args);
     }
-
 }
