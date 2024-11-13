@@ -5,12 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.Action;
+
 import controllers.AsientoController;
 import controllers.SalaController;
 import entities.Asiento;
+import entities.Compra;
 import entities.Pelicula;
 import entities.Sala;
 import entities.Sala_Funcion;
+import entities.Ticket;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +22,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -53,6 +58,9 @@ public class SeleccionAsientoController {
     public Sala_Funcion funcion;
     public int cantidadAsientos;
     public List<Asiento> asientosSelec = new ArrayList<>();
+    public int maxSeleccionados;
+
+    private Compra compra = new Compra();
 
     @FXML
     void volverPelicula(ActionEvent event) {
@@ -74,16 +82,28 @@ public class SeleccionAsientoController {
 
     @FXML
     void confirmarAsientos(ActionEvent event) {
-        System.out.println("confirmar");
+        if (asientosSelec.size() != maxSeleccionados) {
+            mensajeError("Debe seleccionar todos los Asientos antes de continuar!");
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/ConfirmarVenta.fxml"));
             Parent root = loader.load();
+            ConfirmacionVentaController confirmacionVentaController = loader.getController();
+            confirmacionVentaController.setValores(compra, pelicula, funcion, asientosSelec);
 
             Stage stage = new Stage();
             stage.setTitle("Formulario");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
-            // stage.setOnHidden(e -> cargarSalas());
+            stage.setOnHidden(e -> {
+                if (confirmacionVentaController.getCompra()) {
+                    mostrarResumenCompra(event);
+                } else {
+                    irACartelera(event);
+                }
+            });
 
             stage.showAndWait();
 
@@ -92,19 +112,52 @@ public class SeleccionAsientoController {
         }
     }
 
-    public void setValores(Pelicula pelicula, Sala_Funcion funcion, int cantidadTickets) {
+    public void irACartelera(ActionEvent event) {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/Cartelera.fxml"));
+            root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneManager.setScene(root, stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void mostrarResumenCompra(ActionEvent event) {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/ResumenVenta.fxml"));
+            root = loader.load();
+            ResumenVentaController resumenVentaController = loader.getController();
+            resumenVentaController.setValores(compra, pelicula, funcion, asientosSelec);
+
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneManager.setScene(root, stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setValores(Compra compra, Pelicula pelicula, Sala_Funcion funcion, int cantidadTickets) {
         this.pelicula = pelicula;
         this.funcion = funcion;
         this.cantidadAsientos = cantidadTickets;
+        this.compra = compra;
+
         mostrarAsientos();
     }
 
     private void mostrarAsientos() {
         panelAsientos.getChildren().clear(); // Limpia panel antes de añadir nuevos asientos
 
-        int maxSeleccionados = cantidadAsientos;
-        List<CheckBox> asientosSeleccionados = new ArrayList<>();
-        List<Asiento> asientos = asientoController.findBySala(funcion.getId_sala());
+        maxSeleccionados = cantidadAsientos;
+        List<CheckBox> bAsientosSeleccionados = new ArrayList<>(); // botones que representan a los asientos
+                                                                   // seleccionados
+        List<Asiento> asientos = asientoController.findBySala(funcion.getId_sala()); // asientos por los cuales se van a
+                                                                                     // mostrar los botones
 
         Sala sala = salaController.findById(funcion.getId_sala());
         int asientoWidth = 30;
@@ -127,6 +180,7 @@ public class SeleccionAsientoController {
         grid.setAlignment(Pos.CENTER);
 
         for (Asiento asiento : asientos) {
+            // Para realizar salto de fila
             if (!asiento.getLetraFila().equals(filaAnterior) && !filaAnterior.equals("")) {
                 fila++;
                 filaAnterior = asiento.getLetraFila();
@@ -138,52 +192,38 @@ public class SeleccionAsientoController {
             boton.getStyleClass().add("asiento-button");
             boton.setPrefWidth(asientoWidth);
             boton.setPrefHeight(asientoHeight);
-            
+
             if (asientoController.asientoDesocupado(asiento.getIdAsiento(), funcion)) {
-                boton.setStyle("-fx-background-image: url('@../../Resources/Asiento.png'); " +
-                        "-fx-background-size: cover;" +
-                        "-fx-padding: 0;");
-
-                boton.setOnMouseEntered(
-                        event -> {
-                            if (!boton.isSelected()) {
-                                boton.setStyle("-fx-background-image: url('@../../Resources/AsientoHover.png'); " +
-                                        "-fx-background-size: cover;" +
-                                        "-fx-padding: 0;");
-                            }
-                        });
-
-                boton.setOnMouseExited(event -> {
+                boton.setStyle(setAsientoStyle("Asiento"));
+                boton.setOnMouseEntered(event -> {
                     if (!boton.isSelected()) {
-                        boton.setStyle("-fx-background-image: url('@../../Resources/Asiento.png'); " +
-                                "-fx-background-size: cover;" +
-                                "-fx-padding: 0;");
+                        boton.setStyle(setAsientoStyle("AsientoHover"));
                     }
                 });
-
+                boton.setOnMouseExited(event -> {
+                    if (!boton.isSelected()) {
+                        boton.setStyle(setAsientoStyle("Asiento"));
+                    }
+                });
                 boton.setOnAction(event -> {
                     if (boton.isSelected()) {
-                        if (asientosSeleccionados.size() < maxSeleccionados) {
-                            boton.setStyle("-fx-background-image: url('@../../Resources/AsientoSeleccionado.png'); " +
-                                    "-fx-background-size: cover;" +
-                                    "-fx-z-index: 2;" +
-                                    "-fx-padding: 0;");
+                        if (bAsientosSeleccionados.size() < maxSeleccionados) {
+                            boton.setStyle(setAsientoStyle("AsientoSeleccionado"));
                             boton.setGraphic(null);
-                            asientosSeleccionados.add(boton);
+                            bAsientosSeleccionados.add(boton);
+                            asientosSelec.add(asiento);
                         } else {
                             boton.setSelected(false);
                         }
                     } else {
-                        boton.setStyle("-fx-background-image: url('@../../Resources/Asiento.png'); " +
-                                "-fx-background-size: cover;" +
-                                "-fx-padding: 0;");
-                        asientosSeleccionados.remove(boton);
+                        boton.setStyle(setAsientoStyle("Asiento"));
+                        bAsientosSeleccionados.remove(boton);
+                        asientosSelec.remove(asiento);
                     }
                 });
-            }else{
-                boton.setStyle("-fx-background-image: url('@../../Resources/AsientoOcupado.png'); " +
-                        "-fx-background-size: cover;" +
-                        "-fx-padding: 0;");
+
+            } else {
+                boton.setStyle(setAsientoStyle("AsientoOcupado"));
                 boton.setDisable(true);
             }
 
@@ -191,6 +231,27 @@ public class SeleccionAsientoController {
         }
 
         panelAsientos.getChildren().add(grid);
+    }
+
+    private String setAsientoStyle(String asiento) {
+        return "-fx-background-image: url('@../../Resources/" + asiento
+                + ".png'); -fx-background-size: cover; -fx-padding: 0;";
+    }
+
+    private void mensajeError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void mensajeExito(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
 }

@@ -140,6 +140,30 @@ public class AsientoController {
         return asientos;
     }
 
+    public Asiento findById(int idAsiento) {
+        String query = "SELECT a.id_asiento, a.id_sala, a.letra_fila, a.numero_columna, a.estado FROM Asiento a WHERE a.id_asiento = ?";
+        Asiento asiento = null;
+    
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idAsiento);
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    asiento = new Asiento();
+                    asiento.setIdAsiento(rs.getInt("id_asiento"));
+                    asiento.setIdSala(rs.getInt("id_sala"));
+                    asiento.setLetraFila(rs.getString("letra_fila"));
+                    asiento.setNumeroColumna(rs.getInt("numero_columna"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el asiento: " + e.getMessage());
+        }
+    
+        return asiento;
+    }
+    
+
     public boolean asientoDesocupado(int id_asiento, Sala_Funcion funcion) {
         String query = "SELECT a.* FROM Asiento a " +
                 "JOIN Ticket t ON t.id_asiento = a.id_asiento " +
@@ -161,6 +185,30 @@ public class AsientoController {
             System.out.println("Error al encontrar asiento desocupado: " + e.getMessage());
             return false;
         }
+    }
+
+    public int contarAsientosOcupados(Sala_Funcion funcion) {
+        String query = "SELECT COUNT(*) AS total_ocupados " +
+               "FROM Asiento a " +
+               "JOIN Ticket t ON t.id_asiento = a.id_asiento AND t.id_sala = a.id_sala " +
+               "WHERE t.id_funcion = ? " +
+               "AND t.id_sala = ? " +
+               "AND t.inicio_funcion = ?";
+    
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, funcion.getId_funcion());
+            stmt.setInt(2, funcion.getId_sala());
+            stmt.setTimestamp(3, funcion.getInicioFuncion());
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total_ocupados");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar asientos ocupados: " + e.getMessage());
+        }
+        return 0; 
     }
 
 }

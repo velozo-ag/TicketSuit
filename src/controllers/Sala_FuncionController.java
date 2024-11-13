@@ -19,6 +19,31 @@ public class Sala_FuncionController {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
+    public Sala_Funcion findByIdSalaFuncion(int id_sala, int id_funcion) {
+        String query = "SELECT * FROM Sala_Funcion WHERE id_sala = ? AND id_funcion = ? ";
+        Sala_Funcion funcion = new Sala_Funcion();
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)){
+            stmt.setInt(1, id_sala);;
+            stmt.setInt(2, id_funcion);;
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                funcion.setId_funcion(rs.getInt("id_funcion"));
+                funcion.setId_sala(rs.getInt("id_sala"));
+                funcion.setInicioFuncion(rs.getTimestamp("inicio_funcion"));
+                funcion.setFinalFuncion(rs.getTimestamp("final_funcion"));
+            }
+
+            System.out.println("Sala_Funcion encontrado");
+            
+        } catch (SQLException e) {
+            System.out.println("Error al encontrar funciones: " + e.getMessage());
+        }
+
+        return funcion;
+    }
+
     public List<Sala_Funcion> findByIdSala(int id_sala) {
         String query = "SELECT * FROM Sala_Funcion WHERE id_sala = ?";
         List<Sala_Funcion> funciones = new ArrayList<>();

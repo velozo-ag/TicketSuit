@@ -1,6 +1,6 @@
 package views.vendedor;
 
-import java.sql.Date;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -12,27 +12,24 @@ import entities.Compra;
 import entities.Pelicula;
 import entities.Sala_Funcion;
 import entities.Ticket;
-import entities.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import views.SceneManager;
 
-public class ConfirmacionVentaController {
-
-    @FXML
-    private Button bCerrar;
+public class ResumenVentaController {
 
     @FXML
-    private Pane formPanel;
+    private Button bTickets;
 
     @FXML
     private Label lPrecio1;
@@ -41,7 +38,7 @@ public class ConfirmacionVentaController {
     private Pane mainButton;
 
     @FXML
-    private AnchorPane pFormulario;
+    private Pane mainPanel;
 
     @FXML
     private Pane panelImagen;
@@ -65,47 +62,39 @@ public class ConfirmacionVentaController {
     private Label tSala;
 
     private SalaController salaController = new SalaController();
+    private TicketPDFController ticketPDFController = new TicketPDFController();
     private CompraController compraController = new CompraController();
     private TicketController ticketController = new TicketController();
 
     public Pelicula pelicula;
     public Sala_Funcion funcion;
     public List<Asiento> asientos;
+    public List<Ticket> tickets;
+    public Compra compra;
 
-    private boolean resultadoCompra;
-    private Compra compra;
+
 
     @FXML
-    void CerrarFormulario(ActionEvent event) {
-        if (mensajeConfirmacion("Esta seguro que desea cancelar la compra?")) {
-            Stage stage = (Stage) bCerrar.getScene().getWindow();
-            resultadoCompra = false;
-            stage.close();
+    void imprimirTickets(ActionEvent event) {
+        for(Ticket t : tickets){
+            ticketPDFController.generarTicketPDF(t.getId_ticket());
         }
+
+        mensajeExito("Tickets generados con exito en Paquete Tickets");
+        toCartelera(event);
     }
 
     @FXML
-    void realizarVenta(ActionEvent event) {
-        if (mensajeConfirmacion("Desea finalizar la venta?")) {
-            compra.setId_usuario(UserSession.getInstance().getUsuario().getIdUsuario());
-            int id_compra = compraController.createCompra(compra);
+    void toCartelera(ActionEvent event) {
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/Cartelera.fxml"));
+            root = loader.load();
 
-            for (Asiento asiento : asientos) {
-                Ticket ticket = new Ticket();
-
-                ticket.setId_funcion(funcion.getId_funcion());
-                ticket.setId_sala(funcion.getId_sala());
-                ticket.setInicioFuncion(funcion.getInicioFuncion());
-                ticket.setId_asiento(asiento.getIdAsiento());
-                ticket.setId_compra(id_compra);
-                ticket.setValor(compra.getSubtotal() / compra.getCantidad());
-
-                ticketController.createTicket(ticket);
-            }
-            resultadoCompra = true;
-            
-            Stage stage = (Stage) bCerrar.getScene().getWindow();
-            stage.close();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneManager.setScene(root, stage);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -114,6 +103,7 @@ public class ConfirmacionVentaController {
         this.funcion = funcion;
         this.asientos = asientos;
         this.compra = compra;
+        tickets = ticketController.findByIdCompra(compraController.obtenerUltimoIdCompra());
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
@@ -151,28 +141,19 @@ public class ConfirmacionVentaController {
         return lista;
     }
 
-    private boolean mensajeConfirmacion(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmación");
+     private void mensajeError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
-
-        ButtonType buttonAceptar = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
-        ButtonType buttonCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(buttonAceptar, buttonCancelar);
-
         alert.showAndWait();
-
-        if (alert.getResult() == buttonAceptar) {
-            return true;
-        }
-
-        return false;
     }
 
-    public boolean getCompra() {
-        return resultadoCompra;
+    private void mensajeExito(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
-
 }

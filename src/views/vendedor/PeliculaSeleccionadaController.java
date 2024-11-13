@@ -2,10 +2,14 @@ package views.vendedor;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
+import controllers.AsientoController;
 import controllers.FuncionController;
+import controllers.SalaController;
 import controllers.Sala_FuncionController;
 import controllers.TipoFuncionController;
 import javafx.scene.Node;
@@ -19,9 +23,11 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import entities.Compra;
 import entities.Funcion;
 import entities.Pelicula;
 import entities.Sala_Funcion;
+import entities.Ticket;
 import entities.TipoFuncion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,10 +67,14 @@ public class PeliculaSeleccionadaController {
     private TipoFuncionController tipoFuncionController = new TipoFuncionController();
     private MainController mainController = new MainController();
     private Sala_FuncionController sala_FuncionController = new Sala_FuncionController();
+    private SalaController salaController = new SalaController();
+    private AsientoController asientoController = new AsientoController();
     public Pelicula pelicula;
     public Date fecha;
     public Sala_Funcion funcionSeleccionada = null;
     public List<Sala_Funcion> funciones;
+
+    private Compra compra = new Compra();
 
     @FXML
     void initialize() {
@@ -72,16 +82,14 @@ public class PeliculaSeleccionadaController {
         tCantidad.setText("1");
 
         tCantidad.textProperty().addListener((observable, oldValue, newValue) -> {
+            int capacidadSala = salaController.findById(funcionSeleccionada.getId_sala()).getCapacidad();
+            int asientosOcupados = asientoController.contarAsientosOcupados(funcionSeleccionada);
+
             if (!newValue.matches("\\d*")) {
                 tCantidad.setText(newValue.replaceAll("[^\\d]", ""));
             } else if (!newValue.isEmpty()) {
 
                 int cantidad = Integer.parseInt(newValue);
-
-                if (cantidad > 16) {
-                    tCantidad.setText("16");
-                    mensajeError("No hay tantos asientos disponibles");
-                }
 
                 if (cantidad <= 0) {
                     tCantidad.setText("1");
@@ -90,7 +98,20 @@ public class PeliculaSeleccionadaController {
                 if (funcionSeleccionada == null) {
                     tCantidad.setText("1");
                     mensajeError("Seleccione una funcion");
+                } else if (cantidad > capacidadSala
+                        - asientosOcupados
+                        || cantidad > capacidadSala) {
+                    mensajeError("No hay tantos asientos disponibles");
+                    tCantidad.setText("1");
+                    lPrecio.setText(
+                            funcionController.findById(funcionSeleccionada.getId_funcion()).getTipoFuncion().getPrecio()
+                                    + "");
+                    return;
                 }
+
+                lPrecio.setText(cantidad
+                        * funcionController.findById(funcionSeleccionada.getId_funcion()).getTipoFuncion().getPrecio()
+                        + "");
 
             }
         });
@@ -108,13 +129,17 @@ public class PeliculaSeleccionadaController {
             return;
         }
 
+        compra.setCantidad(Integer.parseInt(tCantidad.getText()));
+        compra.setSubtotal(Float.parseFloat(lPrecio.getText()));
+
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/SeleccionAsiento.fxml"));
             root = loader.load();
 
             SeleccionAsientoController seleccionAsientoController = loader.getController();
-            seleccionAsientoController.setValores(pelicula, funcionSeleccionada, Integer.parseInt(tCantidad.getText()));
+            seleccionAsientoController.setValores(compra, pelicula, funcionSeleccionada,
+                    Integer.parseInt(tCantidad.getText()));
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             SceneManager.setScene(root, stage);
@@ -175,6 +200,12 @@ public class PeliculaSeleccionadaController {
         funciones = sala_FuncionController.findByPeliculaFecha(pelicula.getIdPelicula(), fecha);
 
         for (Sala_Funcion funcion : funciones) {
+
+            if (asientoController.contarAsientosOcupados(funcion) == salaController.findById(funcion.getId_sala())
+                    .getCapacidad()) {
+                continue;
+            }
+
             TipoFuncion tipoFuncion = tipoFuncionController
                     .findById(funcionController.findById(funcion.getId_funcion()).getId_tipoFuncion());
 
