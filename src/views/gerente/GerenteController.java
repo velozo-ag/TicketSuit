@@ -1,4 +1,5 @@
 package views.gerente;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import database.DatabaseConnection;
@@ -21,6 +22,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.layout.Pane;
 import views.MainController;
 import java.time.temporal.ChronoUnit;
+
+import com.itextpdf.text.DocumentException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,8 +65,11 @@ public class GerenteController {
     
     private Connection connection;
 
+    private exportarDatosPDF reportePDF;
+
     public GerenteController(){
         this.connection = DatabaseConnection.getInstance().getConnection();
+        this.reportePDF = new exportarDatosPDF();
     }
 
     public void cargarTicketsVendidosPorMes(LocalDate desde, LocalDate hasta) {
@@ -98,6 +104,17 @@ public class GerenteController {
         ticketsVendidosChart.getData().add(series);
         ChartsUtilController.addTooltipToBarChartDash(series);
         ticketsLabel.setText("Tickets Vendidos: " + totalTickets);
+    }
+
+    // Método que se ejecutará al presionar el botón
+    @FXML
+    private void handleGenerarReporte(ActionEvent event) {
+        try {
+            reportePDF.generateReport();
+        } catch (SQLException | DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+            // Aquí puedes mostrar un mensaje de error al usuario, si lo deseas
+        }
     }
 
     public void cargarCantidadTicketsPorFuncion(LocalDate desde, LocalDate hasta) {
