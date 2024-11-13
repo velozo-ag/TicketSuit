@@ -21,7 +21,6 @@
                   <TableColumn fx:id="colEstado" minWidth="0.0" prefWidth="78.4000244140625" resizable="false" text="ESTADO" />
               </columns>
             </TableView>
-            <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="750.0" layoutY="228.0" mnemonicParsing="false" onAction="#formularioUsuario" prefHeight="42.0" prefWidth="409.0" styleClass="optionButton" text="+  C R E A R  U S U A R I O" textAlignment="RIGHT" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="979.0" layoutY="45.0" styleClass="titleText" text="USUARIOS" textAlignment="RIGHT" />
             <fx:include layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />

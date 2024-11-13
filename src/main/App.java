@@ -21,8 +21,8 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
 
-        // Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/views/vendedor/Cartelera.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
+        // Parent root = FXMLLoader.load(getClass().getResource("/views/vendedor/Cartelera.fxml"));
         scene = new Scene(root);
 
         root.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());

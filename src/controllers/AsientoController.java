@@ -140,12 +140,13 @@ public class AsientoController {
         return asientos;
     }
 
-    public Asiento findById(int idAsiento) {
-        String query = "SELECT a.id_asiento, a.id_sala, a.letra_fila, a.numero_columna, a.estado FROM Asiento a WHERE a.id_asiento = ?";
+    public Asiento findById(int idAsiento, int id_sala) {
+        String query = "SELECT a.id_asiento, a.id_sala, a.letra_fila, a.numero_columna, a.estado FROM Asiento a WHERE a.id_asiento = ? AND a.id_sala = ?";
         Asiento asiento = null;
     
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, idAsiento);
+            stmt.setInt(2, id_sala);
     
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {

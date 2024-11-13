@@ -86,17 +86,16 @@ public class CarteleraController {
 
     @FXML
     void toTickets(ActionEvent event) {
-        // Parent root;
-        // try {
-        // root =
-        // FXMLLoader.load(getClass().getResource("/views/vendedor/HistorialTickets.fxml"));
-        // Scene scene = new Scene(root);
-        // Pane panel = (Pane) scene.lookup("#mainPanel");
-        // mainController.setUpScene(event, panel, scene);
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-        mostrarMensajeError("Proximamente");
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/ReporteTickets.fxml"));
+            root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneManager.setScene(root, stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

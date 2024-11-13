@@ -22,7 +22,6 @@
                   <TableColumn fx:id="colTipoFuncion" prefWidth="45.5999755859375" text="TIPO" />
               </columns>
             </TableView>
-            <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="926.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioFuncion" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  C R E A R  F U N C I O N" textAlignment="RIGHT" />
             <fx:include layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="892.0" layoutY="25.0" styleClass="titleText" text="FUNCIONES" textAlignment="RIGHT" />

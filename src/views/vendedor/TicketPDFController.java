@@ -83,7 +83,7 @@ public class TicketPDFController {
                     addTableRow(table, "Fecha:", dateFormat.format(resultSet.getDate("inicio_funcion")), fontContent);
                     addTableRow(table, "Hora:", resultSet.getString("inicio_funcion"), fontContent);
                     addTableRow(table, "Sala:", resultSet.getString("sala_nombre"), fontContent);
-                    addTableRow(table, "Asiento:", obtenerAsiento(asientoController.findById(resultSet.getInt("id_asiento"))), fontContent);
+                    addTableRow(table, "Asiento:", obtenerAsiento(asientoController.findById(resultSet.getInt("id_asiento"), resultSet.getInt("id_sala"))), fontContent);
                     // addTableRow(table, "Asiento:", String.valueOf(resultSet.getInt("id_asiento")), fontContent);
                     addTableRow(table, "Valor:", "$" + resultSet.getDouble("valor"), fontContent);
 

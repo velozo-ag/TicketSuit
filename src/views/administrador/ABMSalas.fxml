@@ -20,7 +20,6 @@
                   <TableColumn fx:id="colEstado" prefWidth="124.0" text="ESTADO" />
               </columns>
          </TableView>
-            <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="926.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioSala" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  C R E A R  S A L A" textAlignment="RIGHT" />
             <fx:include layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="995.0" layoutY="25.0" styleClass="titleText" text="SALAS" textAlignment="RIGHT" />

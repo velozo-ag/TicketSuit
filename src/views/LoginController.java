@@ -12,11 +12,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class LoginController {
 
     @FXML
     private Button bLogin;
+
+    @FXML
+    private Button bCerrar;
 
     @FXML
     private AnchorPane pLogin;
@@ -34,11 +38,14 @@ public class LoginController {
     void authAccount(ActionEvent event) {
 
         Usuario usuario = usuarioController.findByUser(tUsername.getText());
+        if (usuario == null) {
+            usuario = usuarioController.findByDni(Integer.parseInt(tUsername.getText()));
+        }
+
         System.out.println(usuario.getNombre());
 
         if (verificarCampos(usuario)) {
             UserSession.getInstance().setUsuario(usuario);
-            System.out.println("Usuario " + usuario.getNombre() + " logeado");
 
             try {
                 switch (usuario.getIdPerfil()) {
@@ -61,6 +68,12 @@ public class LoginController {
 
     }
 
+    @FXML
+    private void cerrar(ActionEvent event) {
+        Stage stage = (Stage) bCerrar.getScene().getWindow();
+        stage.close();
+    }
+
     private boolean verificarCampos(Usuario usuario) {
 
         String nombre;
@@ -75,7 +88,7 @@ public class LoginController {
         }
 
         if (nombre == null) {
-            mostrarMensajeError("Usuario incorrecta.");
+            mostrarMensajeError("Usuario incorrecto.");
             return false;
         }
         if (!tPassword.getText().equals(password)) {

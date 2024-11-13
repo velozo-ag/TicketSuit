@@ -22,7 +22,6 @@
                   <TableColumn fx:id="colGeneros" prefWidth="111.20001220703125" text="GENEROS" />
               </columns>
             </TableView>
-            <Button layoutX="123.0" layoutY="125.0" mnemonicParsing="false" onAction="#toPAdmin" prefHeight="40.0" prefWidth="112.0" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Button layoutX="926.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioPelicula" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  C R E A R  P E L I C U L A" />
             <fx:include layoutX="26.0" layoutY="19.0" source="../AdminMenu.fxml" />
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="906.0" layoutY="26.0" styleClass="titleText" text="PELICULAS" textAlignment="RIGHT" />
