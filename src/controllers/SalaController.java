@@ -110,6 +110,77 @@ public class SalaController {
 
     }
 
+    public int eliminarFuncionesSinTickets(int idSala) {
+        String query = """
+            DELETE FROM Sala_Funcion
+            WHERE id_sala = ?
+            AND NOT EXISTS (
+                SELECT 1
+                FROM Ticket
+                WHERE Ticket.id_funcion = Sala_Funcion.id_funcion
+                AND Ticket.id_sala = Sala_Funcion.id_sala
+                AND Ticket.inicio_funcion = Sala_Funcion.inicio_funcion
+            )
+        """;
+        
+        int rowsDeleted = 0;
+    
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idSala); // Configura el parámetro de la consulta
+            rowsDeleted = stmt.executeUpdate(); // Ejecuta la eliminación
+            System.out.println(rowsDeleted + " funciones eliminadas para la sala con ID: " + idSala);
+    
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar funciones sin tickets para la sala con ID " + idSala + ": " + e.getMessage());
+        }
+    
+        return rowsDeleted; // Devuelve la cantidad de funciones eliminadas
+    }
+
+    public int contarFuncionesSinTickets(int idSala) {
+        String query = """
+            SELECT COUNT(*)
+            FROM Sala_Funcion sf
+            WHERE sf.id_sala = ?
+            AND NOT EXISTS (
+                SELECT 1
+                FROM Ticket t
+                WHERE t.id_funcion = sf.id_funcion
+                AND t.id_sala = sf.id_sala
+                AND t.inicio_funcion = sf.inicio_funcion
+            );
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idSala);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar funciones sin tickets: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public int contarFuncionesConTickets(int idSala) {
+        String query = """
+            SELECT COUNT(DISTINCT sf.id_funcion)
+            FROM Sala_Funcion sf
+            INNER JOIN Ticket t ON t.id_funcion = sf.id_funcion
+            WHERE sf.id_sala = ?;
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idSala);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar funciones con tickets: " + e.getMessage());
+        }
+        return 0;
+    }
+
     public List<Sala> findAll(){
         String query = "SELECT s.id_sala, s.nombre, s.capacidad, s.cantFilas, s.cantColumnas, s.id_cine, s.estado FROM Sala s";
         List<Sala> salas = new ArrayList<>();

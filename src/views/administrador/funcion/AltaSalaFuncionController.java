@@ -20,13 +20,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
+import java.util.List;
+import java.util.stream.Collectors;
 import java.sql.Time;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 public class AltaSalaFuncionController {
 
@@ -117,8 +119,17 @@ public class AltaSalaFuncionController {
     }
 
     private void cargarSalas() {
-        ObservableList<Sala> salas = FXCollections.observableArrayList(salaController.findAll());
-        cSala.setItems(salas);
+        // Obtener todas las salas
+        List<Sala> todasLasSalas = salaController.findAll();
+        
+        // Filtrar solo las salas activas (estado = 1)
+        List<Sala> salasActivas = todasLasSalas.stream()
+                                            .filter(sala -> sala.getEstado() == 1)
+                                            .collect(Collectors.toList());
+        
+        // Convertir a ObservableList y cargar en el ComboBox
+        ObservableList<Sala> observableSalasActivas = FXCollections.observableArrayList(salasActivas);
+        cSala.setItems(observableSalasActivas);
     }
 
     private void cargarHorarios() {

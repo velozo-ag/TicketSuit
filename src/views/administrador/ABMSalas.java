@@ -176,16 +176,43 @@ public class ABMSalas {
 
     @FXML
     void desactivarSala(ActionEvent event) {
-        boolean res = mensajeConfirmacion("Desea desactivar la sala: " + salaSeleccionada.getNombre() + "?");
+    // Advertencia con detalles
+        String advertencia = "Al desactivar esta sala, se eliminarán todas las funciones asociadas "
+            + "que no tengan tickets vendidos. ¿Desea continuar?";
+        
+        boolean confirmacion = mensajeConfirmacion(advertencia);
 
-        if (res) {
-            bActivar.setDisable(false);
-            bDesactivar.setDisable(true);
-
+        if (confirmacion) {
+            // Desactivar la sala
             salaSeleccionada.setEstado(0);
             salaController.updateSala(salaSeleccionada);
+
+            // Eliminar funciones sin tickets
+            int funcionesEliminadas = salaController.eliminarFuncionesSinTickets(salaSeleccionada.getIdSala());
+
+            // Mostrar resultado
+            String mensajeFinal = "La sala se desactivó con éxito.\n"
+                + "Se eliminaron " + funcionesEliminadas + " funciones que no tenían tickets vendidos.";
+            mostrarMensaje("Operación exitosa", mensajeFinal);
+
+            // Actualizar la vista
             cargarSalas();
+
+            // Habilitar botones de acción
+            bActivar.setDisable(false);
+            bDesactivar.setDisable(true);
+        } else {
+            mostrarMensaje("Operación cancelada", "No se realizó ninguna acción.");
         }
+    }
+
+
+    private void mostrarMensaje(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void updateDataPanel() {
