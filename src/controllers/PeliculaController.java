@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import database.DatabaseConnection;
+import entities.Director;
 import entities.Pelicula;
 
 public class PeliculaController {
@@ -125,9 +126,9 @@ public class PeliculaController {
 
     public List<Pelicula> findByNombreFecha(String nombre, Date fecha) {
         String query = "SELECT DISTINCT p.* FROM Pelicula p " +
-                        "   JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
-                        "   JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
-                        "WHERE p.nombre LIKE ? AND CAST(sf.inicio_funcion AS DATE) = ? ";
+                "   JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
+                "   JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
+                "WHERE p.nombre LIKE ? AND CAST(sf.inicio_funcion AS DATE) = ? ";
         List<Pelicula> peliculas = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -161,9 +162,9 @@ public class PeliculaController {
 
     public List<Pelicula> findByFecha(Date fecha) {
         String query = "SELECT DISTINCT p.* FROM Pelicula p " +
-                        "   JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
-                        "   JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
-                        "WHERE CAST(sf.inicio_funcion AS DATE) = ? ";
+                "   JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
+                "   JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
+                "WHERE CAST(sf.inicio_funcion AS DATE) = ? ";
         List<Pelicula> peliculas = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -194,5 +195,40 @@ public class PeliculaController {
         }
 
         return peliculas;
+    }
+
+    public void createPelicula(Pelicula pelicula, String nombreDirector) {
+        DirectorController directorController = new DirectorController();
+
+        Director director = directorController.findByName(nombreDirector);
+
+        if (director == null) {
+            director = new Director();
+            director.setNombre(nombreDirector);
+            directorController.createDirector(director);
+
+            director = directorController.findByName(nombreDirector);
+        }
+
+        int idDirector = director.getIdDirector();
+
+        String query = "INSERT INTO Pelicula (nombre, duracion, id_clasificacion, id_director, sinopsis, imagen, nacionalidad) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, pelicula.getNombre());
+            preparedStatement.setInt(2, pelicula.getDuracion());
+            preparedStatement.setInt(3, pelicula.getIdClasificacion());
+            preparedStatement.setInt(4, idDirector);
+            preparedStatement.setString(5, pelicula.getSinopsis());
+            preparedStatement.setString(6, pelicula.getImagen());
+            preparedStatement.setString(7, pelicula.getNacionalidad());
+
+            preparedStatement.executeUpdate();
+
+            System.out.println("Película creada con éxito");
+
+        } catch (SQLException e) {
+            System.out.println("Error al crear la película: " + e.getMessage());
+        }
     }
 }

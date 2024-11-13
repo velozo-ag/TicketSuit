@@ -29,4 +29,9 @@ public class Clasificacion {
         this.nombre = nombre;
     }
 
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }
+

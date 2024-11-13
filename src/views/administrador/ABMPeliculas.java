@@ -181,7 +181,7 @@ public class ABMPeliculas {
     @FXML
     void formularioPelicula(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/AltaPelicula.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/administrador/pelicula/AltaPelicula.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
