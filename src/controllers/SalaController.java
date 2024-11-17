@@ -12,11 +12,12 @@ import entities.Sala;
 import entities.Usuario;
 
 public class SalaController {
-    Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
     AsientoController asientoController = new AsientoController();
 
     public SalaController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public void createSala(Sala sala) {

@@ -14,10 +14,11 @@ import java.sql.Statement;
 import entities.Usuario;
 
 public class UsuarioController {
-    private Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public UsuarioController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public Usuario createUsuario(Usuario usuario) {
@@ -191,7 +192,7 @@ public class UsuarioController {
 
     public List<Usuario> findByContain(String user) {
         String query = "SELECT u.*, p.nombre AS nombre_perfil FROM Usuario u "
-                + "JOIN Perfil p ON u.id_perfil = p.id_perfil " 
+                + "JOIN Perfil p ON u.id_perfil = p.id_perfil "
                 + "WHERE u.nombre_completo LIKE ? OR u.dni LIKE ?";
         List<Usuario> usuarios = new ArrayList<>();
 

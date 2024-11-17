@@ -13,10 +13,10 @@ import entities.Funcion;
 import entities.Sala_Funcion;
 
 public class Sala_FuncionController {
-    Connection connection;
-
+    Connection connection = DatabaseConnection.getInstance().connect();
     public Sala_FuncionController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public Sala_Funcion findByIdSalaFuncion(int id_sala, int id_funcion) {

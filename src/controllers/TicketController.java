@@ -14,10 +14,11 @@ import entities.Compra;
 import entities.Ticket;
 
 public class TicketController {
-    Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public TicketController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public int createTicket(Ticket ticket) {

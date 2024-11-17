@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 
@@ -45,6 +46,7 @@ public class AltaFuncionController {
     public void initialize() {
         cargarPeliculas();
         cargarTipoFuncion();
+        setupDatePickers(dFechaIngreso, dFechaFinal);
     }
 
     @FXML
@@ -109,6 +111,30 @@ public class AltaFuncionController {
 
         return true;
 
+    }
+
+     public static void setupDatePickers(DatePicker dFechaIngreso, DatePicker dFechaFinal) {
+        LocalDate hoy = LocalDate.now();
+
+        dFechaIngreso.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(hoy));
+            }
+        });
+
+        dFechaIngreso.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                dFechaFinal.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        setDisable(empty || date.isBefore(newValue.plusDays(3)));
+                    }
+                });
+            }
+        });
     }
 
     private void mensajeError(String mensaje) {

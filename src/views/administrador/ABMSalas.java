@@ -41,6 +41,9 @@ public class ABMSalas {
 
     @FXML
     private Button bDesactivar;
+    
+    @FXML
+    private Button bModificar;
 
     @FXML
     private TableView<Sala> tablaSalas;
@@ -107,6 +110,7 @@ public class ABMSalas {
 
         dataPanel.setVisible(false);
         dataPanel2.setVisible(false);
+        bModificar.setVisible(false);
         cargarSalas();
     }
 

@@ -14,10 +14,11 @@ import entities.Asiento;
 import entities.Compra;
 
 public class CompraController {
-    Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public CompraController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public int createCompra(Compra compra) {

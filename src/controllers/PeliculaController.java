@@ -13,11 +13,12 @@ import entities.Director;
 import entities.Pelicula;
 
 public class PeliculaController {
-    private Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
     private GeneroController generoController = new GeneroController();
 
     public PeliculaController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public List<Pelicula> findAll() {

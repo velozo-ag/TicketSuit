@@ -11,10 +11,11 @@ import database.DatabaseConnection;
 import entities.Genero;
 
 public class GeneroController {
-    private Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public GeneroController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public List<Genero> findAll() {

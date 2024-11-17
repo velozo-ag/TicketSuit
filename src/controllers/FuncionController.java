@@ -12,10 +12,10 @@ import entities.Funcion;
 import entities.Pelicula;
 
 public class FuncionController {
-    Connection connection;
-
+    Connection connection = DatabaseConnection.getInstance().connect();
     public FuncionController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public List<Funcion> findAll() {

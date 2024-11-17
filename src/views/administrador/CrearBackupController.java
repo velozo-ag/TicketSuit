@@ -1,6 +1,7 @@
 package views.administrador;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import main.App;
 import views.MainController;
 import database.DatabaseConnection;
 import javafx.stage.FileChooser;
@@ -37,7 +39,7 @@ public class CrearBackupController {
     private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
     @FXML
-    private void backupDatabase() {
+    private void backupDatabase() throws URISyntaxException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Seleccionar dirección donde guardar el Backup");
         File selectedDirectory = directoryChooser.showDialog(new Stage());
@@ -47,15 +49,17 @@ public class CrearBackupController {
             String backupQuery = "BACKUP DATABASE TicketSuit TO DISK = '" + backupPath + "'";
 
             try (Connection connection = databaseConnection.connect();
-                 Statement statement = connection.createStatement()) {
+                    Statement statement = connection.createStatement()) {
 
                 statement.executeUpdate(backupQuery);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Backup Exitoso");
                 alert.setHeaderText(null);
-                alert.setContentText("Archivo .bak creado en: " + backupPath);
+                alert.setContentText("Archivo .bak creado en: " + backupPath + " \n A continuacion, se reiniciara la aplicacion.");
                 alert.showAndWait();
+
+                App.restartApplication();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -66,38 +70,49 @@ public class CrearBackupController {
                 alert.showAndWait();
             }
         }
+
+        Stage stage = (Stage) bCerrar.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
     private void restoreDatabase() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo de Backup");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de Backup", "*.bak"));
-        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        String restorePath = "C:\\Backups\\TicketSuitBackup.bak";
+        String restoreQuery = "RESTORE DATABASE TicketSuit FROM DISK = '" + restorePath + "'";
 
-        if (selectedFile != null) {
-            String backupPath = selectedFile.getAbsolutePath();
-            String restoreQuery = "RESTORE DATABASE TicketSuit FROM DISK = '" + backupPath + "' WITH REPLACE";
-
-            try (Connection connection = databaseConnection.connect();
-                 Statement statement = connection.createStatement()) {
-
-                statement.executeUpdate(restoreQuery);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Restauración Exitosa");
-                alert.setHeaderText(null);
-                alert.setContentText("La base de datos ha sido restaurada desde: " + backupPath);
-                alert.showAndWait();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Restauración Fallida");
-                alert.setHeaderText("Ocurrió un error durante la restauración de la base de datos");
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
+        try (Connection connection = databaseConnection.connect()) {
+            String useMasterQuery = "USE master";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(useMasterQuery);
             }
+
+            String setSingleUserQuery = "ALTER DATABASE TicketSuit SET SINGLE_USER WITH ROLLBACK IMMEDIATE";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(setSingleUserQuery);
+            }
+
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(restoreQuery);
+            }
+
+            String setMultiUserQuery = "ALTER DATABASE TicketSuit SET MULTI_USER";
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(setMultiUserQuery);
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Restauración Exitosa");
+            alert.setHeaderText(null);
+            alert.setContentText("La base de datos ha sido restaurada con éxito.");
+            alert.showAndWait();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error en la Restauración");
+            alert.setHeaderText("Ocurrió un error al restaurar la base de datos");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
 

@@ -16,10 +16,10 @@ import java.sql.ResultSet;
 
 public class AsientoController {
 
-    Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public AsientoController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        // this.connection = DatabaseConnection.getInstance().connect();
     }
 
     public void createAsiento(Asiento asiento) {

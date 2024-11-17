@@ -62,7 +62,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Button layoutX="278.0" layoutY="140.0" mnemonicParsing="false" onAction="#modificarSala" prefHeight="40.0" prefWidth="179.0" styleClass="optionButton" text="M O D I F I C A R" textAlignment="RIGHT" />
+                        <Button fx:id="bModificar" layoutX="278.0" layoutY="140.0" mnemonicParsing="false" onAction="#modificarSala" prefHeight="40.0" prefWidth="179.0" styleClass="optionButton" text="M O D I F I C A R" textAlignment="RIGHT" />
                         <Button fx:id="bDesactivar" layoutX="278.0" layoutY="90.0" mnemonicParsing="false" onAction="#desactivarSala" prefHeight="40.0" prefWidth="179.0" styleClass="optionButtonRed" text="D E S A C T I V A R" textAlignment="RIGHT" />
                         <Button fx:id="bActivar" layoutX="278.0" layoutY="40.0" mnemonicParsing="false" onAction="#activarSala" prefHeight="40.0" prefWidth="179.0" styleClass="optionButtonGreen" text="A C T I V A R" textAlignment="RIGHT" />
                      </children>
