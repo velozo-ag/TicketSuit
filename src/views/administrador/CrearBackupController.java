@@ -40,6 +40,9 @@ public class CrearBackupController {
     private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
     @FXML
+    private PasswordField passwordField;
+
+    @FXML
     private void backupDatabase() throws URISyntaxException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Seleccionar dirección donde guardar el Backup");
@@ -90,6 +93,16 @@ public class CrearBackupController {
 
     @FXML
     private void restoreDatabase() {
+        String password = passwordField.getText();
+        if (!password.equals("restore123")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Contraseña Incorrecta");
+            alert.setHeaderText("La contraseña no es correcta");
+            alert.setContentText("Por favor, ingresa la contraseña correcta.");
+            alert.showAndWait();
+            return;
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar archivo de Backup");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos de Backup", "*.bak"));
