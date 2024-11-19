@@ -23,13 +23,6 @@
             <Button layoutX="211.0" layoutY="115.0" mnemonicParsing="false" onAction="#toPVendedor" styleClass="navButton" text="&lt; &lt; V O L V E R" />
             <Label fx:id="tNombrePelicula" layoutX="523.0" layoutY="96.0" styleClass="titlePelicula" text="NOMBRE PELICULA" />
             <Label fx:id="tSinopsis" alignment="TOP_LEFT" layoutX="544.0" layoutY="152.0" prefHeight="102.0" prefWidth="457.0" styleClass="textSinopsis" text="Inception, también conocida como El origen en español, es una película de ciencia ficción que relata la historia de un grupo de ladrones que utilizan una máquina que invade los sueños para conquistar sus objetivos más audaces." wrapText="true" />
-            <Button layoutX="545.0" layoutY="254.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="64.0" styleClass="fechaButton" text="LUN 16" />
-            <Button layoutX="609.0" layoutY="254.0" mnemonicParsing="false" prefWidth="64.0" styleClass="fechaButton" text="MAR 17" />
-            <Button layoutX="673.0" layoutY="254.0" mnemonicParsing="false" prefWidth="64.0" styleClass="fechaButton" text="MIE 18" />
-            <Button layoutX="737.0" layoutY="254.0" mnemonicParsing="false" prefWidth="64.0" styleClass="fechaButtonSelected" text="JUE 19" />
-            <Button layoutX="801.0" layoutY="254.0" mnemonicParsing="false" prefWidth="64.0" styleClass="fechaButton" text="VIE 20" />
-            <Button layoutX="865.0" layoutY="254.0" mnemonicParsing="false" prefWidth="64.0" styleClass="fechaButton" text="SAB 21" />
-            <Button layoutX="929.0" layoutY="254.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="72.0" styleClass="fechaButton" text="DOM 22" />
             <Pane layoutX="546.0" layoutY="298.0" prefHeight="27.0" prefWidth="128.0" style="-fx-background-color: EE6E84;">
                <children>
                   <Label layoutX="10.0" layoutY="5.0" style="-fx-text-fill: FFFFFF; -fx-text-weight: 700;" text="2D">

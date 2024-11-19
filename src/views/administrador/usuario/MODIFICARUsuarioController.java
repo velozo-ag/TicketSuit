@@ -103,13 +103,18 @@ public class MODIFICARUsuarioController {
             return false;
         }
 
-        if (usuarioController.findByUser(tNombre.getText()).getDni() != Integer.parseInt(tDni.getText())) {
+        if (usuarioController.findByUser(tNombre.getText()).getIdUsuario() != usuario.getIdUsuario()) {
             mensajeError("El nombre ya esta en uso.");
             return false;
         }
 
         if (tDni == null || tDni.getText().length() != 8) {
             mensajeError("El DNI debe tener 8 digitos.");
+            return false;
+        }
+
+        if (usuarioController.findByDni(Integer.parseInt(tDni.getText())) != null) {
+            mensajeError("El DNI se encuentra en uso.");
             return false;
         }
 

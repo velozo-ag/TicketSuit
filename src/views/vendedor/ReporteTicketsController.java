@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import controllers.AsientoController;
 import controllers.CompraController;
@@ -140,10 +141,17 @@ public class ReporteTicketsController {
 
     @FXML
     void logout(ActionEvent event) {
-        try {
-            mainController.toLogin(event);
-        } catch (IOException e) {
-            e.printStackTrace();
+         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cierre de Sesión");
+        alert.setHeaderText("¿Seguro que desea cerrar sesión?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                mainController.toLogin(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

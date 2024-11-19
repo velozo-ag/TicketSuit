@@ -189,6 +189,8 @@ public class ABMPeliculas {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
+            stage.setOnHidden(e -> cargarPeliculas());
+            
             stage.showAndWait();
 
         } catch (Exception e) {

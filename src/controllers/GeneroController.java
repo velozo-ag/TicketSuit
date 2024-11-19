@@ -19,7 +19,7 @@ public class GeneroController {
     }
 
     public List<Genero> findAll() {
-        String query = "SELECT Genero.id_genero, Genero.descripcion FROM Genero";
+        String query = "SELECT id_genero, descripcion FROM Genero";
         List<Genero> generos = new ArrayList<>();
 
         try {

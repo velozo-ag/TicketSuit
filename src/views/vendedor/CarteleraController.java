@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.swing.Action;
 
@@ -23,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -77,10 +79,17 @@ public class CarteleraController {
 
     @FXML
     void logout(ActionEvent event) {
-        try {
-            mainController.toLogin(event);
-        } catch (IOException e) {
-            e.printStackTrace();
+         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cierre de Sesión");
+        alert.setHeaderText("¿Seguro que desea cerrar sesión?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                mainController.toLogin(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -106,7 +115,7 @@ public class CarteleraController {
             cargarDias(posicionFecha);
         }
 
-        if (dias.size() < posicionFecha) {
+        if (dias.size() <= posicionFecha) {
             posicionFecha = 0;
             cargarDias(posicionFecha);
         }

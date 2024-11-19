@@ -103,7 +103,7 @@ public class Pelicula {
 
     public void setIdDirector(int id_director) {
         this.id_director = id_director;
-        this.setNombreDirector(directorController.findById(id_pelicula).getNombre());
+        this.setNombreDirector(directorController.findById(id_director).getNombre());
     }
 
     public String getNombreDirector() {
@@ -124,6 +124,10 @@ public class Pelicula {
 
     public String getImagen() {
         return "@../../Resources/thumbnails/" + imagen + ".jpg";
+    }
+
+    public String getNombreImagen(){
+        return imagen;
     }
 
     public void setImagen(String imagen) {

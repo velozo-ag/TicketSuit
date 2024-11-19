@@ -3,6 +3,8 @@ package views.administrador.pelicula;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
 import controllers.ClasificacionController;
 import controllers.DirectorController;
 import controllers.PeliculaController;
@@ -30,13 +32,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-
 import java.sql.Connection;
 
 public class AltaPeliculaController {
 
     @FXML
     private TextField tNombre;
+
+    @FXML
+    private TextField tUrlPoster;
 
     @FXML
     private TextField tDuracion;
@@ -70,7 +74,7 @@ public class AltaPeliculaController {
 
     PeliculaController peliculaController = new PeliculaController();
     DirectorController directorController = new DirectorController();
-    
+
     @FXML
     private Connection connection;
 
@@ -83,15 +87,13 @@ public class AltaPeliculaController {
         ClasificacionController clasificacionController = new ClasificacionController();
         GeneroController generoController = new GeneroController();
 
-        // Cargar clasificaciones en el ComboBox
-        ObservableList<Clasificacion> clasificaciones = FXCollections.observableArrayList(clasificacionController.findAll());
+        ObservableList<Clasificacion> clasificaciones = FXCollections
+                .observableArrayList(clasificacionController.findAll());
         cClasificacion.setItems(clasificaciones);
 
-        // Cargar géneros en el ComboBox de Géneros
         ObservableList<Genero> generos = FXCollections.observableArrayList(generoController.findAll());
         cGenero.setItems(generos);
 
-        // Validar que duración solo acepte números
         tDuracion.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 tDuracion.setText(newValue.replaceAll("[^\\d]", ""));
@@ -108,12 +110,12 @@ public class AltaPeliculaController {
 
         if (selectedFile != null) {
             try {
-                // Mostrar la imagen seleccionada en el ImageView para vista previa
                 Image image = new Image(selectedFile.toURI().toString());
                 posterPreview.setImage(image);
 
-                // Almacenar la ruta temporal de la imagen seleccionada para luego usarla al dar de alta la película
                 imagenPath = selectedFile.getAbsolutePath();
+
+                tUrlPoster.setText(imagenPath);
 
                 mensajeExito("Imagen seleccionada.");
             } catch (Exception e) {
@@ -124,18 +126,18 @@ public class AltaPeliculaController {
     }
 
     private int obtenerIdSiguiente() {
-        int siguienteId = 1; 
+        int siguienteId = 1;
 
-        String query = "SELECT MAX(id_pelicula) AS max_id FROM Pelicula"; 
+        String query = "SELECT MAX(id_pelicula) AS max_id FROM Pelicula";
 
         try (PreparedStatement stmt = connection.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery()) {
-            
+                ResultSet rs = stmt.executeQuery()) {
+
             if (rs.next()) {
                 int ultimoId = rs.getInt("max_id");
                 siguienteId = ultimoId + 1;
             }
-            
+
         } catch (SQLException e) {
             System.out.println("Error al obtener el siguiente ID de la película: " + e.getMessage());
         }
@@ -144,76 +146,75 @@ public class AltaPeliculaController {
     }
 
     @FXML
-void altaPelicula(ActionEvent event) {
-    if (verificarCampos()) {
-        
-        if (tNombre.getText().length() > 200) {
-            mensajeError("El nombre de la película no puede tener más de 200 caracteres.");
-            return;
-        }
+    void altaPelicula(ActionEvent event) {
+        if (verificarCampos()) {
+            if (imagenPath != null) {
+                try {
+                    String thumbnailsDirPath = "src/Resources/thumbnails";
+                    File thumbnailsDir = new File(thumbnailsDirPath);
 
-        // Validar que la sinopsis no exceda los 350 caracteres
-        if (tSinopsis.getText().length() > 350) {
-            mensajeError("La sinopsis no puede tener más de 350 caracteres.");
-            return;
-        }
+                    if (!thumbnailsDir.exists()) {
+                        thumbnailsDir.mkdirs();
+                    }
 
-        // Validar que la nacionalidad no exceda los 100 caracteres
-        if (tNacionalidad.getText().length() > 100) {
-            mensajeError("La nacionalidad no puede tener más de 100 caracteres.");
-            return;
-        }
-        // Solo proceder con el copiado de la imagen cuando se da de alta la película
-        if (imagenPath != null) {
-            try {
-                // Define la carpeta de destino para las miniaturas
-                String thumbnailsDirPath = "src/Resources/thumbnails";
-                File thumbnailsDir = new File(thumbnailsDirPath);
-                
-                if (!thumbnailsDir.exists()) {
-                    thumbnailsDir.mkdirs();
+                    int peliculaId = obtenerIdSiguiente();
+                    String nuevoNombre = "portada" + peliculaId + ".jpg";
+                    File destino = new File(thumbnailsDir, nuevoNombre);
+                    
+                    Files.copy(new File(imagenPath).toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                    Pelicula pelicula = new Pelicula();
+                    pelicula.setIdPelicula(peliculaId);
+                    pelicula.setNombre(tNombre.getText());
+                    pelicula.setDuracion(Integer.parseInt(tDuracion.getText()));
+                    pelicula.setIdClasificacion(cClasificacion.getValue().getIdClasificacion());
+                    pelicula.setSinopsis(tSinopsis.getText());
+                    pelicula.setNacionalidad(tNacionalidad.getText());
+                    pelicula.setImagen("portada" + obtenerIdSiguiente());
+
+                    String nombreDirector = tDirector.getText().trim();
+                    peliculaController.createPelicula(pelicula, nombreDirector, cGenero.getValue().getIdGenero());
+
+                    mensajeExito("Película creada con éxito!");
+                    CerrarFormulario(event);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    mensajeError("Error al copiar la imagen seleccionada.");
                 }
-
-                // Obtener el siguiente ID de la película para el nombre del archivo
-                int peliculaId = obtenerIdSiguiente(); 
-                String nuevoNombre = "Portada" + peliculaId + ".jpg";
-
-                // Ruta de destino para la imagen copiada
-                File destino = new File(thumbnailsDir, nuevoNombre);
-
-                // Copiar la imagen seleccionada a la carpeta de miniaturas
-                Files.copy(new File(imagenPath).toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                // Guardar la ruta de la imagen en el atributo correspondiente
-                imagenPath = destino.getAbsolutePath();
-                
-                // Crear la película y almacenarla en la base de datos
-                Pelicula pelicula = new Pelicula();
-                pelicula.setNombre(tNombre.getText());
-                pelicula.setDuracion(Integer.parseInt(tDuracion.getText()));
-                pelicula.setIdClasificacion(cClasificacion.getValue().getIdClasificacion());
-                pelicula.setSinopsis(tSinopsis.getText());
-                pelicula.setNacionalidad(tNacionalidad.getText());
-                pelicula.setImagen(imagenPath);
-
-                String nombreDirector = tDirector.getText().trim();
-                peliculaController.createPelicula(pelicula, nombreDirector);
-
-                mensajeExito("Película creada con éxito!");
-                CerrarFormulario(event);
-            } catch (IOException e) {
-                e.printStackTrace();
-                mensajeError("Error al copiar la imagen seleccionada.");
+            } else {
+                mensajeError("Debes seleccionar una imagen para la película.");
             }
-        } else {
-            mensajeError("Debes seleccionar una imagen para la película.");
         }
     }
-}
-    
+
     private boolean verificarCampos() {
         if (tNombre == null || tNombre.getText().isEmpty()) {
             mensajeError("El nombre de la película es obligatorio.");
+            return false;
+        }
+
+        if (cGenero.getValue() == null) {
+            mensajeError("Debes seleccionar un genero.");
+            return false;
+        }
+        
+        if (tSinopsis == null || tSinopsis.getText().isEmpty()) {
+            mensajeError("La sinopsis es obligatoria.");
+            return false;
+        }
+
+        if (tDirector == null || tDirector.getText().isEmpty()) {
+            mensajeError("El nombre del director es obligatorio.");
+            return false;
+        }
+        
+        if (cClasificacion.getValue() == null) {
+            mensajeError("Debes seleccionar una clasificación.");
+            return false;
+        }
+        
+        if (tNacionalidad == null || tNacionalidad.getText().isEmpty()) {
+            mensajeError("La nacionalidad es obligatoria.");
             return false;
         }
 
@@ -222,18 +223,18 @@ void altaPelicula(ActionEvent event) {
             return false;
         }
 
-        if (cClasificacion.getValue() == null) {
-            mensajeError("Debes seleccionar una clasificación.");
+        if (tNombre.getText().length() > 200) {
+            mensajeError("El nombre de la película no puede tener más de 200 caracteres.");
             return false;
         }
 
-        if (tDirector == null || tDirector.getText().isEmpty()) {
-            mensajeError("El nombre del director es obligatorio.");
+        if (tSinopsis.getText().length() > 350) {
+            mensajeError("La sinopsis no puede tener más de 350 caracteres.");
             return false;
         }
 
-        if (tSinopsis == null || tSinopsis.getText().isEmpty()) {
-            mensajeError("La sinopsis es obligatoria.");
+        if (tNacionalidad.getText().length() > 100) {
+            mensajeError("La nacionalidad no puede tener más de 100 caracteres.");
             return false;
         }
 

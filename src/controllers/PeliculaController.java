@@ -15,9 +15,11 @@ import entities.Pelicula;
 public class PeliculaController {
     Connection connection = DatabaseConnection.getInstance().connect();
     private GeneroController generoController = new GeneroController();
+    DirectorController directorController = new DirectorController();
+    GeneroPeliculaController generoPeliculaController = new GeneroPeliculaController();
 
     public PeliculaController() {
-                // this.connection = DatabaseConnection.getInstance().connect();
+        // this.connection = DatabaseConnection.getInstance().connect();
 
     }
 
@@ -198,8 +200,7 @@ public class PeliculaController {
         return peliculas;
     }
 
-    public void createPelicula(Pelicula pelicula, String nombreDirector) {
-        DirectorController directorController = new DirectorController();
+    public void createPelicula(Pelicula pelicula, String nombreDirector, int id_genero) {
 
         Director director = directorController.findByName(nombreDirector);
 
@@ -207,11 +208,8 @@ public class PeliculaController {
             director = new Director();
             director.setNombre(nombreDirector);
             directorController.createDirector(director);
-
             director = directorController.findByName(nombreDirector);
         }
-
-        int idDirector = director.getIdDirector();
 
         String query = "INSERT INTO Pelicula (nombre, duracion, id_clasificacion, id_director, sinopsis, imagen, nacionalidad) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -219,14 +217,16 @@ public class PeliculaController {
             preparedStatement.setString(1, pelicula.getNombre());
             preparedStatement.setInt(2, pelicula.getDuracion());
             preparedStatement.setInt(3, pelicula.getIdClasificacion());
-            preparedStatement.setInt(4, idDirector);
+            preparedStatement.setInt(4, director.getIdDirector());
             preparedStatement.setString(5, pelicula.getSinopsis());
-            preparedStatement.setString(6, pelicula.getImagen());
+            preparedStatement.setString(6, pelicula.getNombreImagen());
             preparedStatement.setString(7, pelicula.getNacionalidad());
 
             preparedStatement.executeUpdate();
 
             System.out.println("Película creada con éxito");
+
+            generoPeliculaController.createGeneroPelicula(id_genero, pelicula.getIdPelicula());
 
         } catch (SQLException e) {
             System.out.println("Error al crear la película: " + e.getMessage());
