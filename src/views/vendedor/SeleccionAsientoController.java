@@ -151,13 +151,11 @@ public class SeleccionAsientoController {
     }
 
     private void mostrarAsientos() {
-        panelAsientos.getChildren().clear(); // Limpia panel antes de añadir nuevos asientos
+        panelAsientos.getChildren().clear(); 
 
         maxSeleccionados = cantidadAsientos;
-        List<CheckBox> bAsientosSeleccionados = new ArrayList<>(); // botones que representan a los asientos
-                                                                   // seleccionados
-        List<Asiento> asientos = asientoController.findBySala(funcion.getId_sala()); // asientos por los cuales se van a
-                                                                                     // mostrar los botones
+        List<CheckBox> bAsientosSeleccionados = new ArrayList<>();
+        List<Asiento> asientos = asientoController.findBySala(funcion.getId_sala()); 
 
         Sala sala = salaController.findById(funcion.getId_sala());
         int asientoWidth = 30;
@@ -180,7 +178,7 @@ public class SeleccionAsientoController {
         grid.setAlignment(Pos.CENTER);
 
         for (Asiento asiento : asientos) {
-            // Para realizar salto de fila
+            // Para salto de fila
             if (!asiento.getLetraFila().equals(filaAnterior) && !filaAnterior.equals("")) {
                 fila++;
                 filaAnterior = asiento.getLetraFila();

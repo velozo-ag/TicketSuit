@@ -2,15 +2,18 @@ package controllers;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseConnection;
 import entities.Compra;
+import entities.Sala_Funcion;
 import entities.Ticket;
 
 public class TicketController {
@@ -83,4 +86,31 @@ public class TicketController {
         }
         return -1;
     }
+
+    public int cantVendidoPorFuncion(Sala_Funcion funcion) {
+    int cantidad = 0;
+
+    // Tu consulta SQL
+    String query = "SELECT COUNT(*) AS cantidad " +
+                 "FROM Ticket " +
+                 "WHERE id_funcion = ? AND id_sala = ? AND inicio_funcion = ?";
+
+    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
+        stmt.setInt(1, funcion.getId_funcion());
+        stmt.setInt(2, funcion.getId_sala());
+        stmt.setTimestamp(3, Timestamp.valueOf(funcion.getInicioFuncion().toString()));
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            cantidad = rs.getInt("cantidad");
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al conseguir cantidad de tickets: " + e.getMessage()); 
+    }
+
+    return cantidad;
+}
+
 }

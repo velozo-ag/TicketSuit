@@ -29,7 +29,18 @@
                 <TableColumn fx:id="colNombreSala" prefWidth="188.800048828125" text="SALA" />
               </columns>
             </TableView>
-            <Pane layoutX="823.0" layoutY="176.0" prefHeight="503.0" prefWidth="335.0" styleClass="data-panel" />
+            <Pane fx:id="panelFuncion" layoutX="823.0" layoutY="176.0" prefHeight="503.0" prefWidth="335.0" styleClass="data-panel">
+               <children>
+                  <Pane fx:id="panelDatos" layoutX="68.0" layoutY="338.0" prefHeight="134.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="24.0" layoutY="25.0" prefHeight="17.0" prefWidth="152.0" text="Asientos Ocupados" />
+                        <Label fx:id="tAsientosOcupados" alignment="CENTER" layoutX="20.0" layoutY="42.0" prefHeight="17.0" prefWidth="160.0" text="Asientos Ocupados" />
+                        <Label alignment="CENTER" layoutX="33.0" layoutY="75.0" prefHeight="17.0" prefWidth="134.0" text="Asientos Libres" />
+                        <Label fx:id="tAsientosLibres" alignment="CENTER" layoutX="29.0" layoutY="92.0" prefHeight="17.0" prefWidth="141.0" text="Asientos Libres" />
+                     </children>
+                  </Pane>
+                  <Pane fx:id="panelAsientos" layoutX="17.0" layoutY="35.0" prefHeight="246.0" prefWidth="302.0" />
+               </children></Pane>
             <Button layoutX="681.0" layoutY="125.0" mnemonicParsing="false" onAction="#formularioSalaFuncion" prefHeight="36.0" prefWidth="232.0" styleClass="optionButton" text="+  A S I G N A R  F U N C I O N" textAlignment="RIGHT" />
       </children>
    </Pane>
