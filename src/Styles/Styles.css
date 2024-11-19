@@ -42,6 +42,50 @@ Button {
     -fx-cursor: hand;
 }
 
+
+.dateArrow {
+    -fx-border-radius: 0;
+    -fx-background-color: #050627;
+    -fx-text-fill: #ee6e84;
+    -fx-font-size: 24;
+    -fx-font-weight: 700;
+}
+
+.botonFecha {
+    -fx-font-size: 14;
+    -fx-font-weight: 700;
+}
+
+.botonFecha:selected {
+    -fx-background-color: #ee6e84;
+    -fx-text-fill: #050627;
+}
+
+.horarioPelicula {
+    /* -fx-background-color: #eec86e; */
+    -fx-text-fill: #050627;
+}
+
+.horarioPelicula:selected {
+    -fx-background-color: #ee6e6e;
+    -fx-text-fill: #050627;
+}
+
+.asiento-button .box {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent; 
+}
+
+.asiento-button > .selected {
+    -fx-background-image: url('@../../Resources/AsientoSeleccionado.png');
+    -fx-background-size: cover;
+    -fx-background-color: transparent; 
+}
+
+.asiento-button .text {
+    -fx-opacity: 0;
+}
+
 .mainButton {
     -fx-border-radius: 0;
     -fx-background-color: #050627;
