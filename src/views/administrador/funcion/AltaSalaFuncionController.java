@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -62,8 +63,7 @@ public class AltaSalaFuncionController {
 
     @FXML
     private void initialize() {
-
-        // COMO HAGO ESTE LISTENER
+        setupDatePicker();
         cSala.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && cFuncion.getValue() != null && dFecha.getValue() != null) {
                 cargarHorarios();
@@ -77,14 +77,14 @@ public class AltaSalaFuncionController {
                 cHorario.setDisable(false);
             }
         });
-        
+
         dFecha.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && cSala.getValue() != null && cFuncion.getValue() != null) {
                 cargarHorarios();
                 cHorario.setDisable(false);
             }
         });
-        
+
         cHorario.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 calcularHorarioFinal();
@@ -94,6 +94,18 @@ public class AltaSalaFuncionController {
         cHorario.setDisable(true);
         cargarFunciones();
         cargarSalas();
+    }
+
+    private void setupDatePicker() {
+        LocalDate hoy = LocalDate.now();
+
+        dFecha.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(hoy.plusDays(1)));
+            }
+        });
     }
 
     @FXML

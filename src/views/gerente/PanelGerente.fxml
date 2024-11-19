@@ -65,7 +65,7 @@
                   </Label>
                </children>
             </Pane>
-            <Button layoutX="540.0" layoutY="681.0" mnemonicParsing="false" onAction="#handleGenerarReporte" styleClass="navButton" text="EXPORTAR DATOS TOTALES A PDF" />
+            <Button layoutX="565.0" layoutY="681.0" mnemonicParsing="false" onAction="#toExportarDatosPDF" styleClass="navButton" text="EXPORTAR DATOS A PDF" />
          </children>
       </Pane>
    </children>

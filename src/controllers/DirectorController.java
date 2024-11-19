@@ -9,10 +9,10 @@ import database.DatabaseConnection;
 import entities.Director;
 
 public class DirectorController {
-    Connection connection;
-
+    Connection connection = DatabaseConnection.getInstance().connect();
     public DirectorController(){
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public Director findById(int id_director){

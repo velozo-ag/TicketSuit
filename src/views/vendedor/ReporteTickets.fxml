@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../Styles/Styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.vendedor.ReporteTicketsController">
+   <children>
+      <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1280.0">
+         <children>
+
+            <Button layoutX="175.0" layoutY="50.0" mnemonicParsing="false" onAction="#toCartelera" styleClass="navButton" text="CARTELERA" />
+            <Button layoutX="296.0" layoutY="50.0" mnemonicParsing="false" styleClass="navButton" text="TICKETS" />
+            <Button layoutX="405.0" layoutY="50.0" mnemonicParsing="false" onAction="#logout" styleClass="logoutButton" text="LOGOUT" />
+
+            <ImageView fitHeight="161.0" fitWidth="104.0" layoutX="37.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Resources/Logo.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="794.0" layoutY="42.0" prefHeight="53.0" prefWidth="450.0" styleClass="titleText" text="VENDEDOR" />
+            <Label fx:id="lNombreVendedor" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="794.0" layoutY="82.0" prefHeight="38.0" prefWidth="450.0" style="-fx-font-weight: 700;" styleClass="textSinopsis" text="Sr. Nombre Vendedor" />
+            <TableView fx:id="tablaVentas" layoutX="90.0" layoutY="176.0" prefHeight="487.0" prefWidth="476.0">
+              <columns>
+                <TableColumn fx:id="cIdCompra" prefWidth="59.20001220703125" text="ID" />
+                <TableColumn fx:id="cCantidad" prefWidth="60.0" text="CANT" />
+                  <TableColumn fx:id="cNombrePelicula" prefWidth="194.39999389648438" text="FUNCION" />
+                  <TableColumn fx:id="cFechaFuncion" minWidth="7.20001220703125" prefWidth="81.60003662109375" text="FECHA" />
+                  <TableColumn fx:id="cHoraInicio" prefWidth="72.800048828125" text="HORA" />
+              </columns>
+            </TableView>
+            <Label fx:id="lCartelera11" alignment="CENTER" contentDisplay="RIGHT" layoutX="218.0" layoutY="132.0" prefHeight="38.0" prefWidth="219.0" style="-fx-font-weight: 700;" styleClass="textSinopsis" text="VENTAS" />
+            <Pane fx:id="panelImagen1" layoutX="586.0" layoutY="175.0" prefHeight="487.0" prefWidth="627.0" styleClass="inputText">
+               <children>
+                  <Pane fx:id="panelDetalle" prefHeight="487.0" prefWidth="627.0">
+                     <children>
+                        <Label fx:id="tNombrePelicula" alignment="CENTER" layoutX="14.0" layoutY="33.0" prefHeight="75.0" prefWidth="276.0" styleClass="titlePelicula" text="DETALLE FUNCION" />
+                        <Label fx:id="tPrecioTotal" layoutX="326.0" layoutY="276.0" prefHeight="75.0" prefWidth="219.0" styleClass="titlePelicula" text="3000">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="TOP_LEFT" layoutX="86.0" layoutY="108.0" prefHeight="27.0" prefWidth="68.0" styleClass="textSinopsis" text="FECHA:" wrapText="true" />
+                        <Label alignment="TOP_LEFT" layoutX="86.0" layoutY="138.0" prefHeight="27.0" prefWidth="68.0" styleClass="textSinopsis" text="HORARIO:" wrapText="true" />
+                        <Label alignment="TOP_LEFT" layoutX="86.0" layoutY="168.0" prefHeight="27.0" prefWidth="68.0" styleClass="textSinopsis" text="SALA:" wrapText="true" />
+                        <Label alignment="TOP_LEFT" layoutX="86.0" layoutY="198.0" prefHeight="27.0" prefWidth="87.0" styleClass="textSinopsis" text="ASIENTO/S:" wrapText="true" />
+                        <Label fx:id="tFechaFuncion" alignment="TOP_LEFT" layoutX="166.0" layoutY="110.0" prefHeight="27.0" prefWidth="68.0" style="-fx-font-weight: 700;" text="FECHA:" wrapText="true" />
+                        <Label fx:id="tHorario" alignment="TOP_LEFT" layoutX="166.0" layoutY="140.0" prefHeight="27.0" prefWidth="68.0" style="-fx-font-weight: 700;" text="HORARIO:" wrapText="true" />
+                        <Label fx:id="tSala" alignment="TOP_LEFT" layoutX="166.0" layoutY="170.0" prefHeight="27.0" prefWidth="68.0" style="-fx-font-weight: 700;" text="SALA:" wrapText="true" />
+                        <Label fx:id="tAsientos" alignment="TOP_LEFT" layoutX="166.0" layoutY="200.0" prefHeight="75.0" prefWidth="137.0" style="-fx-font-weight: 700;" text="ASIENTO/S:" wrapText="true" />
+                        <Label alignment="TOP_LEFT" layoutX="406.0" layoutY="108.0" prefHeight="27.0" prefWidth="68.0" styleClass="textSinopsis" text="ID:" wrapText="true" />
+                        <Label fx:id="tIdCompra" alignment="TOP_LEFT" layoutX="486.0" layoutY="110.0" prefHeight="27.0" prefWidth="68.0" style="-fx-font-weight: 700;" text="CANT:" wrapText="true" />
+                        <Button layoutX="208.0" layoutY="372.0" mnemonicParsing="false" onAction="#imprimirTickets" prefHeight="42.0" prefWidth="212.0" styleClass="optionButton" text="I M P R I M I R  T I C K E T S" />
+                        <Label fx:id="tPrecioTotal1" layoutX="210.0" layoutY="276.0" styleClass="titlePelicula" text="TOTAL:  $">
+                           <font>
+                              <Font name="Montserrat Regular" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tNombrePelicula1" alignment="CENTER" layoutX="337.0" layoutY="33.0" prefHeight="75.0" prefWidth="276.0" styleClass="titlePelicula" text="DETALLE COMPRA" />
+                        <Label alignment="TOP_LEFT" layoutX="406.0" layoutY="138.0" prefHeight="27.0" prefWidth="68.0" styleClass="textSinopsis" text="FECHA:" wrapText="true" />
+                        <Label fx:id="tFechaCompra" alignment="TOP_LEFT" layoutX="486.0" layoutY="140.0" prefHeight="27.0" prefWidth="104.0" style="-fx-font-weight: 700;" text="CANT:" wrapText="true" />
+                        <Label alignment="TOP_LEFT" layoutX="406.0" layoutY="168.0" prefHeight="27.0" prefWidth="68.0" styleClass="textSinopsis" text="CANT:" wrapText="true" />
+                        <Label fx:id="tCantidad" alignment="TOP_LEFT" layoutX="486.0" layoutY="170.0" prefHeight="27.0" prefWidth="68.0" style="-fx-font-weight: 700;" text="CANT:" wrapText="true" />
+                     </children>
+                  </Pane>
+                  <Label fx:id="lSeleccioneCompra" alignment="CENTER" contentDisplay="CENTER" layoutX="251.0" layoutY="220.0" prefHeight="27.0" prefWidth="121.0" text="* Seleccione compra *" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -12,8 +12,9 @@
             <Label layoutX="100.0" layoutY="96.0" />
             <Button layoutX="177.0" layoutY="105.0" mnemonicParsing="false" onAction="#backupDatabase" prefHeight="42.0" prefWidth="186.0" styleClass="mainButton" text="CREAR BACKUP" />
             <Button fx:id="bCerrar" layoutX="177.0" layoutY="169.0" mnemonicParsing="false" onAction="#CerrarFormulario" prefHeight="42.0" prefWidth="186.0" styleClass="optionButton" text="CANCELAR" />
-            <Label layoutX="14.0" layoutY="257.0" text="*Nota: Se creara un archivo .bak con los datos de la DB actualmente" />
+            <Label layoutX="14.0" layoutY="241.0" text="*Nota: Se creara un archivo .bak con los datos de la DB actualmente." />
             <Button layoutX="177.0" layoutY="41.0" mnemonicParsing="false" onAction="#restoreDatabase" prefHeight="42.0" prefWidth="186.0" styleClass="mainButton" text="RESTAURAR DATABASE" />
+            <Label layoutX="14.0" layoutY="258.0" prefHeight="17.0" prefWidth="361.0" text="Al realizar una operacion, la aplicacion se cerrara automaticamente." />
          </children>
       </Pane>
    </children>

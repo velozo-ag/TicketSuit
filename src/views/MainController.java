@@ -31,7 +31,7 @@ public class MainController {
 
     @FXML
     public void toPAdmin(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/administrador/PanelAdministrador.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/administrador/ABMUsuarios.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         SceneManager.setScene(root, stage);
     }

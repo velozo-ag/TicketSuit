@@ -3,6 +3,7 @@ package views.vendedor;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.Action;
 
@@ -17,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -61,26 +63,32 @@ public class CarteleraController {
 
     @FXML
     void logout(ActionEvent event) {
-        try {
-            mainController.toLogin(event);
-        } catch (IOException e) {
-            e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cierre de Sesión");
+        alert.setHeaderText("¿Seguro que desea cerrar sesión?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                mainController.toLogin(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @FXML
     void toTickets(ActionEvent event) {
-        // Parent root;
-        // try {
-        // root =
-        // FXMLLoader.load(getClass().getResource("/views/vendedor/HistorialTickets.fxml"));
-        // Scene scene = new Scene(root);
-        // Pane panel = (Pane) scene.lookup("#mainPanel");
-        // mainController.setUpScene(event, panel, scene);
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-        mostrarMensajeError("Proximamente");
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/vendedor/ReporteTickets.fxml"));
+            root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneManager.setScene(root, stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

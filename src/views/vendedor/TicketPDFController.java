@@ -2,6 +2,9 @@ package views.vendedor;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+
+import controllers.AsientoController;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,11 +12,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+
 import database.DatabaseConnection;
+import entities.Asiento;
 
 public class TicketPDFController {
 
     private Connection connection;
+    private AsientoController asientoController = new AsientoController();
 
     public TicketPDFController() {
         this.connection = DatabaseConnection.getInstance().getConnection();
@@ -21,9 +28,11 @@ public class TicketPDFController {
 
     public void generarTicketPDF(int ticketId) {
         Document document = new Document(PageSize.A6, 20, 20, 20, 20);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
         try { 
-            String basePath = "@../../Resources/thumbnails/Ticket_" + ticketId;
+            String basePath = "Tickets/Ticket_" + ticketId;
             // String basePath = "D:\\Repos2\\TicketSuit\\tickets\\Ticket_" + ticketId;
             String outputPath = obtenerRutaDisponible(basePath); 
 
@@ -71,10 +80,11 @@ public class TicketPDFController {
 
                     addTableRow(table, "ID Ticket:", String.valueOf(resultSet.getInt("id_ticket")), fontContent);
                     addTableRow(table, "Película:", resultSet.getString("pelicula_nombre"), fontContent);
-                    addTableRow(table, "Fecha:", resultSet.getString("fecha_ingreso"), fontContent);
+                    addTableRow(table, "Fecha:", dateFormat.format(resultSet.getDate("inicio_funcion")), fontContent);
                     addTableRow(table, "Hora:", resultSet.getString("inicio_funcion"), fontContent);
                     addTableRow(table, "Sala:", resultSet.getString("sala_nombre"), fontContent);
-                    addTableRow(table, "Asiento:", String.valueOf(resultSet.getInt("id_asiento")), fontContent);
+                    addTableRow(table, "Asiento:", obtenerAsiento(asientoController.findById(resultSet.getInt("id_asiento"), resultSet.getInt("id_sala"))), fontContent);
+                    // addTableRow(table, "Asiento:", String.valueOf(resultSet.getInt("id_asiento")), fontContent);
                     addTableRow(table, "Valor:", "$" + resultSet.getDouble("valor"), fontContent);
 
                     document.add(table);
@@ -126,5 +136,9 @@ public class TicketPDFController {
             } while (file.exists());
             return newFilePath;
         }
+    }
+
+    private String obtenerAsiento(Asiento asiento){
+        return asiento.getLetraFila() + asiento.getNumeroColumna();
     }
 }

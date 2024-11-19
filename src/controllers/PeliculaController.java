@@ -13,11 +13,12 @@ import entities.Director;
 import entities.Pelicula;
 
 public class PeliculaController {
-    private Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
     private GeneroController generoController = new GeneroController();
 
     public PeliculaController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public List<Pelicula> findAll() {
@@ -126,9 +127,9 @@ public class PeliculaController {
 
     public List<Pelicula> findByNombreFecha(String nombre, Date fecha) {
         String query = "SELECT DISTINCT p.* FROM Pelicula p " +
-                        "   JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
-                        "   JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
-                        "WHERE p.nombre LIKE ? AND CAST(sf.inicio_funcion AS DATE) = ? ";
+                "   JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
+                "   JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
+                "WHERE p.nombre LIKE ? AND CAST(sf.inicio_funcion AS DATE) = ? ";
         List<Pelicula> peliculas = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -153,6 +154,43 @@ public class PeliculaController {
                 peliculas.add(pelicula);
                 System.out.println(pelicula.getNombre());
             }
+        } catch (SQLException e) {
+            System.out.println("Error al encontrar pelicula: " + e.getMessage());
+        }
+
+        return peliculas;
+    }
+
+    public List<Pelicula> findByFecha(Date fecha) {
+        String query = "SELECT DISTINCT p.* FROM Pelicula p " +
+                "   JOIN Funcion f ON f.id_pelicula = p.id_pelicula " +
+                "   JOIN Sala_Funcion sf ON f.id_funcion = sf.id_funcion " +
+                "WHERE CAST(sf.inicio_funcion AS DATE) = ? ";
+        List<Pelicula> peliculas = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setDate(1, fecha);
+            System.out.println(fecha.toString());
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Pelicula pelicula = new Pelicula();
+                pelicula.setIdPelicula(rs.getInt("id_pelicula"));
+                pelicula.setNombre(rs.getString("nombre"));
+                pelicula.setDuracion(rs.getInt("duracion"));
+                pelicula.setIdClasificacion(rs.getInt("id_clasificacion"));
+                pelicula.setIdDirector(rs.getInt("id_director"));
+                pelicula.setSinopsis(rs.getString("sinopsis"));
+                pelicula.setImagen(rs.getString("imagen"));
+                pelicula.setNacionalidad(rs.getString("nacionalidad"));
+                pelicula.setGeneros(generoController.findByPelicula(rs.getInt("id_pelicula")));
+
+                peliculas.add(pelicula);
+                System.out.println(pelicula.getNombre());
+            }
+
         } catch (SQLException e) {
             System.out.println("Error al encontrar pelicula: " + e.getMessage());
         }

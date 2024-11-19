@@ -2,6 +2,8 @@ package controllers;
 
 import database.DatabaseConnection;
 import entities.Asiento;
+import entities.Sala_Funcion;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,10 +16,10 @@ import java.sql.ResultSet;
 
 public class AsientoController {
 
-    Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public AsientoController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        // this.connection = DatabaseConnection.getInstance().connect();
     }
 
     public void createAsiento(Asiento asiento) {
@@ -87,14 +89,14 @@ public class AsientoController {
 
     }
 
-    public List<Asiento> findAll(){
+    public List<Asiento> findAll() {
         String query = "SELECT a.id_asiento, a.id_sala, a.letra_fila, a.numero_columna, a.estado FROM Asiento a";
         List<Asiento> asientos = new ArrayList<>();
 
-        try(PreparedStatement stmt = connection.prepareStatement(query)){
-            
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
             ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Asiento asiento = new Asiento();
                 asiento.setIdAsiento(rs.getInt("id_asiento"));
                 asiento.setIdSala(rs.getInt("id_sala"));
@@ -104,7 +106,7 @@ public class AsientoController {
             }
 
             System.out.println("Asientos encontrados");
-            
+
         } catch (SQLException e) {
             System.out.println("Error al listar asientos: " + e.getMessage());
         }
@@ -112,15 +114,15 @@ public class AsientoController {
         return asientos;
     }
 
-    public List<Asiento> findBySala(int id_sala){
+    public List<Asiento> findBySala(int id_sala) {
         String query = "SELECT a.id_asiento, a.id_sala, a.letra_fila, a.numero_columna, a.estado FROM Asiento a WHERE id_sala = ?";
         List<Asiento> asientos = new ArrayList<>();
 
-        try(PreparedStatement stmt = connection.prepareStatement(query)){
-            
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
             stmt.setInt(1, id_sala);
             ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Asiento asiento = new Asiento();
                 asiento.setIdAsiento(rs.getInt("id_asiento"));
                 asiento.setIdSala(rs.getInt("id_sala"));
@@ -130,11 +132,84 @@ public class AsientoController {
             }
 
             System.out.println("Asientos encontrados");
-            
+
         } catch (SQLException e) {
             System.out.println("Error al listar asientos: " + e.getMessage());
         }
 
         return asientos;
     }
+
+    public Asiento findById(int idAsiento, int id_sala) {
+        String query = "SELECT a.id_asiento, a.id_sala, a.letra_fila, a.numero_columna, a.estado FROM Asiento a WHERE a.id_asiento = ? AND a.id_sala = ?";
+        Asiento asiento = null;
+    
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, idAsiento);
+            stmt.setInt(2, id_sala);
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    asiento = new Asiento();
+                    asiento.setIdAsiento(rs.getInt("id_asiento"));
+                    asiento.setIdSala(rs.getInt("id_sala"));
+                    asiento.setLetraFila(rs.getString("letra_fila"));
+                    asiento.setNumeroColumna(rs.getInt("numero_columna"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el asiento: " + e.getMessage());
+        }
+    
+        return asiento;
+    }
+    
+
+    public boolean asientoDesocupado(int id_asiento, Sala_Funcion funcion) {
+        String query = "SELECT a.* FROM Asiento a " +
+                "JOIN Ticket t ON t.id_asiento = a.id_asiento " +
+                "WHERE t.id_funcion = ? " +
+                "AND t.id_sala = ? " +
+                "AND t.inicio_funcion = ? " +
+                "AND a.id_asiento = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, funcion.getId_funcion());
+            stmt.setInt(2, funcion.getId_sala());
+            stmt.setTimestamp(3, funcion.getInicioFuncion());
+            stmt.setInt(4, id_asiento); 
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return !rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al encontrar asiento desocupado: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public int contarAsientosOcupados(Sala_Funcion funcion) {
+        String query = "SELECT COUNT(*) AS total_ocupados " +
+               "FROM Asiento a " +
+               "JOIN Ticket t ON t.id_asiento = a.id_asiento AND t.id_sala = a.id_sala " +
+               "WHERE t.id_funcion = ? " +
+               "AND t.id_sala = ? " +
+               "AND t.inicio_funcion = ?";
+    
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, funcion.getId_funcion());
+            stmt.setInt(2, funcion.getId_sala());
+            stmt.setTimestamp(3, funcion.getInicioFuncion());
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total_ocupados");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar asientos ocupados: " + e.getMessage());
+        }
+        return 0; 
+    }
+
 }

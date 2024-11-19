@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 
 import database.DatabaseConnection;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -90,10 +92,18 @@ public class AdminMenuController {
 
     @FXML
     void logout(ActionEvent event) {
-        try {
-            mainController.toLogin(event);
-        } catch (IOException e) {
-            e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cierre de Sesión");
+        alert.setHeaderText("¿Seguro que desea cerrar sesión?");
+        alert.setContentText("Como administrador, es recomendable realizar almenos un backup diario.");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                mainController.toLogin(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

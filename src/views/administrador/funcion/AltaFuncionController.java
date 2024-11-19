@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 
@@ -45,6 +46,8 @@ public class AltaFuncionController {
     public void initialize() {
         cargarPeliculas();
         cargarTipoFuncion();
+        //setupDatePickers(dFechaIngreso, dFechaFinal);
+        configurarDatePickers();
     }
 
     @FXML
@@ -79,36 +82,71 @@ public class AltaFuncionController {
         cTipoFuncion.setItems(tiposFuncion);
     }
 
+    private void configurarDatePickers() {
+        LocalDate hoy = LocalDate.now();
+
+        dFechaIngreso.setValue(hoy);
+
+        // Restricciones en dFechaIngreso
+        dFechaIngreso.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(hoy));
+            }
+        });
+
+        // Listener para dFechaIngreso
+        dFechaIngreso.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                dFechaFinal.setValue(newValue.plusDays(3)); // Configurar un valor inicial
+                dFechaFinal.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        setDisable(empty || date.isBefore(newValue.plusDays(3)));
+                    }
+                });
+            }
+        });
+
+        // Restricciones en dFechaFinal
+        dFechaFinal.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(dFechaIngreso.getValue() == null ? hoy : dFechaIngreso.getValue().plusDays(3)));
+            }
+        });
+    }
+
     private boolean verificarCampos() {
-        if(dFechaIngreso.getValue() == null || dFechaFinal.getValue() == null || cPelicula.getValue() == null || cTipoFuncion.getValue() == null){
-            mensajeError("Debe rellenar todos los campos");
+        if (dFechaIngreso.getValue() == null || dFechaFinal.getValue() == null || cPelicula.getValue() == null || cTipoFuncion.getValue() == null) {
+            mensajeError("Debe rellenar todos los campos.");
             return false;
         }
 
-        Date fechaIngreso = Date.valueOf(dFechaIngreso.getValue());
-        Date fechaFinal = Date.valueOf(dFechaFinal.getValue());
-        Date fechaActual = Date.valueOf(LocalDate.now());
-        LocalDate fechaIngresoMas3 = fechaIngreso.toLocalDate().plusDays(3);
+        LocalDate fechaIngreso = dFechaIngreso.getValue();
+        LocalDate fechaFinal = dFechaFinal.getValue();
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaIngresoMas3 = fechaIngreso.plusDays(3);
 
-
-        if (fechaIngreso.before(fechaActual) || fechaFinal.before(fechaActual)) {
+        if (fechaIngreso.isBefore(fechaActual) || fechaFinal.isBefore(fechaActual)) {
             mensajeError("No se puede ingresar una fecha anterior a la actual.");
             return false;
         }
 
-        if (fechaFinal.before(fechaIngreso)) {
-            mensajeError("La fecha final de la funcion no puede ser anterior a su fecha de ingreso.");
+        if (fechaFinal.isBefore(fechaIngreso)) {
+            mensajeError("La fecha final de la función no puede ser anterior a su fecha de ingreso.");
             return false;
         }
 
-        if (fechaFinal.before(Date.valueOf(fechaIngresoMas3))) {
-            mensajeError("El periodo de una función no puede ser menor a 3 días.");
+        if (fechaFinal.isBefore(fechaIngresoMas3)) {
+            mensajeError("El período de una función no puede ser menor a 3 días.");
             return false;
         }
-
 
         return true;
-
     }
 
     private void mensajeError(String mensaje) {

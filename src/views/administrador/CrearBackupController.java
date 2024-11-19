@@ -1,6 +1,7 @@
 package views.administrador;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,6 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import main.App;
 import views.MainController;
 import database.DatabaseConnection;
 import javafx.stage.FileChooser;
@@ -38,25 +40,29 @@ public class CrearBackupController {
     private DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
 
     @FXML
-    private void backupDatabase() {
+    private void backupDatabase() throws URISyntaxException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Seleccionar dirección donde guardar el Backup");
         File selectedDirectory = directoryChooser.showDialog(new Stage());
 
         if (selectedDirectory != null) {
-            String backupPath = selectedDirectory.getAbsolutePath() + "\\TicketSuitBackup.bak";
+            String backupPathBase = selectedDirectory.getAbsolutePath() + "\\TicketSuitBackup";
+            String backupPath = generarNombreUnico(backupPathBase);
+
             String backupQuery = "BACKUP DATABASE TicketSuit TO DISK = '" + backupPath + "'";
 
             try (Connection connection = databaseConnection.connect();
-                 Statement statement = connection.createStatement()) {
+                    Statement statement = connection.createStatement()) {
 
                 statement.executeUpdate(backupQuery);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Backup Exitoso");
                 alert.setHeaderText(null);
-                alert.setContentText("Archivo .bak creado en: " + backupPath);
+                alert.setContentText("Archivo .bak creado en: " + backupPath + " \n A continuación, se reiniciará la aplicación.");
                 alert.showAndWait();
+
+                App.restartApplication();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -67,6 +73,19 @@ public class CrearBackupController {
                 alert.showAndWait();
             }
         }
+
+        Stage stage = (Stage) bCerrar.getScene().getWindow();
+        stage.close();
+    }
+
+    private String generarNombreUnico(String basePath) {
+        int count = 1;
+        String path = basePath + ".bak";
+        while (new File(path).exists()) {
+            path = basePath + " (" + count + ").bak";
+            count++;
+        }
+        return path;
     }
 
     @FXML
@@ -85,16 +104,12 @@ public class CrearBackupController {
             try (Connection connection = databaseConnection.connect();
                 Statement statement = connection.createStatement()) {
 
-                // Cambiar a la base de datos master
                 connection.setCatalog("master");
 
-                // Cerrar conexiones activas
                 statement.executeUpdate(setSingleUserQuery);
 
-                // Restaurar la base de datos
                 statement.executeUpdate(restoreQuery);
 
-                // Volver a modo multiusuario
                 statement.executeUpdate(setMultiUserQuery);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -121,3 +136,4 @@ public class CrearBackupController {
         stage.close();
     }
 }
+

@@ -12,10 +12,10 @@ import entities.Funcion;
 import entities.TipoFuncion;
 
 public class TipoFuncionController {
-    Connection connection;
-
+    Connection connection = DatabaseConnection.getInstance().connect();
     public TipoFuncionController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public TipoFuncion findById(int id_tipoFuncion) {

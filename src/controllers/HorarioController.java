@@ -13,10 +13,10 @@ import database.DatabaseConnection;
 import entities.Horario;
 
 public class HorarioController {
-    Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public HorarioController() {
-        this.connection = DatabaseConnection.getInstance().connect();
+        // this.connection = DatabaseConnection.getInstance().connect();
     }
 
     public List<Horario> findBySala(int id_sala) {

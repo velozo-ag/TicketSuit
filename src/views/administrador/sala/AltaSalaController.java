@@ -177,22 +177,47 @@ public class AltaSalaController {
     }
 
     private boolean verificarCampos() {
-
+        // Verificar que el nombre no esté vacío
         if (tNombre.getText().isEmpty()) {
-            mensajeError("El nombre de la sala no puede estar vacio.");
+            mensajeError("El nombre de la sala no puede estar vacío.");
             return false;
         }
-
+    
+        // Verificar que el nombre tenga al menos 5 caracteres
         if (tNombre.getText().length() < 5) {
             mensajeError("El nombre de la sala debe tener al menos 5 caracteres.");
             return false;
         }
-
+    
+        // Verificar si el nombre ya existe en la base de datos
         if (salaController.findByNombre(tNombre.getText()) != null) {
-            mensajeError("El nombre de la sala ya esta en uso!");
+            mensajeError("El nombre de la sala ya está en uso.");
             return false;
         }
-
+    
+        // Verificar que el valor de filas sea válido
+        if (tFilas.getText().isEmpty() || Integer.parseInt(tFilas.getText()) <= 0) {
+            mensajeError("La cantidad de filas debe ser mayor a 0.");
+            return false;
+        }
+    
+        if (Integer.parseInt(tFilas.getText()) > 20) {
+            mensajeError("La cantidad de filas no puede ser mayor a 16.");
+            return false;
+        }
+    
+        // Verificar que el valor de columnas sea válido
+        if (tColumnas.getText().isEmpty() || Integer.parseInt(tColumnas.getText()) <= 0) {
+            mensajeError("La cantidad de columnas debe ser mayor a 0.");
+            return false;
+        }
+    
+        if (Integer.parseInt(tColumnas.getText()) > 20) {
+            mensajeError("La cantidad de columnas no puede ser mayor a 18.");
+            return false;
+        }
+    
+        // Si pasa todas las verificaciones
         return true;
     }
 

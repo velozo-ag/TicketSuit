@@ -11,10 +11,11 @@ import database.DatabaseConnection;
 import entities.Clasificacion;
 
 public class ClasificacionController {
-    Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public ClasificacionController(){
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public Clasificacion findById(int id_clasificacion){

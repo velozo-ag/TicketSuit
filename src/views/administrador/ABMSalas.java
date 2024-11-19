@@ -41,6 +41,9 @@ public class ABMSalas {
 
     @FXML
     private Button bDesactivar;
+    
+    @FXML
+    private Button bModificar;
 
     @FXML
     private TableView<Sala> tablaSalas;
@@ -107,6 +110,7 @@ public class ABMSalas {
 
         dataPanel.setVisible(false);
         dataPanel2.setVisible(false);
+        bModificar.setVisible(false);
         cargarSalas();
     }
 
@@ -171,6 +175,10 @@ public class ABMSalas {
             salaSeleccionada.setEstado(1);
             salaController.updateSala(salaSeleccionada);
             cargarSalas();
+
+            
+            mostrarMensajeExito("Sala activada con éxito",
+                            "La sala " + salaSeleccionada.getNombre() + " ha sido activada correctamente.");
         }
     }
 
@@ -244,6 +252,14 @@ public class ABMSalas {
             bActivar.setDisable(false);
             bDesactivar.setDisable(true);
         }
+    }
+
+    private void mostrarMensajeExito(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void mostrarAsientos() {

@@ -13,10 +13,11 @@ import entities.Perfil;
 
 public class PerfilController {
 
-    private Connection connection;
+    Connection connection = DatabaseConnection.getInstance().connect();
 
     public PerfilController() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+                // this.connection = DatabaseConnection.getInstance().connect();
+
     }
 
     public List<Perfil> findAll() {

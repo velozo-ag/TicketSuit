@@ -20,6 +20,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import views.MainController;
 import java.time.temporal.ChronoUnit;
 
@@ -106,14 +109,29 @@ public class GerenteController {
         ticketsLabel.setText("Tickets Vendidos: " + totalTickets);
     }
 
-    // Método que se ejecutará al presionar el botón
     @FXML
-    private void handleGenerarReporte(ActionEvent event) {
+    void toExportarDatosPDF(ActionEvent event) {
         try {
-            reportePDF.generateReport();
-        } catch (SQLException | DocumentException | FileNotFoundException e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/gerente/ExportarDatosPDFSeleccion.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador de la nueva escena
+            exportarDatosPDF controller = loader.getController();
+
+            // Pasar los valores de los DatePicker al nuevo controlador
+            LocalDate desde = desdeDatePicker.getValue();
+            LocalDate hasta = hastaDatePicker.getValue();
+            controller.setFechas(desde, hasta);
+
+            // Crear y mostrar la nueva escena
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+        } catch (Exception e) {
             e.printStackTrace();
-            // Aquí puedes mostrar un mensaje de error al usuario, si lo deseas
         }
     }
 

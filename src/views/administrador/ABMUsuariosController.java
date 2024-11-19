@@ -233,6 +233,9 @@ public class ABMUsuariosController {
             modificarEstado();
             bActivar.setDisable(true);
             bDesactivar.setDisable(false);
+
+            mostrarMensajeExito("Usuario activado con éxito", 
+                                "El usuario " + usuarioSeleccionado.getNombre() + " ha sido activado correctamente.");
         }
     }
 
@@ -244,6 +247,9 @@ public class ABMUsuariosController {
             modificarEstado();
             bActivar.setDisable(false);
             bDesactivar.setDisable(true);
+    
+            mostrarMensajeExito("Usuario desactivado con éxito", 
+                                "El usuario " + usuarioSeleccionado.getNombre() + " ha sido desactivado correctamente.");
         }
     }
 
@@ -263,6 +269,14 @@ public class ABMUsuariosController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void mostrarMensajeExito(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private boolean mensajeConfirmacion(String mensaje) {
