@@ -74,8 +74,6 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Button layoutX="16.0" layoutY="419.0" mnemonicParsing="false" onAction="#modificarPelicula" prefHeight="40.0" prefWidth="362.0" styleClass="optionButton" text="M O D I F I C A R" textAlignment="RIGHT" />
-               </children>
             </Pane>
          </children>
       </Pane>
