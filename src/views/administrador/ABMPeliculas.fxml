@@ -74,6 +74,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
+               </children>
             </Pane>
          </children>
       </Pane>
