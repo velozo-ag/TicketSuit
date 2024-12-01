@@ -74,7 +74,7 @@ public class DatabaseConnection {
 
 1. Clona este repositorio:
 ```bash
-git clone https://github.com/tuusuario/TicketSuit.git
+git clone https://github.com/velozo-ag/TicketSuit.git
 ```
 
 2. Navega a la carpeta del proyecto:
